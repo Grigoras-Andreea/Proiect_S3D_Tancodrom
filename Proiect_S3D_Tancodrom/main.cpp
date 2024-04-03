@@ -30,7 +30,7 @@ int main()
 	// Metode normale
 
 	a.ForceBind(GLFW_KEY_W, MoveForward);
-	a.Call(GLFW_KEY_W);
+	a.Call(GLFW_KEY_W, 1);
 
 	a.ForceBind(GLFW_KEY_W, MoveForward2);
 	a.Call(GLFW_KEY_W, 1);

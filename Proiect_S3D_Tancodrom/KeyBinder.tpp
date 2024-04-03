@@ -1,9 +1,14 @@
 #pragma once
 
+#pragma comment (lib, "Logger.lib")
+
 #include <iostream>
 #include <variant>
 #include <functional>
 #include <unordered_map>
+#include <sstream>
+
+#include "Logger.h"
 
 /// @class KeyBinder
 /// 
@@ -20,6 +25,12 @@ class KeyBinder
 public:
 	using FuncTypesVariant = std::variant<std::function<FuncSignatures>...>;
 
+	KeyBinder(std::ostream& os = std::cout)
+		: m_logger(os)
+	{
+		/* EMPTY */
+	}
+
 	/// @brief Calls the function bound to the key with the given parameters.
 	/// @returns true if the function was called, false if there was no function bound to the key or the signature did not match the parameters.
 	template<typename... ParamTypes>
@@ -28,6 +39,7 @@ public:
 		if (auto it = m_keyBindsMap.find(key);
 			it != m_keyBindsMap.end())
 		{
+			// TODO: try checking disregarding the return type to allow more flexibility
 			if (auto* func = std::get_if<std::function<void(ParamTypes...)>>(&it->second);
 				func != nullptr)
 			{
@@ -36,14 +48,19 @@ public:
 			}
 			else
 			{
-				std::cout << "The function signature void(";
-				((std::cout << typeid(ParamTypes).name() << ", "), ...);
-				std::cout << "\b\b) does not match with the current function signature for the key " << key;
+				std::stringstream sstream;
+
+				sstream << "The function signature void(";
+				((sstream << typeid(ParamTypes).name() << std::string{ ", " }), ...);
+				sstream << "\b\b) does not match with the current function signature for the key " << key;
 
 				// TODO: print the current function signature
-				// std::cout << ": " << typeid(it->second).name();
+				// sstream << ": " << typeid(it->second).name();
 
-				std::cout << std::endl;
+				sstream << std::endl;
+
+				m_logger.Log(sstream.str(), Logger::Level::Error);
+
 				return false;
 			}
 		}
@@ -101,4 +118,5 @@ public:
 
 private:
 	std::unordered_map<KeyType, FuncTypesVariant> m_keyBindsMap;
+	Logger m_logger;
 };
