@@ -1,14 +1,12 @@
 #pragma once
 
+#include "Logger.h"
 #pragma comment (lib, "Logger.lib")
 
-#include <iostream>
 #include <variant>
 #include <functional>
 #include <unordered_map>
 #include <sstream>
-
-#include "Logger.h"
 
 /// @class KeyBinder
 /// 
