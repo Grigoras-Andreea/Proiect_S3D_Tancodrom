@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Logger;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)x64\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Logger;$(SolutionDir)_external\glew-2.1.0-win32\include;$(SolutionDir)_external\glfw-3.4.bin.WIN64\include;$(SolutionDir)_external\glm;$(SolutionDir)_external\stb;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)x64\Debug;$(SolutionDir)_external\glew-2.1.0-win32\lib\Release\x64;$(SolutionDir)_external\glfw-3.4.bin.WIN64\lib-vc2022;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
