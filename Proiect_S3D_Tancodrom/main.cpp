@@ -1,6 +1,6 @@
 #pragma comment(lib, "glfw3.lib")
 #pragma comment(lib, "opengl32.lib")
-#pragma comment(lib, "glews.lib")
+#pragma comment(lib, "glew32s.lib")
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -37,6 +37,8 @@ int main()
 	// Metode normale
 
 	a.ForceBind(GLFW_KEY_W, MoveForward);
+
+	// Trebuie sa arunce o eroare
 	a.Call(GLFW_KEY_W, 1);
 
 	a.ForceBind(GLFW_KEY_W, MoveForward2);

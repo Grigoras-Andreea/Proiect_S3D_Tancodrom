@@ -1,7 +1,7 @@
 #pragma once
+#pragma comment (lib, "Logger.lib")
 
 #include "Logger.h"
-#pragma comment (lib, "Logger.lib")
 
 #include <variant>
 #include <functional>
