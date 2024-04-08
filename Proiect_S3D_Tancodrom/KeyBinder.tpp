@@ -10,7 +10,7 @@
 
 /// @class KeyBinder
 /// 
-/// @brief A class that handles key binds for a game with the ability to bind functions at runtime. 
+/// @brief A class that handles key binds for a game with the ability to bind functions at runtime.
 /// It can handle multiple function signatures at the same time. 
 /// The return type of all the bound functions has to be void. 
 /// Only 1 function can be bound to a key at a time. 

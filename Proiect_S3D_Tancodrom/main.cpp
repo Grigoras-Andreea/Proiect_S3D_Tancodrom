@@ -1,3 +1,10 @@
+#pragma comment(lib, "glfw3.lib")
+#pragma comment(lib, "opengl32.lib")
+#pragma comment(lib, "glews.lib")
+
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #include "KeyBinder.tpp"
 
 // example usage
