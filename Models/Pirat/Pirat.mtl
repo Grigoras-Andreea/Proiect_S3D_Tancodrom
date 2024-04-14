@@ -1,0 +1,93 @@
+# Blender 3.1.2 MTL File: 'None'
+# www.blender.org
+
+newmtl boots
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  pirate boots color.jpg
+map_Ns  pirate boots roughness.jpg
+map_Bump  -bm 1.000000 pirate boots normal.jpg
+
+newmtl clothe
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  pirate clothe color.jpg
+map_Ns  pirate clothe roughness.jpg
+map_Bump  -bm 1.000000 pirate clothe normal.jpg
+
+newmtl eye
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  pirate eye color.jpg
+map_Ns  pirate eye roughness.jpg
+map_Bump  -bm 1.000000 pirate eye normal.jpg
+
+newmtl hat
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  pirate hat color.jpg
+map_Ns  pirate hat roughness.jpg
+map_Bump  -bm 1.000000 pirate hat normal.jpg
+
+newmtl pant
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  pirate pant color.jpg
+map_Ns  pirate pant roughness.jpg
+map_Bump  -bm 1.000000 pirate pant normal.jpg
+
+newmtl skin
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  pirate skin color.jpg
+map_Ns  pirate skin roughness.jpg
+map_Bump  -bm 1.000000 pirate skin normal.jpg
+
+newmtl teeth
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd  pirate teeth color.jpg
+map_Ns  pirate teeth roughness.jpg
+map_Bump  -bm 1.000000 pirate teeth normal.jpg
