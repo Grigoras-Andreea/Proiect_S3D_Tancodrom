@@ -4,7 +4,8 @@
 
 #include <stdlib.h> // necesare pentru citirea shader-elor
 #include <stdio.h>
-#include <math.h> 
+#include <math.h>
+#include <string>
 
 #include <GL/glew.h>
 
@@ -257,29 +258,34 @@ int main()
 	/*std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 	std::string currentPath = converter.to_bytes(wscurrentPath);*/
 	//std::wstring wscurrentPath; // Asume că aceasta este inițializată cu calea dorită
-	std::string currentPath = ConvertWStringToString(wscurrentPath);
+	std::string currentPath = ConvertWStringToString(wscurrentPath).c_str();			// de tinut minte asta
+
+	const char* currentPathChr = currentPath.c_str();
+
+	std::string path = (std::string(currentPathChr) + "\\Shaders\\PhongLight.vs").c_str();
+	std::string path2 = (std::string(currentPathChr) + "\\Shaders\\PhongLight.vs").c_str();
 
 
-	std::string path = (currentPath + "\\Shaders\\PhongLight.vs").c_str();
+	
 
-
-	Shader lightingShader((currentPath + "\\Shaders\\PhongLight.vs").c_str(), (currentPath + "\\Shaders\\PhongLight.fs").c_str());
-	Shader lampShader((currentPath + "\\Shaders\\Lamp.vs").c_str(), (currentPath + "\\Shaders\\Lamp.fs").c_str());
+	Shader lightingShader((currentPathChr + std::string("\\Shaders\\PhongLight.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\PhongLight.fs")).c_str()));
+	Shader lampShader((currentPathChr + std::string("\\Shaders\\Lamp.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\Lamp.fs")).c_str()));
 	//Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
 	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
 
-	std::string objFileName = (currentPath + "\\Models\\CylinderProject.obj").c_str();
+
+	std::string objFileName = std::string(currentPathChr) + "\\Models\\CylinderProject.obj";
 	Model objModel(objFileName, false);
 
 	//std::string piratObjFileName = (currentPath + "\\Models\\Pirat\\Pirat.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
-	std::string piratObjFileName = (currentPath + "\\Models\\Tiger.obj");
+	std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\Human\\human.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\WWII_Tank_Germany_Panzer_III_v1_L2.123c56cb92d1-9485-44e9-a197-a7bddb48c29f\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	Model piratObjModel(piratObjFileName, false);
 
-	unsigned int floorTexture = CreateTexture(currentPath + "\\ColoredFloor.png");
+	unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 
 
 
