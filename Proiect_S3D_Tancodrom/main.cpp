@@ -14,6 +14,7 @@
 #include <gtc/type_ptr.hpp>
 
 #include <glfw3.h>
+#include <gtc/matrix_transform.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -34,7 +35,6 @@ const unsigned int SCR_HEIGHT = 800;
 
 GLuint ProjMatrixLocation, ViewMatrixLocation, WorldMatrixLocation;
 Camera* pCamera = nullptr;
-
 
 unsigned int CreateTexture(const std::string& strTexturePath)
 {
@@ -162,7 +162,7 @@ int main()
 
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetCursorPosCallback(window, mouse_callback); /// ultima mouse eroare
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetKeyCallback(window, key_callback);
 
@@ -274,8 +274,8 @@ int main()
 	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
 
 
-	std::string objFileName = std::string(currentPathChr) + "\\Models\\CylinderProject.obj";
-	Model objModel(objFileName, false);
+	/*std::string objFileName = std::string(currentPathChr) + "\\Models\\CylinderProject.obj";
+	Model objModel(objFileName, false);*/
 
 	//std::string piratObjFileName = (currentPath + "\\Models\\Pirat\\Pirat.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
@@ -283,11 +283,19 @@ int main()
 	std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\Human\\human.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\WWII_Tank_Germany_Panzer_III_v1_L2.123c56cb92d1-9485-44e9-a197-a7bddb48c29f\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
-	Model piratObjModel(piratObjFileName, false);
+	Model tank1(piratObjFileName, false);
+	Model tank2(piratObjFileName, false);
+	Model tank3(piratObjFileName, false);
+	Model tank4(piratObjFileName, false);
 
 	unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 
-
+	tank2.SetPosition(glm::vec3(7.0f, 0.0f, 3.0f));
+	tank2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tank3.SetPosition(glm::vec3(-5.0f, 0.0f, 5.0f));
+	tank3.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tank4.SetPosition(glm::vec3(12.0f, 0.0f, -2.0f));
+	tank4.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	float radius = 20.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.2f;
@@ -304,9 +312,10 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+
 		// Input
 		//processInput(window);
-		processInput(window, piratObjModel);
+		processInput(window, tank1);
 
 		// Clear buffers
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -336,6 +345,7 @@ int main()
 		lightingShader.SetVec3("lightPos", lightPos);
 		glBindTexture(GL_TEXTURE_2D, floorTexture);
 		lightingShader.SetVec3("viewPos", pCamera->GetPosition());
+		
 		lightingShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lightingShader.SetMat4("view", pCamera->GetViewMatrix());
 
@@ -344,8 +354,14 @@ int main()
 		piratObjModel.SetPosition(newPosition);*/
 
 		// Set model matrix and draw the model
-		lightingShader.SetMat4("model", piratObjModel.GetModelMatrix());
-		piratObjModel.Draw(lightingShader);
+		lightingShader.SetMat4("model", tank1.GetModelMatrix());
+		tank1.Draw(lightingShader);
+		lightingShader.SetMat4("model", tank2.GetModelMatrix());
+		tank2.Draw(lightingShader);
+		lightingShader.SetMat4("model", tank3.GetModelMatrix());
+		tank3.Draw(lightingShader);
+		lightingShader.SetMat4("model", tank4.GetModelMatrix());
+		tank4.Draw(lightingShader);
 
 		// Use lamp shader
 		lampShader.Use();
@@ -381,51 +397,127 @@ int main()
 	return 0;
 }
 
+glm::vec3 rotateVector(const glm::vec3& vec, float angle, const glm::vec3& axis) {
+	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, axis);
+	return glm::vec3(rotationMatrix * glm::vec4(vec, 1.0f));
+}
+
+bool tankIsSelected = false;
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow* window, Model& piratObjModel)
 {
-
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
 	glm::vec3 movementDirection(0.0f);
+	float rotationAngle = piratObjModel.GetRotationAngle();
 
-	// Update movement direction based on pressed keys
+	// Calculul direcției de mișcare în funcție de unghiul de rotație
+	float radianRotationAngle = glm::radians(-rotationAngle); // Convertim unghiul în radiani
+	float cosAngle = cos(radianRotationAngle);
+	float sinAngle = sin(radianRotationAngle);
+
+	// Rotăm direcția îndreptată înainte în jurul axei y
+	glm::vec3 forwardDirection(
+		0.0f,
+		0.0f,
+		1.0f
+	);
+	glm::vec3 rotatedForwardDirection(
+		forwardDirection.x * cosAngle + forwardDirection.z * sinAngle,
+		forwardDirection.y,
+		forwardDirection.x * sinAngle - forwardDirection.z * cosAngle
+	);
+
+	// Updatează direcția de mișcare bazată pe tastele apăsate
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		movementDirection += glm::vec3(0.0f, 0.0f, 1.0f); // forward
-	}
+		movementDirection -= rotatedForwardDirection; // Înainte
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		movementDirection += glm::vec3(0.0f, 0.0f, -1.0f); // backward
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		movementDirection += glm::vec3(1.0f, 0.0f, 0.0f); // left
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		movementDirection += glm::vec3(-1.0f, 0.0f, 0.0f); // right
+		movementDirection += rotatedForwardDirection; // Înapoi
 
-
-	// Apply movement speed
-	float movementSpeed = 0.5f; // Adjust as needed
+	// Aplică viteza de mișcare
+	float movementSpeed = 0.5f; // Ajustează după necesități
 	glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
 	piratObjModel.SetPosition(newPosition);
 
+	// Inițializează viteza și unghiul de rotație
+	float rotationSpeed = 20.0f; // Ajustează după necesități
+	glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f); // Axul de rotație implicit (în jurul axei Y)
 
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		pCamera->ProcessKeyboard(Camera::FORWARD, (float)deltaTime * 5);
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		pCamera->ProcessKeyboard(Camera::BACKWARD, (float)deltaTime * 5);
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		pCamera->ProcessKeyboard(Camera::LEFT, (float)deltaTime * 5);
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		pCamera->ProcessKeyboard(Camera::RIGHT, (float)deltaTime * 5);
-	if (glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
-		pCamera->ProcessKeyboard(Camera::UP, (float)deltaTime * 5);
-	if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
-		pCamera->ProcessKeyboard(Camera::DOWN, (float)deltaTime * 5);
+	// Rotație la stânga (tasta A)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		rotationAngle += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+		rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		rotationAngle -= rotationSpeed * static_cast<float>(deltaTime); // Scade unghiul de rotație
+		rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+	}
 
-	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-		int width, height;
-		glfwGetWindowSize(window, &width, &height);
-		pCamera->Reset(width, height);
+	// Setează unghiul și axa de rotație
+	piratObjModel.SetRotationAngle(rotationAngle);
+	piratObjModel.SetRotationAxis(rotationAxis);
+
+
+
+	//----------------------  CAMERA  ------------------------------------
+
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+	{
+		tankIsSelected = true;
+	
+	}
+	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
+	{
+		tankIsSelected = false;
+		
+	}
+	
+	if (tankIsSelected)
+	{
+		// Obținem poziția și rotația tankului
+		glm::vec3 tankPosition = piratObjModel.GetPosition();
+		float tankRotationAngle = piratObjModel.GetRotationAngle();
+		glm::vec3 tankRotationAxis = piratObjModel.GetRotationAxis();
+		// Offset-ul camerei față de tank
+		glm::vec3 cameraOffset = glm::vec3(0.0f, 8.0f, -20.0f); // Offset-ul inițial
+		// Rotăm offset-ul camerei în funcție de rotația tankului
+		cameraOffset = rotateVector(cameraOffset, glm::radians(tankRotationAngle), tankRotationAxis);
+		//pCamera->SetYaw(tankRotationAngle);
+		std::cout << tankRotationAngle <<"\n";
+		// Poziția camerei va fi poziția tankului plus offset-ul
+		glm::vec3 cameraPosition = tankPosition + cameraOffset;
+		// Setăm poziția camerei
+		pCamera->SetPosition(cameraPosition);
+		// Orientăm camera spre tank
+		pCamera->LookAt(tankPosition);
+	}
+
+
+
+	//----------------------  CAMERA  ------------------------------------
+	if (!tankIsSelected)
+	{
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+			pCamera->ProcessKeyboard(Camera::FORWARD, (float)deltaTime * 5);
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+			pCamera->ProcessKeyboard(Camera::BACKWARD, (float)deltaTime * 5);
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+			pCamera->ProcessKeyboard(Camera::LEFT, (float)deltaTime * 5);
+		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			pCamera->ProcessKeyboard(Camera::RIGHT, (float)deltaTime * 5);
+		if (glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
+			pCamera->ProcessKeyboard(Camera::UP, (float)deltaTime * 5);
+		if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
+			pCamera->ProcessKeyboard(Camera::DOWN, (float)deltaTime * 5);
+
+		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+			int width, height;
+			glfwGetWindowSize(window, &width, &height);
+			pCamera->Reset(width, height);
+		}
 	}
 }
 
@@ -440,7 +532,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	pCamera->MouseControl((float)xpos, (float)ypos);
+	if(!tankIsSelected)
+		pCamera->MouseControl((float)xpos, (float)ypos);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yOffset)

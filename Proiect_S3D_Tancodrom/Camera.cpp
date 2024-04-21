@@ -1,4 +1,5 @@
 ﻿#include "Camera.h"
+#include <iostream>
 
 Camera::Camera(const int width, const int height, const glm::vec3& position)
 {
@@ -107,6 +108,8 @@ void Camera::MouseControl(float xPos, float yPos)
     lastX = xPos;
     lastY = yPos;
 
+    //std::cout << lastX<<" - "<<lastY << "\n";
+
     if (fabs(xChange) <= 1e-6 && fabs(yChange) <= 1e-6) {
         return;
     }
@@ -127,10 +130,57 @@ void Camera::ProcessMouseScroll(float yOffset)
         FoVy = 90.0f;
 }
 
+void Camera::LookAt(const glm::vec3& target)
+{
+    // Calculează vectorul de direcție de la poziția camerei la țintă
+    glm::vec3 direction = glm::normalize(target - position);
+
+    // Calculează un vector care reprezintă "susul" camerei
+    //glm::vec3 worldUp(0.0f, 1.0f, 0.0f);
+    worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+
+
+     //Calculează vectorul în sus
+    up = glm::cross(glm::cross(direction, worldUp), direction);
+
+    // Calculează vectorul drept
+    right = glm::cross(direction, up);
+
+    //right = glm::normalize(glm::cross(forward, worldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+    //up = glm::normalize(glm::cross(right, forward));
+    
+    // Actualizează membrul forward
+    forward = direction;
+
+    //yaw = 90;
+    pitch = -10;
+    lastX = 0;
+    lastY = 0;
+
+}
+
+void Camera::SetPosition(const glm::vec3& newPosition)
+{
+    position = newPosition;
+}
+
+void Camera::SetYaw(float tankRotationAngle)
+{
+    yaw = tankRotationAngle;
+}
+
 void Camera::ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch)
 {
+    if (yOffset >= 1)
+        yOffset = 1;
+    if (xOffset >= 1)
+        xOffset = 1;
     yaw += xOffset;
     pitch += yOffset;
+
+    std::cout <<"yaw-pitch:      "<< yaw << "  -  " << pitch << "\n";
+    //std::cout <<"xOffset-yOffset:           "<< xOffset << "  -  " << yOffset << "\n";
 
     //std::cout << "yaw = " << yaw << std::endl;
     //std::cout << "pitch = " << pitch << std::endl;

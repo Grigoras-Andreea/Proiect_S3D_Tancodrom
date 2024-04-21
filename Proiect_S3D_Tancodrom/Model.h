@@ -30,9 +30,22 @@ public:
     glm::mat4 GetModelMatrix() const {
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, position);
+        model = glm::rotate(model, glm::radians(rotationAngle), rotationAxis); // Rotates the model around the specified axis
+
         // alte transformãri dacã sunt necesare
         return model;
     }
+
+    float GetRotationAngle() { return rotationAngle; };
+    glm::vec3 GetRotationAxis() { return rotationAxis; };
+    void Rotate(float angle, const glm::vec3& axis);
+    void SetRotationAxis(const glm::vec3& axis) {
+        rotationAxis = axis;
+    }
+    void SetRotationAngle(float angle) {
+        rotationAngle = angle;
+    }
+
 
 private:
     // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
@@ -48,6 +61,10 @@ private:
     vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 
 
+
+
+    glm::vec3 rotationAxis;
+    float rotationAngle;
 
     glm::vec3 position;
 };

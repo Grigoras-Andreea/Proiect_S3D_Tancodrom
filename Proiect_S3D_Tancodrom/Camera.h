@@ -60,6 +60,17 @@ public:
     void ProcessMouseScroll(float yOffset);
    
 
+
+    void LookAt(const glm::vec3& target);
+    
+
+    void SetPosition(const glm::vec3& newPosition);
+    
+
+    void SetYaw(float tankRotationAngle);
+
+
+
 private:
     void ProcessMouseMovement(float xOffset, float yOffset, bool constrainPitch = true);
     
