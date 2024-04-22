@@ -26,6 +26,21 @@ void Model::SetPosition(const glm::vec3& newPosition)
     position = newPosition;
 }
 
+glm::mat4 Model::GetModelMatrix() const
+{
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, position);
+    model = glm::rotate(model, glm::radians(rotationAngle), rotationAxis); // Rotates the model around the specified axis
+    model = glm::scale(model, scale);
+    // alte transformări dacă sunt necesare
+    return model;
+}
+
+void Model::SetScale(const glm::vec3& newScale)
+{
+    scale = newScale;
+}
+
 void Model::loadModel(string const& path, bool bSmoothNormals)
 {
     // read file via ASSIMP

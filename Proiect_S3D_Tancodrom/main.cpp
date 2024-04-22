@@ -81,13 +81,13 @@ void renderFloor()
 		// set up vertex data (and buffer(s)) and configure vertex attributes
 		float planeVertices[] = {
 			// positions            // normals         // texcoords
-			75.0f, -30.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-			-75.0f, -30.5f,  25.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-			-75.0f, -30.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
+			500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+			-500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+			-500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
 
-			75.0f, -30.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-			-75.0f, -30.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-			75.0f, -30.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
+			500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+			-500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
+			500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
 		};
 		// plane VAO
 		glGenVertexArrays(1, &planeVAO);
@@ -143,6 +143,52 @@ std::string ConvertWStringToString(const std::wstring& wstr) {
 	return str;
 }
 
+std::vector<Model> tankuri;
+
+void PozitioneazaTankuri(Model &tank1, Model &tank2, Model &tank3, Model &tank4, Model &tank5, Model &tank6, Model &tank7, Model &tank8, Model &mountain1, Model& mountain2, Model& mountain3, Model& mountain4)
+{
+	tank1.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
+	tank1.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tank1.SetRotationAngle(180.0f);
+	tank2.SetPosition(glm::vec3(-12.0f, 0.0f, 20.0f));
+	tank2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tank2.SetRotationAngle(180.0f);
+	tank3.SetPosition(glm::vec3(-25.0f, 0.0f, 20.0f));
+	tank3.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tank3.SetRotationAngle(180.0f);
+	tank4.SetPosition(glm::vec3(14.0f, 0.0f, 27.0f));
+	tank4.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tank4.SetRotationAngle(180.0f);
+
+	tank5.SetPosition(glm::vec3(0.0f, 0.0f, -20.0f));
+	tank5.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//tank5.SetRotationAngle(180.0f); 
+	tank6.SetPosition(glm::vec3(-12.0f, 0.0f, -25.0f));
+	tank6.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//tank6.SetRotationAngle(180.0f); 
+	tank7.SetPosition(glm::vec3(-25.0f, 0.0f, -29.0f));
+	tank7.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//tank7.SetRotationAngle(180.0f);
+	tank8.SetPosition(glm::vec3(14.0f, 0.0f, -30.0f));
+	tank8.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//tank8.SetRotationAngle(180.0f); 
+
+	
+	mountain1.SetPosition(glm::vec3(150.0f, -2.0f, 0.0f));
+	mountain1.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	mountain1.SetScale(glm::vec3(25.0f));
+	mountain2.SetPosition(glm::vec3(-150.0f, -2.0f, 0.0f));
+	mountain2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	mountain2.SetScale(glm::vec3(25.0f));
+	mountain3.SetPosition(glm::vec3(0.0f, -2.0f, -150.0f));
+	mountain3.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	mountain3.SetScale(glm::vec3(25.0f));
+	mountain3.SetRotationAngle(90.0f);
+	mountain4.SetPosition(glm::vec3(0.0f, -2.0f, 150.0f));
+	mountain4.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	mountain4.SetScale(glm::vec3(25.0f));
+	mountain4.SetRotationAngle(90.0f);
+}
 
 int main()
 {
@@ -281,28 +327,42 @@ int main()
 	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
+	//std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mountain\\mount.blend1.obj");
+	std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mount.blend1.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\Human\\human.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\WWII_Tank_Germany_Panzer_III_v1_L2.123c56cb92d1-9485-44e9-a197-a7bddb48c29f\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	Model tank1(piratObjFileName, false);
 	Model tank2(piratObjFileName, false);
 	Model tank3(piratObjFileName, false);
 	Model tank4(piratObjFileName, false);
+	Model tank5(piratObjFileName, false);
+	Model tank6(piratObjFileName, false);
+	Model tank7(piratObjFileName, false);
+	Model tank8(piratObjFileName, false);
+	
+	Model mountain1(mountainObjFileName, false);
+	Model mountain2(mountainObjFileName, false);
+	Model mountain3(mountainObjFileName, false);
+	Model mountain4(mountainObjFileName, false);
+
 
 	unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
-
-	tank2.SetPosition(glm::vec3(7.0f, 0.0f, 3.0f));
-	tank2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank3.SetPosition(glm::vec3(-5.0f, 0.0f, 5.0f));
-	tank3.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank4.SetPosition(glm::vec3(12.0f, 0.0f, -2.0f));
-	tank4.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-
-	float radius = 20.0f; // Raza cercului pe care se va rota lumina
-	float speed = 0.2f;
+	
 
 
-	float movementSpeed = 0.1f; // ajustează la viteza dorită
-	glm::vec3 movementDirection(1.0f, 0.0f, 0.0f); // mutare pe axa X
+	float radius = 80.0f; // Raza cercului pe care se va rota lumina
+	float speed = 0.05f;
+
+	//tankuri.push_back(tank1);
+	tankuri.push_back(tank2);
+	tankuri.push_back(tank3);
+	tankuri.push_back(tank4);
+
+
+	PozitioneazaTankuri(tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8, mountain1, mountain2, mountain3, mountain4);
+
+	//float movementSpeed = 0.1f; // ajustează la viteza dorită
+	//glm::vec3 movementDirection(1.0f, 0.0f, 0.0f); // mutare pe axa X
 
 	//renderFloor();
 	// Render loop
@@ -343,17 +403,25 @@ int main()
 		}
 
 		lightingShader.SetVec3("lightPos", lightPos);
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		//glBindTexture(GL_TEXTURE_2D, floorTexture);
 		lightingShader.SetVec3("viewPos", pCamera->GetPosition());
 		
 		lightingShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lightingShader.SetMat4("view", pCamera->GetViewMatrix());
-
+		
 		////Calculate new model position
 		/*glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
 		piratObjModel.SetPosition(newPosition);*/
-
+		
 		// Set model matrix and draw the model
+		lightingShader.SetMat4("model", mountain1.GetModelMatrix());
+		mountain1.Draw(lightingShader);
+		lightingShader.SetMat4("model", mountain2.GetModelMatrix());
+		mountain2.Draw(lightingShader);
+		lightingShader.SetMat4("model", mountain3.GetModelMatrix());
+		mountain3.Draw(lightingShader);
+		lightingShader.SetMat4("model", mountain4.GetModelMatrix());
+		mountain4.Draw(lightingShader);
 		lightingShader.SetMat4("model", tank1.GetModelMatrix());
 		tank1.Draw(lightingShader);
 		lightingShader.SetMat4("model", tank2.GetModelMatrix());
@@ -362,26 +430,37 @@ int main()
 		tank3.Draw(lightingShader);
 		lightingShader.SetMat4("model", tank4.GetModelMatrix());
 		tank4.Draw(lightingShader);
-
+		lightingShader.SetMat4("model", tank5.GetModelMatrix());
+		tank5.Draw(lightingShader);
+		lightingShader.SetMat4("model", tank6.GetModelMatrix());
+		tank6.Draw(lightingShader);
+		lightingShader.SetMat4("model", tank7.GetModelMatrix());
+		tank7.Draw(lightingShader);
+		lightingShader.SetMat4("model", tank8.GetModelMatrix());
+		tank8.Draw(lightingShader);
+		
+		renderFloor();
+		
+		
 		// Use lamp shader
 		lampShader.Use();
 		lampShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lampShader.SetMat4("view", pCamera->GetViewMatrix());
 
-
+		//glBindTexture(GL_TEXTURE_2D, floorTexture);
 
 		// Set light model matrix and draw the lamp object
 		glm::mat4 lightModel = glm::translate(glm::mat4(1.0), lightPos);
 		lightModel = glm::scale(lightModel, glm::vec3(0.5f)); // a smaller cube
 		lampShader.SetMat4("model", lightModel);
 		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		glActiveTexture(GL_TEXTURE1);
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-
 
 	}
 
@@ -409,61 +488,60 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	glm::vec3 movementDirection(0.0f);
-	float rotationAngle = piratObjModel.GetRotationAngle();
+	if (tankIsSelected) {
+		glm::vec3 movementDirection(0.0f);
+		float rotationAngle = piratObjModel.GetRotationAngle();
 
-	// Calculul direcției de mișcare în funcție de unghiul de rotație
-	float radianRotationAngle = glm::radians(-rotationAngle); // Convertim unghiul în radiani
-	float cosAngle = cos(radianRotationAngle);
-	float sinAngle = sin(radianRotationAngle);
+		// Calculul direcției de mișcare în funcție de unghiul de rotație
+		float radianRotationAngle = glm::radians(-rotationAngle); // Convertim unghiul în radiani
+		float cosAngle = cos(radianRotationAngle);
+		float sinAngle = sin(radianRotationAngle);
 
-	// Rotăm direcția îndreptată înainte în jurul axei y
-	glm::vec3 forwardDirection(
-		0.0f,
-		0.0f,
-		1.0f
-	);
-	glm::vec3 rotatedForwardDirection(
-		forwardDirection.x * cosAngle + forwardDirection.z * sinAngle,
-		forwardDirection.y,
-		forwardDirection.x * sinAngle - forwardDirection.z * cosAngle
-	);
+		// Rotăm direcția îndreptată înainte în jurul axei y
+		glm::vec3 forwardDirection(
+			0.0f,
+			0.0f,
+			1.0f
+		);
+		glm::vec3 rotatedForwardDirection(
+			forwardDirection.x * cosAngle + forwardDirection.z * sinAngle,
+			forwardDirection.y,
+			forwardDirection.x * sinAngle - forwardDirection.z * cosAngle
+		);
 
-	// Updatează direcția de mișcare bazată pe tastele apăsate
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		movementDirection -= rotatedForwardDirection; // Înainte
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		movementDirection += rotatedForwardDirection; // Înapoi
+		// Updatează direcția de mișcare bazată pe tastele apăsate
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			movementDirection -= rotatedForwardDirection; // Înainte
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			movementDirection += rotatedForwardDirection; // Înapoi
 
-	// Aplică viteza de mișcare
-	float movementSpeed = 0.5f; // Ajustează după necesități
-	glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
-	piratObjModel.SetPosition(newPosition);
+		// Aplică viteza de mișcare
+		float movementSpeed = 0.5f; // Ajustează după necesități
+		glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
+		piratObjModel.SetPosition(newPosition);
 
-	// Inițializează viteza și unghiul de rotație
-	float rotationSpeed = 20.0f; // Ajustează după necesități
-	glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f); // Axul de rotație implicit (în jurul axei Y)
+		// Inițializează viteza și unghiul de rotație
+		float rotationSpeed = 20.0f; // Ajustează după necesități
+		glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f); // Axul de rotație implicit (în jurul axei Y)
 
-	// Rotație la stânga (tasta A)
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		rotationAngle += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
-		rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+		// Rotație la stânga (tasta A)
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		{
+			rotationAngle += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+			rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			rotationAngle -= rotationSpeed * static_cast<float>(deltaTime); // Scade unghiul de rotație
+			rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+		}
+
+		// Setează unghiul și axa de rotație
+		piratObjModel.SetRotationAngle(rotationAngle);
+		piratObjModel.SetRotationAxis(rotationAxis);
 	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		rotationAngle -= rotationSpeed * static_cast<float>(deltaTime); // Scade unghiul de rotație
-		rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-	}
 
-	// Setează unghiul și axa de rotație
-	piratObjModel.SetRotationAngle(rotationAngle);
-	piratObjModel.SetRotationAxis(rotationAxis);
-
-
-
-	//----------------------  CAMERA  ------------------------------------
-
+	//---- modificare tankIsSelected ---- 
 	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
 	{
 		tankIsSelected = true;
@@ -474,7 +552,9 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 		tankIsSelected = false;
 		
 	}
-	
+
+
+	//----------------------  CAMERA  ------------------------------------
 	if (tankIsSelected)
 	{
 		// Obținem poziția și rotația tankului
@@ -495,9 +575,6 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 		pCamera->LookAt(tankPosition);
 	}
 
-
-
-	//----------------------  CAMERA  ------------------------------------
 	if (!tankIsSelected)
 	{
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)

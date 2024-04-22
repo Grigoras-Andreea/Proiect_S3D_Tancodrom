@@ -27,18 +27,12 @@ public:
     glm::vec3 GetPosition() const;
     void SetPosition(const glm::vec3& newPosition);
 
-    glm::mat4 GetModelMatrix() const {
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, position);
-        model = glm::rotate(model, glm::radians(rotationAngle), rotationAxis); // Rotates the model around the specified axis
-
-        // alte transformãri dacã sunt necesare
-        return model;
-    }
+    glm::mat4 GetModelMatrix() const;
+        
 
     float GetRotationAngle() { return rotationAngle; };
     glm::vec3 GetRotationAxis() { return rotationAxis; };
-    void Rotate(float angle, const glm::vec3& axis);
+    void SetScale(const glm::vec3& newScale);
     void SetRotationAxis(const glm::vec3& axis) {
         rotationAxis = axis;
     }
@@ -61,7 +55,7 @@ private:
     vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
 
 
-
+    glm::vec3 scale = glm::vec3(1.0f);
 
     glm::vec3 rotationAxis;
     float rotationAngle;
