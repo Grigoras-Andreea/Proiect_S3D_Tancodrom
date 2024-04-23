@@ -528,26 +528,7 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 			forwardDirection.x * sinAngle - forwardDirection.z * cosAngle
 		);
 
-		// Rotație la stânga (tasta A)
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		{
-			float rotationSpeed = 20.0f; // Ajustează după necesități
-			glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-			rotationAngle += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
-			rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-			piratObjModel.SetRotationAngle(rotationAngle);
-			piratObjModel.SetRotationAxis(rotationAxis);
-		}
-		// Rotație la dreapta (tasta D)
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		{
-			float rotationSpeed = 20.0f; // Ajustează după necesități
-			glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-			rotationAngle -= rotationSpeed * static_cast<float>(deltaTime); // Scade unghiul de rotație
-			rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-			piratObjModel.SetRotationAngle(rotationAngle);
-			piratObjModel.SetRotationAxis(rotationAxis);
-		}
+
 
 		// Miscare fata (tasta W)
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -557,6 +538,26 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 			float movementSpeed = 1.5f; // Ajustează după necesități
 			glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
 			piratObjModel.SetPosition(newPosition);
+			// Rotație la stânga (tasta A)
+			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			{
+				float rotationSpeed = 20.0f; // Ajustează după necesități
+				glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+				rotationAngle += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+				rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+				piratObjModel.SetRotationAngle(rotationAngle);
+				piratObjModel.SetRotationAxis(rotationAxis);
+			}
+			// Rotație la dreapta (tasta D)
+			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			{
+				float rotationSpeed = 20.0f; // Ajustează după necesități
+				glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+				rotationAngle -= rotationSpeed * static_cast<float>(deltaTime); // Scade unghiul de rotație
+				rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+				piratObjModel.SetRotationAngle(rotationAngle);
+				piratObjModel.SetRotationAxis(rotationAxis);
+			}
 		}
 		// Miscare spate (tasta S) 
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -566,6 +567,26 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 			float movementSpeed = 1.5f; // Ajustează după necesități
 			glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
 			piratObjModel.SetPosition(newPosition);
+			// Rotație la stânga (tasta A)
+			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			{
+				float rotationSpeed = 20.0f; // Ajustează după necesități
+				glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+				rotationAngle += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+				rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+				piratObjModel.SetRotationAngle(rotationAngle);
+				piratObjModel.SetRotationAxis(rotationAxis);
+			}
+			// Rotație la dreapta (tasta D)
+			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			{
+				float rotationSpeed = 20.0f; // Ajustează după necesități
+				glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+				rotationAngle -= rotationSpeed * static_cast<float>(deltaTime); // Scade unghiul de rotație
+				rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+				piratObjModel.SetRotationAngle(rotationAngle);
+				piratObjModel.SetRotationAxis(rotationAxis);
+			}
 		}
 	}
 
