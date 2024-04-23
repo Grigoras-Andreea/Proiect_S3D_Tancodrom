@@ -179,7 +179,7 @@ void Camera::ProcessMouseMovement(float xOffset, float yOffset, bool constrainPi
     yaw += xOffset;
     pitch += yOffset;
 
-    std::cout <<"yaw-pitch:      "<< yaw << "  -  " << pitch << "\n";
+    //std::cout <<"yaw-pitch:      "<< yaw << "  -  " << pitch << "\n";
     //std::cout <<"xOffset-yOffset:           "<< xOffset << "  -  " << yOffset << "\n";
 
     //std::cout << "yaw = " << yaw << std::endl;

@@ -145,8 +145,49 @@ std::string ConvertWStringToString(const std::wstring& wstr) {
 
 std::vector<Model> tankuri;
 
-void PozitioneazaTankuri(Model &tank1, Model &tank2, Model &tank3, Model &tank4, Model &tank5, Model &tank6, Model &tank7, Model &tank8, Model &mountain1, Model& mountain2, Model& mountain3, Model& mountain4)
+void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8, Model& mountain1, Model& mountain2, Model& mountain3, Model& mountain4, Model& helicopter1, Model& helicopter2)
 {
+	glBindTexture(GL_TEXTURE_2D, 2);
+	lightingShader.SetMat4("model", mountain1.GetModelMatrix());
+	mountain1.Draw(lightingShader);
+	lightingShader.SetMat4("model", mountain2.GetModelMatrix());
+	mountain2.Draw(lightingShader);
+	lightingShader.SetMat4("model", mountain3.GetModelMatrix());
+	mountain3.Draw(lightingShader);
+	lightingShader.SetMat4("model", mountain4.GetModelMatrix());
+	mountain4.Draw(lightingShader);
+
+
+	glBindTexture(GL_TEXTURE_2D, 1);
+	lightingShader.SetMat4("model", tank1.GetModelMatrix());
+	tank1.Draw(lightingShader);
+	lightingShader.SetMat4("model", tank2.GetModelMatrix());
+	tank2.Draw(lightingShader);
+	lightingShader.SetMat4("model", tank3.GetModelMatrix());
+	tank3.Draw(lightingShader);
+	lightingShader.SetMat4("model", tank4.GetModelMatrix());
+	tank4.Draw(lightingShader);
+	lightingShader.SetMat4("model", tank5.GetModelMatrix());
+	tank5.Draw(lightingShader);
+	lightingShader.SetMat4("model", tank6.GetModelMatrix());
+	tank6.Draw(lightingShader);
+	lightingShader.SetMat4("model", tank7.GetModelMatrix());
+	tank7.Draw(lightingShader);
+	lightingShader.SetMat4("model", tank8.GetModelMatrix());
+	tank8.Draw(lightingShader);
+	glBindTexture(GL_TEXTURE_2D, 2);
+	renderFloor();
+	glBindTexture(GL_TEXTURE_2D, 1);
+	lightingShader.SetMat4("model", helicopter1.GetModelMatrix());
+	helicopter1.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopter2.GetModelMatrix());
+	helicopter2.Draw(lightingShader);
+
+}
+
+void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8, Model& mountain1, Model& mountain2, Model& mountain3, Model& mountain4, Model& helicopter1, Model& helicopter2)
+{
+	//---- Tancuri ----
 	tank1.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
 	tank1.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	tank1.SetRotationAngle(180.0f);
@@ -162,18 +203,15 @@ void PozitioneazaTankuri(Model &tank1, Model &tank2, Model &tank3, Model &tank4,
 
 	tank5.SetPosition(glm::vec3(0.0f, 0.0f, -20.0f));
 	tank5.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//tank5.SetRotationAngle(180.0f); 
 	tank6.SetPosition(glm::vec3(-12.0f, 0.0f, -25.0f));
 	tank6.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//tank6.SetRotationAngle(180.0f); 
 	tank7.SetPosition(glm::vec3(-25.0f, 0.0f, -29.0f));
 	tank7.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//tank7.SetRotationAngle(180.0f);
 	tank8.SetPosition(glm::vec3(14.0f, 0.0f, -30.0f));
 	tank8.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//tank8.SetRotationAngle(180.0f); 
 
-	
+
+	//---- Munti ----
 	mountain1.SetPosition(glm::vec3(150.0f, -2.0f, 0.0f));
 	mountain1.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	mountain1.SetScale(glm::vec3(25.0f));
@@ -188,6 +226,16 @@ void PozitioneazaTankuri(Model &tank1, Model &tank2, Model &tank3, Model &tank4,
 	mountain4.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	mountain4.SetScale(glm::vec3(25.0f));
 	mountain4.SetRotationAngle(90.0f);
+
+
+	//---- Elicoptere ----
+	helicopter1.SetPosition(glm::vec3(20.0f, 20.0f, -30.0f));
+	helicopter1.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//helicopter1.SetRotationAngle(180.0f);
+	helicopter2.SetPosition(glm::vec3(20.0f, 20.0f, 30.0f));
+	helicopter2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	helicopter2.SetRotationAngle(180.0f);
+
 }
 
 int main()
@@ -312,11 +360,11 @@ int main()
 	std::string path2 = (std::string(currentPathChr) + "\\Shaders\\PhongLight.vs").c_str();
 
 
-	
 
-	Shader lightingShader((currentPathChr + std::string("\\Shaders\\PhongLight.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\PhongLight.fs")).c_str()));
+
+	//Shader lightingShader((currentPathChr + std::string("\\Shaders\\PhongLight.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\PhongLight.fs")).c_str()));
 	Shader lampShader((currentPathChr + std::string("\\Shaders\\Lamp.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\Lamp.fs")).c_str()));
-	//Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
+	Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
 	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
 
 
@@ -331,6 +379,11 @@ int main()
 	std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mount.blend1.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\Human\\human.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\WWII_Tank_Germany_Panzer_III_v1_L2.123c56cb92d1-9485-44e9-a197-a7bddb48c29f\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
+	//std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_bell_nou.obj");
+	std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_Bell\\Heli_bell_nou.obj");
+
+
+	//---- Creare Modele
 	Model tank1(piratObjFileName, false);
 	Model tank2(piratObjFileName, false);
 	Model tank3(piratObjFileName, false);
@@ -339,19 +392,22 @@ int main()
 	Model tank6(piratObjFileName, false);
 	Model tank7(piratObjFileName, false);
 	Model tank8(piratObjFileName, false);
-	
+
 	Model mountain1(mountainObjFileName, false);
 	Model mountain2(mountainObjFileName, false);
 	Model mountain3(mountainObjFileName, false);
 	Model mountain4(mountainObjFileName, false);
 
+	Model helicopter1(helicopterObjFileName, false);
+	Model helicopter2(helicopterObjFileName, false);
+
+
 
 	unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
-	
-
+	unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
 
 	float radius = 80.0f; // Raza cercului pe care se va rota lumina
-	float speed = 0.05f;
+	float speed = 1.05f;
 
 	//tankuri.push_back(tank1);
 	tankuri.push_back(tank2);
@@ -359,12 +415,8 @@ int main()
 	tankuri.push_back(tank4);
 
 
-	PozitioneazaTankuri(tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8, mountain1, mountain2, mountain3, mountain4);
+	PozitionateModels(tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8, mountain1, mountain2, mountain3, mountain4, helicopter1, helicopter2);
 
-	//float movementSpeed = 0.1f; // ajustează la viteza dorită
-	//glm::vec3 movementDirection(1.0f, 0.0f, 0.0f); // mutare pe axa X
-
-	//renderFloor();
 	// Render loop
 	while (!glfwWindowShouldClose(window)) {
 		// Per-frame time logic
@@ -375,7 +427,7 @@ int main()
 
 		// Input
 		//processInput(window);
-		processInput(window, tank1);
+		processInput(window, tank1);		// aici ar cam trb modificat pentru a putea controla toate tancurile, acum se poate controla doar tancul tank1
 
 		// Clear buffers
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -388,72 +440,43 @@ int main()
 		lightPos.x = lightX;
 		lightPos.y = fabs(lightZ);
 
-		//renderFloor();
 		// Use lighting shader
 		lightingShader.Use();
 
+		// asta a fost pentru modificarea culorii Shaderelor PhongLight
 		if (lightZ >= 0) {
-			lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
-			lightingShader.SetVec3("objectColor", 0.5f, 1.0f, 0.3f);
+			//lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
+			//lightingShader.SetVec3("objectColor", 0.5f, 1.0f, 0.3f);
 		}
 		else {
-			lightingShader.SetVec3("lightColor", 0.8f, 0.8f, 0.8f);
-			lightingShader.SetVec3("objectColor", 0.8f, 0.8f, 0.3f);
+			//lightingShader.SetVec3("lightColor", 0.2f, 0.2f, 0.2f);
+			//lightingShader.SetVec3("objectColor", 0.8f, 0.8f, 0.3f);
 			lightPos.x = -lightPos.x;
 		}
 
 		lightingShader.SetVec3("lightPos", lightPos);
 		//glBindTexture(GL_TEXTURE_2D, floorTexture);
 		lightingShader.SetVec3("viewPos", pCamera->GetPosition());
-		
+
 		lightingShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lightingShader.SetMat4("view", pCamera->GetViewMatrix());
-		
-		////Calculate new model position
-		/*glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
-		piratObjModel.SetPosition(newPosition);*/
-		
+
+
 		// Set model matrix and draw the model
-		lightingShader.SetMat4("model", mountain1.GetModelMatrix());
-		mountain1.Draw(lightingShader);
-		lightingShader.SetMat4("model", mountain2.GetModelMatrix());
-		mountain2.Draw(lightingShader);
-		lightingShader.SetMat4("model", mountain3.GetModelMatrix());
-		mountain3.Draw(lightingShader);
-		lightingShader.SetMat4("model", mountain4.GetModelMatrix());
-		mountain4.Draw(lightingShader);
-		lightingShader.SetMat4("model", tank1.GetModelMatrix());
-		tank1.Draw(lightingShader);
-		lightingShader.SetMat4("model", tank2.GetModelMatrix());
-		tank2.Draw(lightingShader);
-		lightingShader.SetMat4("model", tank3.GetModelMatrix());
-		tank3.Draw(lightingShader);
-		lightingShader.SetMat4("model", tank4.GetModelMatrix());
-		tank4.Draw(lightingShader);
-		lightingShader.SetMat4("model", tank5.GetModelMatrix());
-		tank5.Draw(lightingShader);
-		lightingShader.SetMat4("model", tank6.GetModelMatrix());
-		tank6.Draw(lightingShader);
-		lightingShader.SetMat4("model", tank7.GetModelMatrix());
-		tank7.Draw(lightingShader);
-		lightingShader.SetMat4("model", tank8.GetModelMatrix());
-		tank8.Draw(lightingShader);
-		
-		renderFloor();
-		
-		
+		RenderModels(lightingShader, tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8, mountain1, mountain2, mountain3, mountain4, helicopter1, helicopter2);
+
+
 		// Use lamp shader
 		lampShader.Use();
 		lampShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lampShader.SetMat4("view", pCamera->GetViewMatrix());
 
-		//glBindTexture(GL_TEXTURE_2D, floorTexture);
-
 		// Set light model matrix and draw the lamp object
 		glm::mat4 lightModel = glm::translate(glm::mat4(1.0), lightPos);
 		lightModel = glm::scale(lightModel, glm::vec3(0.5f)); // a smaller cube
 		lampShader.SetMat4("model", lightModel);
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
+
+		//glBindTexture(GL_TEXTURE_2D, floorTexture);
 		glActiveTexture(GL_TEXTURE1);
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -463,7 +486,6 @@ int main()
 		glfwPollEvents();
 
 	}
-
 
 	Cleanup();
 
@@ -485,9 +507,11 @@ bool tankIsSelected = false;
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow* window, Model& piratObjModel)
 {
+	//---- EXIT APP ----
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	//---- Control miscari model(tank)
 	if (tankIsSelected) {
 		glm::vec3 movementDirection(0.0f);
 		float rotationAngle = piratObjModel.GetRotationAngle();
@@ -497,65 +521,63 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 		float cosAngle = cos(radianRotationAngle);
 		float sinAngle = sin(radianRotationAngle);
 
-		// Rotăm direcția îndreptată înainte în jurul axei y
-		glm::vec3 forwardDirection(
-			0.0f,
-			0.0f,
-			1.0f
-		);
+		glm::vec3 forwardDirection(0.0f, 0.0f, 1.0f);
 		glm::vec3 rotatedForwardDirection(
 			forwardDirection.x * cosAngle + forwardDirection.z * sinAngle,
 			forwardDirection.y,
 			forwardDirection.x * sinAngle - forwardDirection.z * cosAngle
 		);
 
-		// Updatează direcția de mișcare bazată pe tastele apăsate
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			movementDirection -= rotatedForwardDirection; // Înainte
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			movementDirection += rotatedForwardDirection; // Înapoi
-
-		// Aplică viteza de mișcare
-		float movementSpeed = 0.5f; // Ajustează după necesități
-		glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
-		piratObjModel.SetPosition(newPosition);
-
-		// Inițializează viteza și unghiul de rotație
-		float rotationSpeed = 20.0f; // Ajustează după necesități
-		glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f); // Axul de rotație implicit (în jurul axei Y)
-
 		// Rotație la stânga (tasta A)
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		{
+			float rotationSpeed = 20.0f; // Ajustează după necesități
+			glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
 			rotationAngle += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
 			rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+			piratObjModel.SetRotationAngle(rotationAngle);
+			piratObjModel.SetRotationAxis(rotationAxis);
 		}
+		// Rotație la dreapta (tasta D)
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		{
+			float rotationSpeed = 20.0f; // Ajustează după necesități
+			glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
 			rotationAngle -= rotationSpeed * static_cast<float>(deltaTime); // Scade unghiul de rotație
 			rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+			piratObjModel.SetRotationAngle(rotationAngle);
+			piratObjModel.SetRotationAxis(rotationAxis);
 		}
 
-		// Setează unghiul și axa de rotație
-		piratObjModel.SetRotationAngle(rotationAngle);
-		piratObjModel.SetRotationAxis(rotationAxis);
+		// Miscare fata (tasta W)
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			movementDirection -= rotatedForwardDirection; // Înainte
+			// Aplică viteza de mișcare
+			float movementSpeed = 1.5f; // Ajustează după necesități
+			glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
+			piratObjModel.SetPosition(newPosition);
+		}
+		// Miscare spate (tasta S) 
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			movementDirection += rotatedForwardDirection; // Înapoi
+			// Aplică viteza de mișcare
+			float movementSpeed = 1.5f; // Ajustează după necesități
+			glm::vec3 newPosition = piratObjModel.GetPosition() + (movementDirection * movementSpeed * static_cast<float>(deltaTime));
+			piratObjModel.SetPosition(newPosition);
+		}
 	}
 
-	//---- modificare tankIsSelected ---- 
+	//---- modificare tankIsSelected de la tastatura ---- 
 	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
-	{
 		tankIsSelected = true;
-	
-	}
 	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
-	{
 		tankIsSelected = false;
-		
-	}
 
 
 	//----------------------  CAMERA  ------------------------------------
-	if (tankIsSelected)
+	if (tankIsSelected) // Daca un model este selectat de aici am setat sa fie urmarit de camera
 	{
 		// Obținem poziția și rotația tankului
 		glm::vec3 tankPosition = piratObjModel.GetPosition();
@@ -565,8 +587,6 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 		glm::vec3 cameraOffset = glm::vec3(0.0f, 8.0f, -20.0f); // Offset-ul inițial
 		// Rotăm offset-ul camerei în funcție de rotația tankului
 		cameraOffset = rotateVector(cameraOffset, glm::radians(tankRotationAngle), tankRotationAxis);
-		//pCamera->SetYaw(tankRotationAngle);
-		std::cout << tankRotationAngle <<"\n";
 		// Poziția camerei va fi poziția tankului plus offset-ul
 		glm::vec3 cameraPosition = tankPosition + cameraOffset;
 		// Setăm poziția camerei
@@ -574,7 +594,7 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 		// Orientăm camera spre tank
 		pCamera->LookAt(tankPosition);
 	}
-
+	//---- Putem misca din sageti camera numai daca nu avem un model selectat
 	if (!tankIsSelected)
 	{
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
@@ -609,7 +629,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	if(!tankIsSelected)
+	if (!tankIsSelected) // am facut aceasta conditie ca sa nu putem modifica deloc camera cu mouse-ul atunci cand un model este selectat
 		pCamera->MouseControl((float)xpos, (float)ypos);
 }
 
