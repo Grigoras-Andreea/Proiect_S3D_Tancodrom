@@ -415,7 +415,7 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	cloud3.SetRotationAngle(180.0f);
 	cloud3.SetScale(glm::vec3(0.55f));
 
-	cloud4.SetPosition(glm::vec3(-20.0f, 170.0f, -205.0f));
+	cloud4.SetPosition(glm::vec3(20.0f, 170.0f, 205.0f));
 	cloud4.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud4.SetRotationAngle(180.0f);
 	cloud4.SetScale(glm::vec3(0.35f));
@@ -442,17 +442,17 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	cloud8.SetRotationAngle(180.0f);
 	cloud8.SetScale(glm::vec3(0.65f));
 
-	cloud9.SetPosition(glm::vec3(-285.0f, 140.0f, 40.0f));
+	cloud9.SetPosition(glm::vec3(285.0f, 140.0f, -40.0f));
 	cloud9.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud9.SetRotationAngle(180.0f);
 	cloud9.SetScale(glm::vec3(0.25f));
 
-	cloud10.SetPosition(glm::vec3(-185.0f, 170.0f, 35.0f));
+	cloud10.SetPosition(glm::vec3(85.0f, 170.0f, 135.0f));
 	cloud10.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud10.SetRotationAngle(180.0f);
 	cloud10.SetScale(glm::vec3(0.45f));
 
-	cloud11.SetPosition(glm::vec3(-220.0f, 160.0f, -25.0f));
+	cloud11.SetPosition(glm::vec3(-220.0f, 160.0f, -125.0f));
 	cloud11.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud11.SetRotationAngle(180.0f);
 	cloud11.SetScale(glm::vec3(0.25f));
@@ -463,12 +463,12 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	cloud12.SetRotationAngle(180.0f);
 	cloud12.SetScale(glm::vec3(0.25f));
 
-	cloud13.SetPosition(glm::vec3(-250.0f, 170.0f, -90.0f));
+	cloud13.SetPosition(glm::vec3(250.0f, 170.0f, 90.0f));
 	cloud13.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud13.SetRotationAngle(180.0f);
 	cloud13.SetScale(glm::vec3(0.25f));
 
-	cloud14.SetPosition(glm::vec3(-220.0f, 140.0f, 65.0f));
+	cloud14.SetPosition(glm::vec3(-120.0f, 140.0f, 65.0f));
 	cloud14.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud14.SetRotationAngle(180.0f);
 	cloud14.SetScale(glm::vec3(0.55f));
@@ -494,13 +494,13 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	cloud18.SetRotationAngle(180.0f);
 	cloud18.SetScale(glm::vec3(0.45f));
 
-	cloud19.SetPosition(glm::vec3(10.0f, 150.0f, 40.0f));
+	cloud19.SetPosition(glm::vec3(-50.0f, 150.0f, -230.0f));
 	cloud19.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud19.SetRotationAngle(180.0f);
 	cloud19.SetScale(glm::vec3(0.35f));
 
 	//---- Nori5 ----
-	cloud20.SetPosition(glm::vec3(-250.0f, 150.0f, 130.0f));
+	cloud20.SetPosition(glm::vec3(-250.0f, 150.0f, -130.0f));
 	cloud20.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud20.SetRotationAngle(180.0f);
 	cloud20.SetScale(glm::vec3(0.85f));
@@ -511,7 +511,7 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	cloud21.SetRotationAngle(180.0f);
 	cloud21.SetScale(glm::vec3(0.85f));
 
-	cloud22.SetPosition(glm::vec3(-250.0f, 150.0f, -130.0f));
+	cloud22.SetPosition(glm::vec3(250.0f, 150.0f, 160.0f));
 	cloud22.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud22.SetRotationAngle(180.0f);
 	cloud22.SetScale(glm::vec3(0.85f));
@@ -526,14 +526,50 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	cloud24.SetRotationAngle(180.0f);
 	cloud24.SetScale(glm::vec3(0.85f));
 
-	cloud25.SetPosition(glm::vec3(250.0f, 150.0f, -130.0f));
+	cloud25.SetPosition(glm::vec3(250.0f, 150.0f, -160.0f));
 	cloud25.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	cloud25.SetRotationAngle(180.0f);
 	cloud25.SetScale(glm::vec3(0.85f));
 
 }
 
+void moveClouds(
+	Model& cloud1, Model& cloud2, Model& cloud3, Model& cloud4, Model& cloud5, Model& cloud6, Model& cloud7, Model& cloud8, Model& cloud9,
+	Model& cloud10, Model& cloud11, Model& cloud12, Model& cloud13, Model& cloud14, Model& cloud15, Model& cloud16, Model& cloud17,
+	Model& cloud18, Model& cloud19, Model& cloud20, Model& cloud21, Model& cloud22, Model& cloud23, Model& cloud24, Model& cloud25
+)
+{
+	if (cloud15.GetPosition().x > -350.0f && cloud17.GetPosition().x > -350.0f)
+	{
+		//move clouds
+		cloud1.SetPosition(cloud1.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud2.SetPosition(cloud2.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud3.SetPosition(cloud3.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud4.SetPosition(cloud4.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud5.SetPosition(cloud5.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud6.SetPosition(cloud6.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud7.SetPosition(cloud7.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud8.SetPosition(cloud8.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud9.SetPosition(cloud9.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud10.SetPosition(cloud10.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud11.SetPosition(cloud11.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud12.SetPosition(cloud12.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud13.SetPosition(cloud13.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud14.SetPosition(cloud14.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud15.SetPosition(cloud15.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud16.SetPosition(cloud16.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud17.SetPosition(cloud17.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud18.SetPosition(cloud18.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud19.SetPosition(cloud19.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud20.SetPosition(cloud20.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud21.SetPosition(cloud21.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud22.SetPosition(cloud22.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud23.SetPosition(cloud23.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud24.SetPosition(cloud24.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+		cloud25.SetPosition(cloud25.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
+	}
 
+}
 
 bool isNight = true;
 
@@ -780,6 +816,12 @@ int main()
 		double currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
+		moveClouds(
+			cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9,
+			cloud10, cloud11, cloud12, cloud13, cloud14, cloud15, cloud16, cloud17,
+			cloud18, cloud19, cloud20, cloud21, cloud22, cloud23, cloud24, cloud25
+		);
 
 		rotate_elice(helicopter1_elice, deltaTime);
 		rotate_elice(helicopter2_elice, deltaTime);
