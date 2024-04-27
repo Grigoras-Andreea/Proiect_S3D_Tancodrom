@@ -65,26 +65,48 @@ void updateBackgroundColor(float timeOfDay) {
 
 	// Interpolate between colors
 	Color interpolatedColor(0.0f, 0.0f, 0.0f);
-	if (interpolationFactor < 0.35f) {
-		interpolatedColor = lerp(lightBlue, lightBlue, interpolationFactor * 4.0f);
+	if (interpolationFactor < 0.1f) {
+		interpolatedColor = lerp(darkBlue, sunrise, interpolationFactor  * 10.0f);
+	}
+	else if (interpolationFactor < 0.2f) {
+		interpolatedColor = lerp(sunrise, lightBlue, (interpolationFactor - 0.1f) * 10.0f);
+	}
+	else if (interpolationFactor < 0.4f) {
+		interpolatedColor = lerp(lightBlue, lightBlue, (interpolationFactor - 0.3f) * 4.0f);
 	}
 	else if (interpolationFactor < 0.5f) {
-		interpolatedColor = lerp(lightBlue, darkBlue, (interpolationFactor - 0.35f) * 7.0f);
-	}
-	else if (interpolationFactor < 0.75f) {
-		interpolatedColor = lerp(darkBlue, darkBlue, (interpolationFactor - 0.5f) * 4.0f);
-	}
-	else if (interpolationFactor < 0.9f) {
-		interpolatedColor = lerp(darkBlue, sunrise, (interpolationFactor - 0.75f) * 7.0f);
+		interpolatedColor = lerp(lightBlue, darkBlue, (interpolationFactor - 0.4f) * 10.0f);
 	}
 	else {
-		interpolatedColor = lerp(sunrise, lightBlue, (interpolationFactor - 0.9f) * 7.0f);
+		interpolatedColor = lerp(darkBlue, darkBlue, (interpolationFactor - 0.5f) * 4.0f);
 	}
 
 	// Set the background color using glClearColor
 	glClearColor(interpolatedColor.r, interpolatedColor.g, interpolatedColor.b, 1.0f);
 }
 
+float calculateTimeOfDay(glm::vec3 lightPos) {
+	// Define reference positions for sunrise and sunset
+	glm::vec3 sunrisePos(0.0f, 0.0f, 0.0f); // Example: Sun rises from the center
+	glm::vec3 sunsetPos(0.0f, 0.0f, -1.0f); // Example: Sun sets along the negative z-axis
+
+	// Calculate the angle between the light position and the sunrise position
+	glm::vec3 lightDir = glm::normalize(lightPos);
+	glm::vec3 sunriseDir = glm::normalize(sunrisePos);
+	float dotProduct = glm::dot(lightDir, sunriseDir);
+	float angle = glm::acos(dotProduct);
+
+	// Map the angle to the time of day (0 to 1)
+	// Assuming the sun moves from sunrise (0.0) to sunset (0.5) and back to sunrise (1.0)
+	float timeOfDay = angle / glm::pi<float>();
+
+	// Adjust timeOfDay if the sun is setting (after 180 degrees)
+	if (lightPos.z < 0.0f) {
+		timeOfDay = 1.0f - timeOfDay;
+	}
+
+	return timeOfDay;
+}
 
 // settings
 const unsigned int SCR_WIDTH = 1000;
@@ -405,7 +427,7 @@ int main()
 	glEnableVertexAttribArray(0);
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // cursor haz
 	// Create camera
-	pCamera = new Camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(0.0, 0.0, 3.0));
+	pCamera = new Camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(0.0, 2.0, 3.0));
 
 	glm::vec3 lightPos(0.0f, 2.0f, 1.0f);
 
@@ -472,8 +494,8 @@ int main()
 	unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
 
-	float radius = 80.0f; // Raza cercului pe care se va rota lumina
-	float speed = 1.05f;
+	float radius = 150.0f; // Raza cercului pe care se va rota lumina
+	float speed = 0.26f;
 
 	//tankuri.push_back(tank1);
 	tankuri.push_back(tank2);
