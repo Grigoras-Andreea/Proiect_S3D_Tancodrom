@@ -395,8 +395,8 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	helicopter1_elice.SetPosition(glm::vec3(20.0f, 20.0f, -30.0f));
 	helicopter1_elice.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 
-	helicopter1_elice_spate.SetPosition(glm::vec3(20.25f, 20.0f, -30.0f));
-	helicopter1_elice_spate.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	helicopter1_elice_spate.SetPosition(glm::vec3(20.5f, 23.63f, -41.27f));
+	helicopter1_elice_spate.SetRotationAxis(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	helicopter2.SetPosition(glm::vec3(19.75f, 20.0f, 30.0f));
 	helicopter2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -404,11 +404,11 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 
 	helicopter2_elice.SetPosition(glm::vec3(20.0f, 20.0f, 30.0f));
 	helicopter2_elice.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	helicopter2_elice.SetRotationAngle(180.0f);
+	//helicopter2_elice.SetRotationAngle(180.0f);
 
-	helicopter2_elice_spate.SetPosition(glm::vec3(19.75f, 20.0f, 30.0f));
-	helicopter2_elice_spate.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	helicopter2_elice_spate.SetRotationAngle(180.0f);
+	helicopter2_elice_spate.SetPosition(glm::vec3(19.5f, 23.63f, 41.27f));
+	helicopter2_elice_spate.SetRotationAxis(glm::vec3(1.0f, 0.0f, 0.0f));
+	//helicopter2_elice_spate.SetRotationAngle(180.0f);
 
 	//---- Nori ----
 	cloud1.SetPosition(glm::vec3(30.0f, 170.0f, 210.0f));
@@ -586,12 +586,12 @@ bool isNight = true;
 
 void rotate_elice(Model& helicpter3_elice, double deltaTime)
 {
-	helicpter3_elice.SetRotationAngle(helicpter3_elice.GetRotationAngle() + 100.0f * deltaTime * 5);
+	helicpter3_elice.SetRotationAngle(helicpter3_elice.GetRotationAngle() + 100.0f * deltaTime * 250);
 }
 
 void rotate_elice_spate(Model& helicpter3_elice_spate, double deltaTime)
 {
-	helicpter3_elice_spate.SetRotationAngle(helicpter3_elice_spate.GetRotationAngle() + 100.0f * deltaTime * 5);
+	helicpter3_elice_spate.SetRotationAngle(helicpter3_elice_spate.GetRotationAngle() + 100.0f * deltaTime * 50);
 }
 
 int main()
@@ -845,8 +845,8 @@ int main()
 		rotate_elice(helicopter1_elice, deltaTime);
 		rotate_elice(helicopter2_elice, deltaTime);
 
-		//rotate_elice_spate(helicopter1_elice_spate, deltaTime);
-		//rotate_elice_spate(helicopter2_elice_spate, deltaTime);
+		rotate_elice_spate(helicopter1_elice_spate, deltaTime);
+		rotate_elice_spate(helicopter2_elice_spate, deltaTime);
 
 		// Input
 		//processInput(window);
@@ -861,8 +861,8 @@ int main()
 		float time = glfwGetTime();
 		float lightX = radius * cos(speed * time);
 		float lightZ = radius * sin(speed * time);
-		lightPos.x = lightX;
-		lightPos.y = fabs(lightZ);
+		//lightPos.x = lightX;
+		//lightPos.y = fabs(lightZ);
 
 		// Use lighting shader
 		lightingShader.Use();
