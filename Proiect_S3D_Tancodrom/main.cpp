@@ -539,7 +539,7 @@ void moveClouds(
 	Model& cloud18, Model& cloud19, Model& cloud20, Model& cloud21, Model& cloud22, Model& cloud23, Model& cloud24, Model& cloud25
 )
 {
-	if (cloud15.GetPosition().x > -350.0f && cloud17.GetPosition().x > -350.0f)
+	if (cloud15.GetPosition().x > -400.0f && cloud17.GetPosition().x > -400.0f)
 	{
 		//move clouds
 		cloud1.SetPosition(cloud1.GetPosition() + glm::vec3(-0.001f, 0.0f, -0.001f));
