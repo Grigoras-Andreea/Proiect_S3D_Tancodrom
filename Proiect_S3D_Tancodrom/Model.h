@@ -19,6 +19,7 @@ public:
     bool gammaCorrection;
 
     // constructor, expects a filepath to a 3D model.
+    Model();
     Model(string const& path, bool bSmoothNormals, bool gamma = false);
 
     // draws the model, and thus all its meshes
@@ -28,7 +29,7 @@ public:
     void SetPosition(const glm::vec3& newPosition);
 
     glm::mat4 GetModelMatrix() const;
-        
+
 
     float GetRotationAngle() { return rotationAngle; };
     glm::vec3 GetRotationAxis() { return rotationAxis; };
@@ -39,7 +40,6 @@ public:
     void SetRotationAngle(float angle) {
         rotationAngle = angle;
     }
-
 
 private:
     // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.

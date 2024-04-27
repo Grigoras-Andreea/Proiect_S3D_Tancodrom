@@ -5,6 +5,10 @@
 #include "stb_image.h"
 #endif
 
+Model::Model()
+{
+}
+
 Model::Model(string const& path, bool bSmoothNormals, bool gamma) : gammaCorrection(gamma)
 {
     loadModel(path, bSmoothNormals);
