@@ -29,6 +29,63 @@
 #pragma comment (lib, "OpenGL32.lib")
 #pragma comment (lib, "assimp-vc143-mt.lib")
 
+
+// Define a simple Color struct
+struct Color {
+	float r, g, b; // Red, green, and blue components
+
+	// Constructor
+	Color(float _r, float _g, float _b) : r(_r), g(_g), b(_b) {}
+};
+
+// Linear interpolation function for colors
+Color lerp(const Color& x, const Color& y, float t) {
+	float r = x.r + (y.r - x.r) * t;
+	float g = x.g + (y.g - x.g) * t;
+	float b = x.b + (y.b - x.b) * t;
+	return Color(r, g, b);
+}
+
+// Function to calculate the interpolation factor based on time of day
+float calculateInterpolationFactor(float timeOfDay) {
+	// Calculate the interpolation factor based on time of day (0 to 1)
+	// Ensure that the interpolation factor resets to 0 at the start of each day
+	const float hoursPerDay = 24.0f;
+	return fmod(timeOfDay, hoursPerDay) / hoursPerDay;
+}
+void updateBackgroundColor(float timeOfDay) {
+	// Define key colors
+	Color lightBlue(0.5f, 0.7f, 1.0f);    // Light blue
+	Color purple(0.988f, 0.831f, 0.967f);       // Purple
+	Color darkBlue(0.0f, 0.0f, 0.2f);     // Dark blue
+	Color sunrise(0.78f, 0.73f, 0.80f);       // Orange
+
+	// Calculate interpolation factor
+	float interpolationFactor = calculateInterpolationFactor(timeOfDay);
+
+	// Interpolate between colors
+	Color interpolatedColor(0.0f, 0.0f, 0.0f);
+	if (interpolationFactor < 0.35f) {
+		interpolatedColor = lerp(lightBlue, lightBlue, interpolationFactor * 4.0f);
+	}
+	else if (interpolationFactor < 0.5f) {
+		interpolatedColor = lerp(lightBlue, darkBlue, (interpolationFactor - 0.35f) * 7.0f);
+	}
+	else if (interpolationFactor < 0.75f) {
+		interpolatedColor = lerp(darkBlue, darkBlue, (interpolationFactor - 0.5f) * 4.0f);
+	}
+	else if (interpolationFactor < 0.9f) {
+		interpolatedColor = lerp(darkBlue, sunrise, (interpolationFactor - 0.75f) * 7.0f);
+	}
+	else {
+		interpolatedColor = lerp(sunrise, lightBlue, (interpolationFactor - 0.9f) * 7.0f);
+	}
+
+	// Set the background color using glClearColor
+	glClearColor(interpolatedColor.r, interpolatedColor.g, interpolatedColor.b, 1.0f);
+}
+
+
 // settings
 const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 800;
@@ -238,8 +295,17 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 
 }
 
+bool isNight = true;
+
+
 int main()
 {
+	// key colors for sky gradient
+	Color lightBlue(0.5f, 0.7f, 1.0f);    // Light blue
+	Color purple(0.5f, 0.0f, 0.5f);       // Purple
+	Color darkBlue(0.0f, 0.0f, 0.2f);     // Dark blue
+	Color orange(1.0f, 0.5f, 0.0f);       // Orange
+
 	// glfw: initialize and configure
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -430,7 +496,8 @@ int main()
 		processInput(window, tank1);		// aici ar cam trb modificat pentru a putea controla toate tancurile, acum se poate controla doar tancul tank1
 
 		// Clear buffers
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		float timeOfDay = glfwGetTime(); // Adjust this based on your time scale
+		updateBackgroundColor(timeOfDay);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Update light position
