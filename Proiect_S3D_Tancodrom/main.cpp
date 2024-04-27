@@ -161,13 +161,13 @@ void renderFloor()
 		// set up vertex data (and buffer(s)) and configure vertex attributes
 		float planeVertices[] = {
 			// positions            // normals         // texcoords
-			500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+			500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,  75.0f,  0.0f,
 			-500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-			-500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
+			-500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,   0.0f, 75.0f,
 
-			500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-			-500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-			500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
+			500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,  75.0f,  0.0f,
+			-500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,   0.0f, 75.0f,
+			500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,  75.0f, 75.0f
 		};
 		// plane VAO
 		glGenVertexArrays(1, &planeVAO);
@@ -311,7 +311,6 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	tank8.SetPosition(glm::vec3(14.0f, 0.0f, -30.0f));
 	tank8.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 
-
 	//---- Munti ----
 	mountains[0].SetPosition(glm::vec3(150.0f, -2.0f, 0.0f));
 	mountains[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -319,181 +318,94 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	mountains[1].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	mountains[2].SetPosition(glm::vec3(0.0f, -2.0f, -150.0f));
 	mountains[2].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	mountains[2].SetRotationAngle(90.0f);
 	mountains[3].SetPosition(glm::vec3(0.0f, -2.0f, 150.0f));
 	mountains[3].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	mountains[3].SetRotationAngle(90.0f);
 	for (int i = 0; i < 4; i++) {
 		mountains[i].SetScale(glm::vec3(25.0f));
+		mountains[i].SetRotationAngle(0.0f);
 	}
-
 
 	//---- Elicoptere ----
 	helicopter1.Body.SetPosition(glm::vec3(20.25f, 20.0f, -30.0f));
 	helicopter1.Body.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	helicopter1.Body.SetRotationAngle(0.0f);
-
 	helicopter1.ProppelerUp.SetPosition(glm::vec3(20.0f, 20.0f, -30.0f));
 	helicopter1.ProppelerUp.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-
 	helicopter1.ProppelerBack.SetPosition(glm::vec3(20.5f, 23.63f, -41.27f));
 	helicopter1.ProppelerBack.SetRotationAxis(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	helicopter2.Body.SetPosition(glm::vec3(19.75f, 20.0f, 30.0f));
 	helicopter2.Body.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	helicopter2.Body.SetRotationAngle(180.0f);
-
 	helicopter2.ProppelerUp.SetPosition(glm::vec3(20.0f, 20.0f, 30.0f));
 	helicopter2.ProppelerUp.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//helicopter2_elice.SetRotationAngle(180.0f);
-
 	helicopter2.ProppelerBack.SetPosition(glm::vec3(19.5f, 23.63f, 41.27f));
 	helicopter2.ProppelerBack.SetRotationAxis(glm::vec3(1.0f, 0.0f, 0.0f));
-	//helicopter2_elice_spate.SetRotationAngle(180.0f);
 
 	//---- Nori ----
 	clouds[0].SetPosition(glm::vec3(30.0f, 170.0f, 210.0f));
-	clouds[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[0].SetRotationAngle(180.0f);
 	clouds[0].SetScale(glm::vec3(0.35f));
-
 	clouds[1].SetPosition(glm::vec3(-70.0f, 170.0f, 50.0f));
-	clouds[1].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[1].SetRotationAngle(180.0f);
 	clouds[1].SetScale(glm::vec3(0.2f));
-
 	clouds[2].SetPosition(glm::vec3(85.0f, 170.0f, -35.0f));
-	clouds[2].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[2].SetRotationAngle(180.0f);
 	clouds[2].SetScale(glm::vec3(0.55f));
-
 	clouds[3].SetPosition(glm::vec3(20.0f, 170.0f, 205.0f));
-	clouds[3].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[3].SetRotationAngle(180.0f);
 	clouds[3].SetScale(glm::vec3(0.35f));
-
 	clouds[4].SetPosition(glm::vec3(95.0f, 170.0f, -100.0f));
-	clouds[4].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[4].SetRotationAngle(180.0f);
 	clouds[4].SetScale(glm::vec3(0.45f));
-
 	clouds[5].SetPosition(glm::vec3(-50.0f, 170.0f, -90.0f));
-	clouds[5].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[5].SetRotationAngle(180.0f);
 	clouds[5].SetScale(glm::vec3(0.35f));
-
 	clouds[6].SetPosition(glm::vec3(120.0f, 170.0f, 65.0f));
-	clouds[6].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[6].SetRotationAngle(180.0f);
 	clouds[6].SetScale(glm::vec3(0.25f));
-
-	//---- Nori2 ----
-
 	clouds[7].SetPosition(glm::vec3(270.0f, 150.0f, -130.0f));
-	clouds[7].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[7].SetRotationAngle(180.0f);
 	clouds[7].SetScale(glm::vec3(0.65f));
-
 	clouds[8].SetPosition(glm::vec3(285.0f, 140.0f, -40.0f));
-	clouds[8].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[8].SetRotationAngle(180.0f);
 	clouds[8].SetScale(glm::vec3(0.25f));
-
 	clouds[9].SetPosition(glm::vec3(85.0f, 170.0f, 135.0f));
-	clouds[9].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[9].SetRotationAngle(180.0f);
 	clouds[9].SetScale(glm::vec3(0.45f));
-
 	clouds[10].SetPosition(glm::vec3(-220.0f, 160.0f, -125.0f));
-	clouds[10].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[10].SetRotationAngle(180.0f);
 	clouds[10].SetScale(glm::vec3(0.25f));
-
-	//---- Nori3 ----
 	clouds[11].SetPosition(glm::vec3(295.0f, 150.0f, 100.0f));
-	clouds[11].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[11].SetRotationAngle(180.0f);
 	clouds[11].SetScale(glm::vec3(0.25f));
-
 	clouds[12].SetPosition(glm::vec3(250.0f, 170.0f, 90.0f));
-	clouds[12].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	clouds[12].SetRotationAngle(180.0f);
 	clouds[12].SetScale(glm::vec3(0.25f));
-
 	clouds[13].SetPosition(glm::vec3(-120.0f, 140.0f, 65.0f));
-	clouds[13].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[13].SetRotationAngle(180.0f);
 	clouds[13].SetScale(glm::vec3(0.55f));
-
 	clouds[14].SetPosition(glm::vec3(-270.0f, 140.0f, 10.0f));
-	clouds[14].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[14].SetRotationAngle(180.0f);
 	clouds[14].SetScale(glm::vec3(0.45f));
-
-	//---- Nori4 ----
 	clouds[15].SetPosition(glm::vec3(-130.0f, 160.0f, 250.0f));
-	clouds[15].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[15].SetRotationAngle(180.0f);
 	clouds[15].SetScale(glm::vec3(0.40f));
-
 	clouds[16].SetPosition(glm::vec3(150.0f, 170.0f, -250.0f));
-	clouds[16].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[16].SetRotationAngle(180.0f);
 	clouds[16].SetScale(glm::vec3(0.35f));
-
 	clouds[17].SetPosition(glm::vec3(-20.0f, 150.0f, 10.0f));
-	clouds[17].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[17].SetRotationAngle(180.0f);
 	clouds[17].SetScale(glm::vec3(0.45f));
-
 	clouds[18].SetPosition(glm::vec3(-50.0f, 150.0f, -230.0f));
-	clouds[18].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[18].SetRotationAngle(180.0f);
 	clouds[18].SetScale(glm::vec3(0.35f));
-
-	//---- Nori5 ----
 	clouds[19].SetPosition(glm::vec3(-250.0f, 150.0f, -130.0f));
-	clouds[19].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[19].SetRotationAngle(180.0f);
 	clouds[19].SetScale(glm::vec3(0.85f));
-
-	//---- Nori6 ----
 	clouds[20].SetPosition(glm::vec3(250.0f, 150.0f, -130.0f));
-	clouds[20].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[20].SetRotationAngle(180.0f);
 	clouds[20].SetScale(glm::vec3(0.85f));
-
 	clouds[21].SetPosition(glm::vec3(250.0f, 150.0f, 160.0f));
-	clouds[21].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[21].SetRotationAngle(180.0f);
 	clouds[21].SetScale(glm::vec3(0.85f));
-
 	clouds[22].SetPosition(glm::vec3(-150.0f, 150.0f, 130.0f));
-	clouds[22].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[22].SetRotationAngle(180.0f);
 	clouds[22].SetScale(glm::vec3(0.85f));
-
 	clouds[23].SetPosition(glm::vec3(-250.0f, 150.0f, 130.0f));
-	clouds[23].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[23].SetRotationAngle(180.0f);
 	clouds[23].SetScale(glm::vec3(0.85f));
-
 	clouds[24].SetPosition(glm::vec3(250.0f, 150.0f, -160.0f));
-	clouds[24].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	clouds[24].SetRotationAngle(180.0f);
 	clouds[24].SetScale(glm::vec3(0.85f));
-
+	for (int i = 0; i < 25; i++) {
+		clouds[i].SetRotationAngle(180.0f);
+		clouds[i].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	}
 }
 
 void moveClouds(std::vector<Model>& clouds)
 {
 	if (clouds[14].GetPosition().x > -400.0f && clouds[16].GetPosition().x > -400.0f)
-	{
-		for (int i = 0; i < 25; i++) 
-		{
+		for (int i = 0; i < 25; i++)
 			clouds[i].SetPosition(clouds[i].GetPosition() + glm::vec3(-0.002f, 0.0f, -0.002f));
-		}
-	}
+
 }
 
 bool isNight = true;
@@ -502,10 +414,16 @@ void rotate_elice(Model& helicpter3_elice, double deltaTime)
 {
 	helicpter3_elice.SetRotationAngle(helicpter3_elice.GetRotationAngle() + 100.0f * deltaTime * 250);
 }
-
 void rotate_elice_spate(Model& helicpter3_elice_spate, double deltaTime)
 {
 	helicpter3_elice_spate.SetRotationAngle(helicpter3_elice_spate.GetRotationAngle() + 100.0f * deltaTime * 50);
+}
+void rotateElice(Helicopter& helicopter1, Helicopter& helicopter2) {
+	rotate_elice(helicopter1.ProppelerUp, deltaTime);
+	rotate_elice(helicopter2.ProppelerUp, deltaTime);
+
+	rotate_elice_spate(helicopter1.ProppelerBack, deltaTime);
+	rotate_elice_spate(helicopter2.ProppelerBack, deltaTime);
 }
 
 int main()
@@ -635,19 +553,11 @@ int main()
 	std::string path = (std::string(currentPathChr) + "\\Shaders\\PhongLight.vs").c_str();
 	std::string path2 = (std::string(currentPathChr) + "\\Shaders\\PhongLight.vs").c_str();
 
-
-
-
 	//Shader lightingShader((currentPathChr + std::string("\\Shaders\\PhongLight.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\PhongLight.fs")).c_str()));
 	Shader lampShader((currentPathChr + std::string("\\Shaders\\Lamp.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\Lamp.fs")).c_str()));
 	Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
 	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
 
-
-	/*std::string objFileName = std::string(currentPathChr) + "\\Models\\CylinderProject.obj";
-	Model objModel(objFileName, false);*/
-
-	//std::string piratObjFileName = (currentPath + "\\Models\\Pirat\\Pirat.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
@@ -678,17 +588,16 @@ int main()
 	Model tank7(piratObjFileName, false);
 	Model tank8(piratObjFileName, false);
 
-	std::vector<Model> mountains(4, Model(mountainObjFileName, false));
-
-	//Model helicopter_body(heli_bodyObjFileName, false);
-	//Model helicopter_elice(heli_eliceObjFileName, false);
-	//Model helicopter_elice_spate(heli_elice_spateObjFileName, false);
-
 	Helicopter helicopter1(Model(heli_bodyObjFileName, false), Model(heli_eliceObjFileName, false) , Model(heli_elice_spateObjFileName, false));
 	Helicopter helicopter2(Model(heli_bodyObjFileName, false), Model(heli_eliceObjFileName, false), Model(heli_elice_spateObjFileName, false));
 
-	std::vector<Model> clouds(25, Model(cloud5ObjFileName, false));
-
+	std::vector<Model> clouds;
+	clouds.insert(clouds.end(), 7, Model(cloudObjFileName, false));
+	clouds.insert(clouds.end(), 4, Model(cloud2ObjFileName, false));
+	clouds.insert(clouds.end(), 8, Model(cloud3ObjFileName, false));
+	clouds.insert(clouds.end(), 1, Model(cloud4ObjFileName, false));
+	clouds.insert(clouds.end(), 5, Model(cloud5ObjFileName, false));
+	std::vector<Model> mountains(4, Model(mountainObjFileName, false));
 
 	unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
@@ -718,13 +627,8 @@ int main()
 		lastFrame = currentFrame;
 
 		moveClouds(clouds);
-
-		rotate_elice(helicopter1.ProppelerUp, deltaTime);
-		rotate_elice(helicopter2.ProppelerUp, deltaTime);
-
-		rotate_elice_spate(helicopter1.ProppelerBack, deltaTime);
-		rotate_elice_spate(helicopter2.ProppelerBack, deltaTime);
-
+		rotateElice(helicopter1, helicopter2);
+		
 		// Input
 		//processInput(window);
 		processInput(window, tank1);		// aici ar cam trb modificat pentru a putea controla toate tancurile, acum se poate controla doar tancul tank1
@@ -744,19 +648,11 @@ int main()
 		// Use lighting shader
 		lightingShader.Use();
 
-		// asta a fost pentru modificarea culorii Shaderelor PhongLight
-		if (lightZ >= 0) {
-			//lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 1.0f);
-			//lightingShader.SetVec3("objectColor", 0.5f, 1.0f, 0.3f);
-		}
-		else {
-			//lightingShader.SetVec3("lightColor", 0.2f, 0.2f, 0.2f);
-			//lightingShader.SetVec3("objectColor", 0.8f, 0.8f, 0.3f);
+		if (lightZ < 0) {
 			lightPos.x = -lightPos.x;
 		}
 
 		lightingShader.SetVec3("lightPos", lightPos);
-		//glBindTexture(GL_TEXTURE_2D, floorTexture);
 		lightingShader.SetVec3("viewPos", pCamera->GetPosition());
 
 		lightingShader.SetMat4("projection", pCamera->GetProjectionMatrix());
@@ -765,7 +661,8 @@ int main()
 
 		// Set model matrix and draw the model
 		RenderModels(
-			lightingShader, tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8,
+			lightingShader,
+			tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8,
 			mountains,
 			helicopter1, helicopter2,
 			clouds
@@ -790,7 +687,6 @@ int main()
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-
 	}
 
 	Cleanup();
