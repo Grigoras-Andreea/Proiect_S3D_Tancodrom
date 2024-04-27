@@ -224,7 +224,13 @@ std::string ConvertWStringToString(const std::wstring& wstr) {
 
 std::vector<Model> tankuri;
 
-void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8, Model& mountain1, Model& mountain2, Model& mountain3, Model& mountain4, Model& helicopter1, Model& helicopter2)
+void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
+	Model& mountain1, Model& mountain2, Model& mountain3, Model& mountain4,
+	Model& helicopter1, Model& helicopter2,
+	Model& cloud1, Model& cloud2, Model& cloud3, Model& cloud4, Model& cloud5, Model& cloud6, Model& cloud7, Model& cloud8, Model& cloud9,
+	Model& cloud10, Model& cloud11, Model& cloud12, Model& cloud13, Model& cloud14, Model& cloud15, Model& cloud16, Model& cloud17,
+	Model& cloud18, Model& cloud19, Model& cloud20, Model& cloud21, Model& cloud22, Model& cloud23, Model& cloud24, Model& cloud25
+)
 {
 	glBindTexture(GL_TEXTURE_2D, 2);
 	lightingShader.SetMat4("model", mountain1.GetModelMatrix());
@@ -262,9 +268,70 @@ void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tan
 	lightingShader.SetMat4("model", helicopter2.GetModelMatrix());
 	helicopter2.Draw(lightingShader);
 
+	glBindTexture(GL_TEXTURE_2D, 4);
+	lightingShader.SetMat4("model", cloud1.GetModelMatrix());
+	cloud1.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud2.GetModelMatrix());
+	cloud2.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud3.GetModelMatrix());
+	cloud3.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud4.GetModelMatrix());
+	cloud4.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud5.GetModelMatrix());
+	cloud5.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud6.GetModelMatrix());
+	cloud6.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud7.GetModelMatrix());
+	cloud7.Draw(lightingShader);
+	//---------------------
+	lightingShader.SetMat4("model", cloud8.GetModelMatrix());
+	cloud8.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud9.GetModelMatrix());
+	cloud9.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud10.GetModelMatrix());
+	cloud10.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud11.GetModelMatrix());
+	cloud11.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud12.GetModelMatrix());
+	cloud12.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud13.GetModelMatrix());
+	cloud13.Draw(lightingShader);
+	//---------------------
+	lightingShader.SetMat4("model", cloud14.GetModelMatrix());
+	cloud14.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud15.GetModelMatrix());
+	cloud15.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud16.GetModelMatrix());
+	cloud16.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud17.GetModelMatrix());
+	cloud17.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud18.GetModelMatrix());
+	cloud18.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud19.GetModelMatrix());
+	cloud19.Draw(lightingShader);
+	//---------------------
+	lightingShader.SetMat4("model", cloud20.GetModelMatrix());
+	cloud20.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud21.GetModelMatrix());
+	cloud21.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud22.GetModelMatrix());
+	cloud22.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud23.GetModelMatrix());
+	cloud23.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud24.GetModelMatrix());
+	cloud24.Draw(lightingShader);
+	lightingShader.SetMat4("model", cloud25.GetModelMatrix());
+	cloud25.Draw(lightingShader);
+
 }
 
-void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8, Model& mountain1, Model& mountain2, Model& mountain3, Model& mountain4, Model& helicopter1, Model& helicopter2)
+void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
+	Model& mountain1, Model& mountain2, Model& mountain3, Model& mountain4,
+	Model& helicopter1, Model& helicopter2,
+	Model& cloud1, Model& cloud2, Model& cloud3, Model& cloud4, Model& cloud5, Model& cloud6, Model& cloud7, Model& cloud8, Model& cloud9,
+	Model& cloud10, Model& cloud11, Model& cloud12, Model& cloud13, Model& cloud14, Model& cloud15, Model& cloud16, Model& cloud17,
+	Model& cloud18, Model& cloud19, Model& cloud20, Model& cloud21, Model& cloud22, Model& cloud23, Model& cloud24, Model& cloud25
+)
 {
 	//---- Tancuri ----
 	tank1.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
@@ -314,6 +381,54 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	helicopter2.SetPosition(glm::vec3(20.0f, 20.0f, 30.0f));
 	helicopter2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	helicopter2.SetRotationAngle(180.0f);
+
+	//---- Nori ----
+	cloud1.SetPosition(glm::vec3(30.0f, 140.0f, 10.0f));
+	cloud1.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	cloud1.SetRotationAngle(180.0f);
+	cloud1.SetScale(glm::vec3(0.25f));
+
+	cloud2.SetPosition(glm::vec3(-70.0f, 140.0f, 50.0f));
+	cloud2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	cloud2.SetRotationAngle(180.0f);
+	cloud2.SetScale(glm::vec3(0.25f));
+
+	cloud3.SetPosition(glm::vec3(85.0f, 140.0f, -35.0f));
+	cloud3.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	cloud3.SetRotationAngle(180.0f);
+	cloud3.SetScale(glm::vec3(0.25f));
+
+	cloud4.SetPosition(glm::vec3(-20.0f, 140.0f, -25.0f));
+	cloud4.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	cloud4.SetRotationAngle(180.0f);
+	cloud4.SetScale(glm::vec3(0.25f));
+
+	cloud5.SetPosition(glm::vec3(95.0f, 140.0f, 100.0f));
+	cloud5.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	cloud5.SetRotationAngle(180.0f);
+	cloud5.SetScale(glm::vec3(0.25f));
+
+	cloud6.SetPosition(glm::vec3(-50.0f, 140.0f, -90.0f));
+	cloud6.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	cloud6.SetRotationAngle(180.0f);
+	cloud6.SetScale(glm::vec3(0.25f));
+
+	cloud7.SetPosition(glm::vec3(120.0f, 140.0f, 65.0f));
+	cloud7.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	cloud7.SetRotationAngle(180.0f);
+	cloud7.SetScale(glm::vec3(0.25f));
+
+	//---- Nori2 ----
+
+	/*cloud8.SetPosition(glm::vec3(0.0f, 140.0f, -10.0f));
+	cloud8.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	cloud8.SetRotationAngle(180.0f);
+	cloud8.SetScale(glm::vec3(0.25f));
+
+	cloud9.SetPosition(glm::vec3(0.0f, 140.0f, 0.0f));
+	cloud9.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	cloud9.SetRotationAngle(180.0f);
+	cloud9.SetScale(glm::vec3(0.25f));*/
 
 }
 
@@ -470,6 +585,9 @@ int main()
 	//std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_bell_nou.obj");
 	std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_Bell\\Heli_bell_nou.obj");
 
+	std::string cloudObjFileName = (std::string(currentPathChr) + "\\Models\\cumulus00.obj");
+
+
 
 	//---- Creare Modele
 	Model tank1(piratObjFileName, false);
@@ -489,10 +607,36 @@ int main()
 	Model helicopter1(helicopterObjFileName, false);
 	Model helicopter2(helicopterObjFileName, false);
 
+	Model cloud1(cloudObjFileName, false);
+	Model cloud2(cloudObjFileName, false);
+	Model cloud3(cloudObjFileName, false);
+	Model cloud4(cloudObjFileName, false);
+	Model cloud5(cloudObjFileName, false);
+	Model cloud6(cloudObjFileName, false);
+	Model cloud7(cloudObjFileName, false);
+	Model cloud8(cloudObjFileName, false);
+	Model cloud9(cloudObjFileName, false);
+	Model cloud10(cloudObjFileName, false);
+	Model cloud11(cloudObjFileName, false);
+	Model cloud12(cloudObjFileName, false);
+	Model cloud13(cloudObjFileName, false);
+	Model cloud14(cloudObjFileName, false);
+	Model cloud15(cloudObjFileName, false);
+	Model cloud16(cloudObjFileName, false);
+	Model cloud17(cloudObjFileName, false);
+	Model cloud18(cloudObjFileName, false);
+	Model cloud19(cloudObjFileName, false);
+	Model cloud20(cloudObjFileName, false);
+	Model cloud21(cloudObjFileName, false);
+	Model cloud22(cloudObjFileName, false);
+	Model cloud23(cloudObjFileName, false);
+	Model cloud24(cloudObjFileName, false);
+	Model cloud25(cloudObjFileName, false);
 
 
 	unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
+	unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\white.jpg");
 
 	float radius = 150.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.26f;
@@ -503,7 +647,14 @@ int main()
 	tankuri.push_back(tank4);
 
 
-	PozitionateModels(tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8, mountain1, mountain2, mountain3, mountain4, helicopter1, helicopter2);
+	PozitionateModels(
+		tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8,
+		mountain1, mountain2, mountain3, mountain4,
+		helicopter1, helicopter2,
+		cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9, cloud10,
+		cloud11, cloud12, cloud13, cloud14, cloud15, cloud16, cloud17, cloud18, cloud19,
+		cloud20, cloud21, cloud22, cloud23, cloud24, cloud25
+	);
 
 	// Render loop
 	while (!glfwWindowShouldClose(window)) {
@@ -552,7 +703,14 @@ int main()
 
 
 		// Set model matrix and draw the model
-		RenderModels(lightingShader, tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8, mountain1, mountain2, mountain3, mountain4, helicopter1, helicopter2);
+		RenderModels(
+			lightingShader, tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8,
+			mountain1, mountain2, mountain3, mountain4,
+			helicopter1, helicopter2,
+			cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9, cloud10,
+			cloud11, cloud12, cloud13, cloud14, cloud15, cloud16, cloud17, cloud18, cloud19,
+			cloud20, cloud21, cloud22, cloud23, cloud24, cloud25
+		);
 
 
 		// Use lamp shader
