@@ -226,7 +226,7 @@ std::vector<Model> tankuri;
 
 void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
 	Model& mountain1, Model& mountain2, Model& mountain3, Model& mountain4,
-	Model& helicopter1,Model& helicopter1_elice , Model& helicopter2, Model& helicopter2_elice,
+	Model& helicopter1,Model& helicopter1_elice, Model& helicopter1_elice_spate, Model& helicopter2, Model& helicopter2_elice, Model& helicopter2_elice_spate,
 	Model& cloud1, Model& cloud2, Model& cloud3, Model& cloud4, Model& cloud5, Model& cloud6, Model& cloud7, Model& cloud8, Model& cloud9,
 	Model& cloud10, Model& cloud11, Model& cloud12, Model& cloud13, Model& cloud14, Model& cloud15, Model& cloud16, Model& cloud17,
 	Model& cloud18, Model& cloud19, Model& cloud20, Model& cloud21, Model& cloud22, Model& cloud23, Model& cloud24, Model& cloud25
@@ -267,10 +267,14 @@ void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tan
 	helicopter1.Draw(lightingShader);
 	lightingShader.SetMat4("model", helicopter1_elice.GetModelMatrix());
 	helicopter1_elice.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopter1_elice_spate.GetModelMatrix());
+	helicopter1_elice_spate.Draw(lightingShader);
 	lightingShader.SetMat4("model", helicopter2.GetModelMatrix());
 	helicopter2.Draw(lightingShader);
 	lightingShader.SetMat4("model", helicopter2_elice.GetModelMatrix());
 	helicopter2_elice.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopter2_elice_spate.GetModelMatrix());
+	helicopter2_elice_spate.Draw(lightingShader);
 
 	glBindTexture(GL_TEXTURE_2D, 4);
 	lightingShader.SetMat4("model", cloud1.GetModelMatrix());
@@ -336,7 +340,7 @@ void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tan
 
 void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
 	Model& mountain1, Model& mountain2, Model& mountain3, Model& mountain4,
-	Model& helicopter1, Model& helicopter1_elice, Model& helicopter2, Model& helicopter2_elice,
+	Model& helicopter1, Model& helicopter1_elice, Model& helicopter1_elice_spate, Model& helicopter2, Model& helicopter2_elice, Model& helicopter2_elice_spate,
 	Model& cloud1, Model& cloud2, Model& cloud3, Model& cloud4, Model& cloud5, Model& cloud6, Model& cloud7, Model& cloud8, Model& cloud9,
 	Model& cloud10, Model& cloud11, Model& cloud12, Model& cloud13, Model& cloud14, Model& cloud15, Model& cloud16, Model& cloud17,
 	Model& cloud18, Model& cloud19, Model& cloud20, Model& cloud21, Model& cloud22, Model& cloud23, Model& cloud24, Model& cloud25
@@ -391,6 +395,9 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	helicopter1_elice.SetPosition(glm::vec3(20.0f, 20.0f, -30.0f));
 	helicopter1_elice.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 
+	helicopter1_elice_spate.SetPosition(glm::vec3(20.25f, 20.0f, -30.0f));
+	helicopter1_elice_spate.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+
 	helicopter2.SetPosition(glm::vec3(19.75f, 20.0f, 30.0f));
 	helicopter2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	helicopter2.SetRotationAngle(180.0f);
@@ -398,6 +405,10 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	helicopter2_elice.SetPosition(glm::vec3(20.0f, 20.0f, 30.0f));
 	helicopter2_elice.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	helicopter2_elice.SetRotationAngle(180.0f);
+
+	helicopter2_elice_spate.SetPosition(glm::vec3(19.75f, 20.0f, 30.0f));
+	helicopter2_elice_spate.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	helicopter2_elice_spate.SetRotationAngle(180.0f);
 
 	//---- Nori ----
 	cloud1.SetPosition(glm::vec3(30.0f, 170.0f, 210.0f));
@@ -578,6 +589,11 @@ void rotate_elice(Model& helicpter3_elice, double deltaTime)
 	helicpter3_elice.SetRotationAngle(helicpter3_elice.GetRotationAngle() + 100.0f * deltaTime * 5);
 }
 
+void rotate_elice_spate(Model& helicpter3_elice_spate, double deltaTime)
+{
+	helicpter3_elice_spate.SetRotationAngle(helicpter3_elice_spate.GetRotationAngle() + 100.0f * deltaTime * 5);
+}
+
 int main()
 {
 	// key colors for sky gradient
@@ -727,8 +743,9 @@ int main()
 	//std::string piratObjFileName = (currentPath + "\\Models\\WWII_Tank_Germany_Panzer_III_v1_L2.123c56cb92d1-9485-44e9-a197-a7bddb48c29f\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	//std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_bell_nou.obj");
 	std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_Bell\\Heli_bell_nou.obj");
-	std::string heli_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_body.obj");
+	std::string heli_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_body2.obj");
 	std::string heli_eliceObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_elice2.obj");
+	std::string heli_elice_spateObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_elice_back.obj");
 
 	std::string cloudObjFileName = (std::string(currentPathChr) + "\\Models\\cumulus00.obj");
 	std::string cloud2ObjFileName = (std::string(currentPathChr) + "\\Models\\cumulus01.obj");
@@ -754,8 +771,10 @@ int main()
 
 	Model helicopter1(heli_bodyObjFileName, false);
 	Model helicopter1_elice(heli_eliceObjFileName, false);
+	Model helicopter1_elice_spate(heli_elice_spateObjFileName, false);
 	Model helicopter2(heli_bodyObjFileName, false);
 	Model helicopter2_elice(heli_eliceObjFileName, false);
+	Model helicopter2_elice_spate(heli_elice_spateObjFileName, false);
 
 	Model cloud1(cloudObjFileName, false);
 	Model cloud2(cloudObjFileName, false);
@@ -804,7 +823,7 @@ int main()
 	PozitionateModels(
 		tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8,
 		mountain1, mountain2, mountain3, mountain4,
-		helicopter1,helicopter1_elice , helicopter2, helicopter2_elice,
+		helicopter1,helicopter1_elice, helicopter1_elice_spate, helicopter2, helicopter2_elice, helicopter2_elice_spate,
 		cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9, cloud10,
 		cloud11, cloud12, cloud13, cloud14, cloud15, cloud16, cloud17, cloud18, cloud19,
 		cloud20, cloud21, cloud22, cloud23, cloud24, cloud25
@@ -825,6 +844,9 @@ int main()
 
 		rotate_elice(helicopter1_elice, deltaTime);
 		rotate_elice(helicopter2_elice, deltaTime);
+
+		//rotate_elice_spate(helicopter1_elice_spate, deltaTime);
+		//rotate_elice_spate(helicopter2_elice_spate, deltaTime);
 
 		// Input
 		//processInput(window);
@@ -868,7 +890,7 @@ int main()
 		RenderModels(
 			lightingShader, tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8,
 			mountain1, mountain2, mountain3, mountain4,
-			helicopter1,helicopter1_elice , helicopter2, helicopter2_elice,
+			helicopter1, helicopter1_elice, helicopter1_elice_spate, helicopter2, helicopter2_elice, helicopter2_elice_spate,
 			cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7, cloud8, cloud9, cloud10,
 			cloud11, cloud12, cloud13, cloud14, cloud15, cloud16, cloud17, cloud18, cloud19,
 			cloud20, cloud21, cloud22, cloud23, cloud24, cloud25
