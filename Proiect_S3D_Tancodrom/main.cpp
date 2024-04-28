@@ -198,7 +198,7 @@ void Cleanup()
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow* window, Tank& piratObjModel);
+void processInput(GLFWwindow* window, std::vector<Tank>& tanks);
 
 // timing
 double deltaTime = 0.0f;	// time between current frame and last frame
@@ -224,9 +224,7 @@ std::string ConvertWStringToString(const std::wstring& wstr) {
 	return str;
 }
 
-std::vector<Model> tankuri;
-
-void RenderModels(Shader& lightingShader, Tank& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
+void RenderModels(Shader& lightingShader, std::vector<Tank>& tanks,
 	std::vector<Model>& mountains,
 	Helicopter& helicopter1, Helicopter& helicopter2,
 	std::vector<Model>& clouds
@@ -240,8 +238,14 @@ void RenderModels(Shader& lightingShader, Tank& tank1, Model& tank2, Model& tank
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 1);
-	lightingShader.SetMat4("model", tank1.Body.GetModelMatrix());
-	tank1.Body.Draw(lightingShader);
+	for (int i = 0; i < tanks.size(); i++) {
+		lightingShader.SetMat4("model", tanks[i].Body.GetModelMatrix());
+		tanks[i].Body.Draw(lightingShader);
+		lightingShader.SetMat4("model", tanks[i].Head.GetModelMatrix());
+		tanks[i].Head.Draw(lightingShader);
+	}
+	/*lightingShader.SetMat4("model", tank1.Body.GetModelMatrix());
+	tanks[i].Body.Draw(lightingShader);
 	lightingShader.SetMat4("model", tank1.Head.GetModelMatrix());
 	tank1.Head.Draw(lightingShader);
 	lightingShader.SetMat4("model", tank2.GetModelMatrix());
@@ -257,7 +261,7 @@ void RenderModels(Shader& lightingShader, Tank& tank1, Model& tank2, Model& tank
 	lightingShader.SetMat4("model", tank7.GetModelMatrix());
 	tank7.Draw(lightingShader);
 	lightingShader.SetMat4("model", tank8.GetModelMatrix());
-	tank8.Draw(lightingShader);
+	tank8.Draw(lightingShader);*/
 	glBindTexture(GL_TEXTURE_2D, 2);
 	renderFloor();
 	glBindTexture(GL_TEXTURE_2D, 1);
@@ -285,37 +289,44 @@ void RenderModels(Shader& lightingShader, Tank& tank1, Model& tank2, Model& tank
 	}
 }
 
-void PozitionateModels(Tank& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
+void PozitionateModels(std::vector<Tank>& tanks,
 	std::vector<Model>& mountains,
 	Helicopter& helicopter1, Helicopter& helicopter2,
 	std::vector<Model>& clouds
 )
 {
 	//---- Tancuri ----
-	tank1.Body.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
-	tank1.Body.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank1.Body.SetRotationAngle(180.0f);
-	tank1.Head.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
-	tank1.Head.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank1.Head.SetRotationAngle(180.0f);
-	tank2.SetPosition(glm::vec3(-12.0f, 0.0f, 20.0f));
-	tank2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank2.SetRotationAngle(180.0f);
-	tank3.SetPosition(glm::vec3(-25.0f, 0.0f, 20.0f));
-	tank3.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank3.SetRotationAngle(180.0f);
-	tank4.SetPosition(glm::vec3(14.0f, 0.0f, 27.0f));
-	tank4.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank4.SetRotationAngle(180.0f);
+	tanks[0].Body.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
+	tanks[0].Head.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
+	tanks[1].Body.SetPosition(glm::vec3(-12.0f, 0.0f, 20.0f));
+	tanks[1].Head.SetPosition(glm::vec3(-12.0f, 0.0f, 20.0f));
+	tanks[2].Body.SetPosition(glm::vec3(-25.0f, 0.0f, 20.0f));
+	tanks[2].Head.SetPosition(glm::vec3(-25.0f, 0.0f, 20.0f));
+	tanks[3].Body.SetPosition(glm::vec3(14.0f, 0.0f, 27.0f));
+	tanks[3].Head.SetPosition(glm::vec3(14.0f, 0.0f, 27.0f));
+	tanks[4].Body.SetPosition(glm::vec3(0.0f, 0.0f, -20.0f));
+	tanks[4].Head.SetPosition(glm::vec3(0.0f, 0.0f, -20.0f));
 
-	tank5.SetPosition(glm::vec3(0.0f, 0.0f, -20.0f));
-	tank5.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank6.SetPosition(glm::vec3(-12.0f, 0.0f, -25.0f));
-	tank6.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank7.SetPosition(glm::vec3(-25.0f, 0.0f, -29.0f));
-	tank7.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank8.SetPosition(glm::vec3(14.0f, 0.0f, -30.0f));
-	tank8.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tanks[5].Body.SetPosition(glm::vec3(-12.0f, 0.0f, -25.0f));
+	tanks[5].Head.SetPosition(glm::vec3(-12.0f, 0.0f, -25.0f));
+	tanks[6].Body.SetPosition(glm::vec3(-25.0f, 0.0f, -29.0f));
+	tanks[6].Head.SetPosition(glm::vec3(-25.0f, 0.0f, -29.0f));
+	tanks[7].Body.SetPosition(glm::vec3(14.0f, 0.0f, -30.0f));
+	tanks[7].Head.SetPosition(glm::vec3(14.0f, 0.0f, -30.0f));
+
+	for (int i = 0; i < tanks.size(); i++)
+	{
+		tanks[i].Body.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+		tanks[i].Head.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+		if (i < 4) {
+			tanks[i].Body.SetRotationAngle(180.0f);
+			tanks[i].Head.SetRotationAngle(180.0f);
+		}
+		else {
+			tanks[i].Body.SetRotationAngle(0.0f);
+			tanks[i].Head.SetRotationAngle(0.0f);
+		}
+	}
 
 	//---- Munti ----
 	mountains[0].SetPosition(glm::vec3(150.0f, -2.0f, 0.0f));
@@ -588,14 +599,23 @@ int main()
 
 
 	//---- Creare Modele
-	Tank tank1(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));
-	Model tank2(piratObjFileName, false);
+	/*Tank tank1(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));
+	Tank tank2(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));
+	Tank tank3(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));
+	Tank tank4(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));
+	Tank tank5(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));
+	Tank tank6(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));
+	Tank tank7(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));
+	Tank tank8(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));*/
+	/*Model tank2(piratObjFileName, false);
 	Model tank3(piratObjFileName, false);
 	Model tank4(piratObjFileName, false);
 	Model tank5(piratObjFileName, false);
 	Model tank6(piratObjFileName, false);
 	Model tank7(piratObjFileName, false);
-	Model tank8(piratObjFileName, false);
+	Model tank8(piratObjFileName, false);*/
+	std::vector<Tank> tanks;
+	tanks.insert(tanks.end(), 8, Tank(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false)));
 
 	Helicopter helicopter1(Model(heli_bodyObjFileName, false), Model(heli_eliceObjFileName, false) , Model(heli_elice_spateObjFileName, false));
 	Helicopter helicopter2(Model(heli_bodyObjFileName, false), Model(heli_eliceObjFileName, false), Model(heli_elice_spateObjFileName, false));
@@ -615,14 +635,10 @@ int main()
 	float radius = 350.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.132f;
 
-	//tankuri.push_back(tank1);
-	tankuri.push_back(tank2);
-	tankuri.push_back(tank3);
-	tankuri.push_back(tank4);
 
 
 	PozitionateModels(
-		tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8,
+		tanks,
 		mountains,
 		helicopter1, helicopter2,
 		clouds
@@ -640,7 +656,7 @@ int main()
 		
 		// Input
 		//processInput(window);
-		processInput(window, tank1);		// aici ar cam trb modificat pentru a putea controla toate tancurile, acum se poate controla doar tancul tank1
+				// aici ar cam trb modificat pentru a putea controla toate tancurile, acum se poate controla doar tancul tank1
 
 		// Clear buffers
 		float timeOfDay = glfwGetTime(); // Adjust this based on your time scale
@@ -671,12 +687,12 @@ int main()
 		// Set model matrix and draw the model
 		RenderModels(
 			lightingShader,
-			tank1, tank2, tank3, tank4, tank5, tank6, tank7, tank8,
+			tanks,
 			mountains,
 			helicopter1, helicopter2,
 			clouds
 		);
-
+		processInput(window, tanks);
 
 		// Use lamp shader
 		lampShader.Use();
@@ -709,6 +725,40 @@ int main()
 	return 0;
 }
 
+bool IsAnObjectSelected(std::vector<Tank>& tanks) {
+	for (int i = 0; i < tanks.size(); i++) {
+		if (tanks[i].GetIsSelected())
+			return true;
+	}
+	return false;
+}
+void SetObjSelectedOrNot(std::vector<Tank>& tanks, int tankNumber) {
+	tankNumber -= 1;
+	/*for (int i = 0; i < tanks.size(); i++) {
+		if (i == tankNumber) {
+			tanks[i].SetIsSelected(!tanks[i].GetIsSelected());
+		}
+		else if(tanks[i].GetIsSelected()) {
+			tanks[i].SetIsSelected(false);
+		}
+	}*/
+	
+	for (int i = 0; i < tanks.size(); i++) {
+		if (i != tankNumber)
+			tanks[i].SetIsSelected(false);
+		else
+			tanks[tankNumber].SetIsSelected(!tanks[tankNumber].GetIsSelected());
+	}
+	
+}
+
+/*
+
+2
+
+3
+
+*/
 glm::vec3 rotateVector(const glm::vec3& vec, float angle, const glm::vec3& axis) {
 	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, axis);
 	return glm::vec3(rotationMatrix * glm::vec4(vec, 1.0f));
@@ -716,162 +766,205 @@ glm::vec3 rotateVector(const glm::vec3& vec, float angle, const glm::vec3& axis)
 
 bool tankIsSelected = false;
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-void processInput(GLFWwindow* window, Tank& tank)
+void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
 {
 	//---- EXIT APP ----
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+		SetObjSelectedOrNot(tanks, 1);
+	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+		SetObjSelectedOrNot(tanks, 2);
+	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+		SetObjSelectedOrNot(tanks, 3);
+	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+		SetObjSelectedOrNot(tanks, 4);
+	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+		SetObjSelectedOrNot(tanks, 5);
+	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
+		SetObjSelectedOrNot(tanks, 6);
+	if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS)
+		SetObjSelectedOrNot(tanks, 7);
+	if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS)
+		SetObjSelectedOrNot(tanks, 8);
+
+
 	//---- Control miscari model(tank)
-	if (tankIsSelected) {
-		glm::vec3 movementDirectionBody(0.0f);
-		glm::vec3 movementDirectionHead(0.0f);
-		float rotationAngleBody = tank.Body.GetRotationAngle();
-		float rotationAngleHead = tank.Head.GetRotationAngle();
-
-		// Calculul direcției de mișcare în funcție de unghiul de rotație
-		float radianRotationAngleBody = glm::radians(-rotationAngleBody); // Convertim unghiul în radiani
-		float cosAngleBody = cos(radianRotationAngleBody);
-		float sinAngleBody = sin(radianRotationAngleBody);
-
-		float radianRotationAngleHead = glm::radians(-rotationAngleHead); // Convertim unghiul în radiani
-		float cosAngleHead = cos(radianRotationAngleHead);
-		float sinAngleHead = sin(radianRotationAngleHead);
-
-		glm::vec3 forwardDirection(0.0f, 0.0f, 1.0f);
-		glm::vec3 rotatedForwardDirectionBody(
-			forwardDirection.x * cosAngleBody + forwardDirection.z * sinAngleBody,
-			forwardDirection.y,
-			forwardDirection.x * sinAngleBody - forwardDirection.z * cosAngleBody
-		);
-		glm::vec3 rotatedForwardDirectionHead(
-			forwardDirection.x * cosAngleHead + forwardDirection.z * sinAngleHead,
-			forwardDirection.y,
-			forwardDirection.x * sinAngleHead - forwardDirection.z * cosAngleHead
-		);
-
-
-
-		// Miscare fata (tasta W)
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	tankIsSelected = IsAnObjectSelected(tanks);
+	if(IsAnObjectSelected(tanks))
+	for (int i = 0; i < tanks.size(); i++) 
+	{
+		if (tanks[i].GetIsSelected()) 
 		{
-			movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
-			movementDirectionHead -= rotatedForwardDirectionHead; // Înainte
-			// Aplică viteza de mișcare
-			float movementSpeed = 2.5f; // Ajustează după necesități
-			glm::vec3 newPositionBody = tank.Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-			glm::vec3 newPositionHead = tank.Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-			tank.Body.SetPosition(newPositionBody);
-			tank.Head.SetPosition(newPositionHead);
-			// Rotație la stânga (tasta A)
-			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			glm::vec3 movementDirectionBody(0.0f);
+			glm::vec3 movementDirectionHead(0.0f);
+			float rotationAngleBody = tanks[i].Body.GetRotationAngle();
+			float rotationAngleHead = tanks[i].Head.GetRotationAngle();
+
+			// Calculul direcției de mișcare în funcție de unghiul de rotație
+			float radianRotationAngleBody = glm::radians(-rotationAngleBody); // Convertim unghiul în radiani
+			float cosAngleBody = cos(radianRotationAngleBody);
+			float sinAngleBody = sin(radianRotationAngleBody);
+
+			float radianRotationAngleHead = glm::radians(-rotationAngleHead); // Convertim unghiul în radiani
+			float cosAngleHead = cos(radianRotationAngleHead);
+			float sinAngleHead = sin(radianRotationAngleHead);
+
+			glm::vec3 forwardDirection(0.0f, 0.0f, 1.0f);
+			glm::vec3 rotatedForwardDirectionBody(
+				forwardDirection.x * cosAngleBody + forwardDirection.z * sinAngleBody,
+				forwardDirection.y,
+				forwardDirection.x * sinAngleBody - forwardDirection.z * cosAngleBody
+			);
+			glm::vec3 rotatedForwardDirectionHead(
+				forwardDirection.x * cosAngleHead + forwardDirection.z * sinAngleHead,
+				forwardDirection.y,
+				forwardDirection.x * sinAngleHead - forwardDirection.z * cosAngleHead
+			);
+
+
+
+			// Miscare fata (tasta W)
+			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			{
+				movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
+				movementDirectionHead -= rotatedForwardDirectionHead; // Înainte
+				// Aplică viteza de mișcare
+				float movementSpeed = 2.5f; // Ajustează după necesități
+				glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+				glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+				tanks[i].Body.SetPosition(newPositionBody);
+				tanks[i].Head.SetPosition(newPositionHead);
+				// Rotație la stânga (tasta A)
+				if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+				{
+					float rotationSpeed = 20.0f; // Ajustează după necesități
+					glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+					rotationAngleBody += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+					tanks[i].Body.SetRotationAngle(rotationAngleBody);
+					//tank.Body.SetRotationAxis(rotationAxis);
+				}
+				// Rotație la dreapta (tasta D)
+				if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+				{
+					float rotationSpeed = 20.0f; // Ajustează după necesități
+					glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+					rotationAngleBody -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+					tanks[i].Body.SetRotationAngle(rotationAngleBody);
+					//tank.Body.SetRotationAxis(rotationAxis);
+				}
+			}
+			// Miscare spate (tasta S) 
+			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			{
+				movementDirectionBody += rotatedForwardDirectionBody; // Înainte
+				movementDirectionHead += rotatedForwardDirectionHead; // Înainte
+				// Aplică viteza de mișcare
+				float movementSpeed = 2.5f; // Ajustează după necesități
+				glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+				glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+				tanks[i].Body.SetPosition(newPositionBody);
+				tanks[i].Head.SetPosition(newPositionHead);
+				// Rotație la stânga (tasta A)
+				if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+				{
+					float rotationSpeed = 20.0f; // Ajustează după necesități
+					glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+					rotationAngleBody += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+					tanks[i].Body.SetRotationAngle(rotationAngleBody);
+					//tank.Body.SetRotationAxis(rotationAxis);
+				}
+				// Rotație la dreapta (tasta D)
+				if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+				{
+					float rotationSpeed = 20.0f; // Ajustează după necesități
+					glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+					rotationAngleBody -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+					tanks[i].Body.SetRotationAngle(rotationAngleBody);
+					//tank.Body.SetRotationAxis(rotationAxis);
+				}
+			}
+			if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+			{
+				//la fel ca la tasta "A" doar ca ar trebui sa se roteasca numai tureta
 				float rotationSpeed = 20.0f; // Ajustează după necesități
 				glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-				rotationAngleBody += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+				rotationAngleHead += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
 				//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-				tank.Body.SetRotationAngle(rotationAngleBody);
+				tanks[i].Head.SetRotationAngle(rotationAngleHead);
 				//tank.Body.SetRotationAxis(rotationAxis);
 			}
-			// Rotație la dreapta (tasta D)
-			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 			{
+				//la fel ca la tasta "D" doar ca ar trebui sa se roteasca numai tureta
 				float rotationSpeed = 20.0f; // Ajustează după necesități
 				glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-				rotationAngleBody -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+				rotationAngleHead -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
 				//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-				tank.Body.SetRotationAngle(rotationAngleBody);
-				//tank.Body.SetRotationAxis(rotationAxis);
+				tanks[i].Head.SetRotationAngle(rotationAngleHead);
 			}
-		}
-		// Miscare spate (tasta S) 
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		{
-			movementDirectionBody += rotatedForwardDirectionBody; // Înainte
-			movementDirectionHead += rotatedForwardDirectionHead; // Înainte
-			// Aplică viteza de mișcare
-			float movementSpeed = 2.5f; // Ajustează după necesități
-			glm::vec3 newPositionBody = tank.Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-			glm::vec3 newPositionHead = tank.Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-			tank.Body.SetPosition(newPositionBody);
-			tank.Head.SetPosition(newPositionHead);
-			// Rotație la stânga (tasta A)
-			if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			{
-				float rotationSpeed = 20.0f; // Ajustează după necesități
-				glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-				rotationAngleBody += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
-				//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-				tank.Body.SetRotationAngle(rotationAngleBody);
-				//tank.Body.SetRotationAxis(rotationAxis);
-			}
-			// Rotație la dreapta (tasta D)
-			if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			{
-				float rotationSpeed = 20.0f; // Ajustează după necesități
-				glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-				rotationAngleBody -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
-				//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-				tank.Body.SetRotationAngle(rotationAngleBody);
-				//tank.Body.SetRotationAxis(rotationAxis);
-			}
-		}
-		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		{
-			//la fel ca la tasta "A" doar ca ar trebui sa se roteasca numai tureta
-			float rotationSpeed = 20.0f; // Ajustează după necesități
-			glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-			rotationAngleHead += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
-			//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-			tank.Head.SetRotationAngle(rotationAngleHead);
-			//tank.Body.SetRotationAxis(rotationAxis);
-		}
-		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		{
-			//la fel ca la tasta "D" doar ca ar trebui sa se roteasca numai tureta
-			float rotationSpeed = 20.0f; // Ajustează după necesități
-			glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-			rotationAngleHead -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
-			//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-			tank.Head.SetRotationAngle(rotationAngleHead);
+			glm::vec3 tankPosition = tanks[i].Head.GetPosition();
+			float tankRotationAngle = tanks[i].Head.GetRotationAngle();
+			glm::vec3 tankRotationAxis = tanks[i].Head.GetRotationAxis();
+			// Offset-ul camerei față de tank
+			glm::vec3 cameraOffset = glm::vec3(0.0f, 8.0f, -20.0f); // Offset-ul inițial
+			// Rotăm offset-ul camerei în funcție de rotația tankului
+			cameraOffset = rotateVector(cameraOffset, glm::radians(tankRotationAngle), tankRotationAxis);
+			// Poziția camerei va fi poziția tankului plus offset-ul
+			glm::vec3 cameraPosition = tankPosition + cameraOffset;
+			// Setăm poziția camerei
+			pCamera->SetPosition(cameraPosition);
+			// Orientăm camera spre tank
+			pCamera->LookAt(tankPosition);
 		}
 	}
 
-	//---- modificare tankIsSelected de la tastatura ---- 
-	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
-		tankIsSelected = true;
-	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
-		tankIsSelected = false;
-
+	////---- modificare tankIsSelected de la tastatura ---- 
+	//if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+	//{
+	//	tanks[1].SetIsSelected(true);
+	//	/*tankIsSelected = true;*/
+	//}
+	//if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
+	//{
+	//	tanks[1].SetIsSelected(false);
+	//	//tankIsSelected = false;
+	//}
+	
 
 	//----------------------  CAMERA  ------------------------------------
-	if (tankIsSelected) // Daca un model este selectat de aici am setat sa fie urmarit de camera
-	{
-		// Obținem poziția și rotația tankului
-		glm::vec3 tankPosition = tank.Head.GetPosition();
-		float tankRotationAngle = tank.Head.GetRotationAngle();
-		glm::vec3 tankRotationAxis = tank.Head.GetRotationAxis();
-		// Offset-ul camerei față de tank
-		glm::vec3 cameraOffset = glm::vec3(0.0f, 8.0f, -20.0f); // Offset-ul inițial
-		// Rotăm offset-ul camerei în funcție de rotația tankului
-		cameraOffset = rotateVector(cameraOffset, glm::radians(tankRotationAngle), tankRotationAxis);
-		// Poziția camerei va fi poziția tankului plus offset-ul
-		glm::vec3 cameraPosition = tankPosition + cameraOffset;
-		// Setăm poziția camerei
-		pCamera->SetPosition(cameraPosition);
-		// Orientăm camera spre tank
-		pCamera->LookAt(tankPosition);
-	}
+	//if (tankIsSelected) // Daca un model este selectat de aici am setat sa fie urmarit de camera
+	//{
+	//	// Obținem poziția și rotația tankului
+	//	glm::vec3 tankPosition = tank.Head.GetPosition();
+	//	float tankRotationAngle = tank.Head.GetRotationAngle();
+	//	glm::vec3 tankRotationAxis = tank.Head.GetRotationAxis();
+	//	// Offset-ul camerei față de tank
+	//	glm::vec3 cameraOffset = glm::vec3(0.0f, 8.0f, -20.0f); // Offset-ul inițial
+	//	// Rotăm offset-ul camerei în funcție de rotația tankului
+	//	cameraOffset = rotateVector(cameraOffset, glm::radians(tankRotationAngle), tankRotationAxis);
+	//	// Poziția camerei va fi poziția tankului plus offset-ul
+	//	glm::vec3 cameraPosition = tankPosition + cameraOffset;
+	//	// Setăm poziția camerei
+	//	pCamera->SetPosition(cameraPosition);
+	//	// Orientăm camera spre tank
+	//	pCamera->LookAt(tankPosition);
+	//}
 	//---- Putem misca din sageti camera numai daca nu avem un model selectat
-	if (!tankIsSelected)
+	if (!IsAnObjectSelected(tanks))
 	{
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::FORWARD, (float)deltaTime * 5);
-		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::BACKWARD, (float)deltaTime * 5);
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::LEFT, (float)deltaTime * 5);
-		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::RIGHT, (float)deltaTime * 5);
 		if (glfwGetKey(window, GLFW_KEY_PAGE_UP) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::UP, (float)deltaTime * 5);
@@ -897,7 +990,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	//if (!tankIsSelected) // am facut aceasta conditie ca sa nu putem modifica deloc camera cu mouse-ul atunci cand un model este selectat
+	if (!tankIsSelected) // am facut aceasta conditie ca sa nu putem modifica deloc camera cu mouse-ul atunci cand un model este selectat
 		pCamera->MouseControl((float)xpos, (float)ypos);
 }
 
