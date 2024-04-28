@@ -633,7 +633,7 @@ int main()
 	unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\white.jpg");
 
 	float radius = 350.0f; // Raza cercului pe care se va rota lumina
-	float speed = 0.132f;
+	float speed = 0.131f;
 
 
 
@@ -675,8 +675,11 @@ int main()
 		// Use lighting shader
 		lightingShader.Use();
 
-		if (lightX == -350) {
-			isNight = !isNight;
+		if (lightX == -350 || lightX == 350) {
+			if(isNight)
+				isNight = false;
+			else
+				isNight = true;
 		}
 
 		if (lightZ < 0) {
