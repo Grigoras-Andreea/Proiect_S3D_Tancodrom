@@ -51,7 +51,7 @@ Color lerp(const Color& x, const Color& y, float t) {
 float calculateInterpolationFactor(float timeOfDay) {
 	// Calculate the interpolation factor based on time of day (0 to 1)
 	// Ensure that the interpolation factor resets to 0 at the start of each day
-	const float hoursPerDay = 24.0f;
+	const float hoursPerDay = 48.0f;
 	return fmod(timeOfDay, hoursPerDay) / hoursPerDay;
 }
 void updateBackgroundColor(float timeOfDay) {
@@ -343,31 +343,31 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	helicopter2.ProppelerBack.SetRotationAxis(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	//---- Nori ----
-	clouds[0].SetPosition(glm::vec3(30.0f, 170.0f, 210.0f));
+	clouds[0].SetPosition(glm::vec3(30.0f, 140.0f, 210.0f));
 	clouds[0].SetScale(glm::vec3(0.35f));
-	clouds[1].SetPosition(glm::vec3(-70.0f, 170.0f, 50.0f));
+	clouds[1].SetPosition(glm::vec3(-70.0f, 140.0f, 50.0f));
 	clouds[1].SetScale(glm::vec3(0.2f));
-	clouds[2].SetPosition(glm::vec3(85.0f, 170.0f, -35.0f));
+	clouds[2].SetPosition(glm::vec3(85.0f, 140.0f, -35.0f));
 	clouds[2].SetScale(glm::vec3(0.55f));
-	clouds[3].SetPosition(glm::vec3(20.0f, 170.0f, 205.0f));
+	clouds[3].SetPosition(glm::vec3(20.0f, 150.0f, 205.0f));
 	clouds[3].SetScale(glm::vec3(0.35f));
-	clouds[4].SetPosition(glm::vec3(95.0f, 170.0f, -100.0f));
+	clouds[4].SetPosition(glm::vec3(95.0f, 150.0f, -100.0f));
 	clouds[4].SetScale(glm::vec3(0.45f));
-	clouds[5].SetPosition(glm::vec3(-50.0f, 170.0f, -90.0f));
+	clouds[5].SetPosition(glm::vec3(-50.0f, 140.0f, -90.0f));
 	clouds[5].SetScale(glm::vec3(0.35f));
-	clouds[6].SetPosition(glm::vec3(120.0f, 170.0f, 65.0f));
+	clouds[6].SetPosition(glm::vec3(120.0f, 160.0f, 65.0f));
 	clouds[6].SetScale(glm::vec3(0.25f));
 	clouds[7].SetPosition(glm::vec3(270.0f, 150.0f, -130.0f));
 	clouds[7].SetScale(glm::vec3(0.65f));
 	clouds[8].SetPosition(glm::vec3(285.0f, 140.0f, -40.0f));
 	clouds[8].SetScale(glm::vec3(0.25f));
-	clouds[9].SetPosition(glm::vec3(85.0f, 170.0f, 135.0f));
+	clouds[9].SetPosition(glm::vec3(85.0f, 150.0f, 135.0f));
 	clouds[9].SetScale(glm::vec3(0.45f));
 	clouds[10].SetPosition(glm::vec3(-220.0f, 160.0f, -125.0f));
 	clouds[10].SetScale(glm::vec3(0.25f));
 	clouds[11].SetPosition(glm::vec3(295.0f, 150.0f, 100.0f));
 	clouds[11].SetScale(glm::vec3(0.25f));
-	clouds[12].SetPosition(glm::vec3(250.0f, 170.0f, 90.0f));
+	clouds[12].SetPosition(glm::vec3(250.0f, 150.0f, 90.0f));
 	clouds[12].SetRotationAngle(180.0f);
 	clouds[12].SetScale(glm::vec3(0.25f));
 	clouds[13].SetPosition(glm::vec3(-120.0f, 140.0f, 65.0f));
@@ -376,7 +376,7 @@ void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, M
 	clouds[14].SetScale(glm::vec3(0.45f));
 	clouds[15].SetPosition(glm::vec3(-130.0f, 160.0f, 250.0f));
 	clouds[15].SetScale(glm::vec3(0.40f));
-	clouds[16].SetPosition(glm::vec3(150.0f, 170.0f, -250.0f));
+	clouds[16].SetPosition(glm::vec3(150.0f, 160.0f, -250.0f));
 	clouds[16].SetScale(glm::vec3(0.35f));
 	clouds[17].SetPosition(glm::vec3(-20.0f, 150.0f, 10.0f));
 	clouds[17].SetScale(glm::vec3(0.45f));
@@ -603,8 +603,8 @@ int main()
 	unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
 	unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\white.jpg");
 
-	float radius = 150.0f; // Raza cercului pe care se va rota lumina
-	float speed = 0.26f;
+	float radius = 350.0f; // Raza cercului pe care se va rota lumina
+	float speed = 0.132f;
 
 	//tankuri.push_back(tank1);
 	tankuri.push_back(tank2);
