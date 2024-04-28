@@ -414,7 +414,6 @@ void moveClouds(std::vector<Model>& clouds)
 
 }
 
-bool isNight = true;
 
 void rotate_elice(Model& helicpter3_elice, double deltaTime)
 {
@@ -431,6 +430,7 @@ void rotateElice(Helicopter& helicopter1, Helicopter& helicopter2) {
 	rotate_elice_spate(helicopter1.ProppelerBack, deltaTime);
 	rotate_elice_spate(helicopter2.ProppelerBack, deltaTime);
 }
+bool isNight = false;
 
 int main()
 {
@@ -647,6 +647,8 @@ int main()
 		updateBackgroundColor(timeOfDay);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		
+
 		// Update light position
 		float time = glfwGetTime();
 		float lightX = radius * cos(speed * time);
@@ -657,8 +659,32 @@ int main()
 		// Use lighting shader
 		lightingShader.Use();
 
+		if (lightX == -350) {
+			isNight = !isNight;
+		}
+
 		if (lightZ < 0) {
 			lightPos.x = -lightPos.x;
+			
+		}
+
+		// change between day and night
+
+		if (isNight)
+		{
+			lightingShader.SetVec3("lightColor", 0.7f, 0.7f, 1.0f);
+
+			lightingShader.SetFloat("Ka", 0.1);
+			lightingShader.SetFloat("Kd", 0.3);
+			lightingShader.SetFloat("Ks", 0.3);
+		}
+		else
+		{
+			lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 0.9f);
+
+			lightingShader.SetFloat("Ka", 0.2f);
+			lightingShader.SetFloat("Kd", 0.7f);
+			lightingShader.SetFloat("Ks", 0.5f);
 		}
 
 		lightingShader.SetVec3("lightPos", lightPos);
@@ -685,7 +711,11 @@ int main()
 
 		// Set light model matrix and draw the lamp object
 		glm::mat4 lightModel = glm::translate(glm::mat4(1.0), lightPos);
-		lightModel = glm::scale(lightModel, glm::vec3(0.5f)); // a smaller cube
+		if(isNight)
+			lightModel = glm::scale(lightModel, glm::vec3(7.0f)); // a smaller cube
+		else
+			lightModel = glm::scale(lightModel, glm::vec3(10.0f)); // a smaller cube
+		//lightModel = glm::scale(lightModel, glm::vec3(0.5f)); // a smaller cube
 		lampShader.SetMat4("model", lightModel);
 
 		//glBindTexture(GL_TEXTURE_2D, floorTexture);
