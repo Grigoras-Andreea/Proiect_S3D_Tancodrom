@@ -24,6 +24,7 @@
 #include "Camera.h"
 #include <stb_image.h>
 #include "Helicopter.h"
+#include "Tank.h"
 
 #pragma comment (lib, "glfw3dll.lib")
 #pragma comment (lib, "glew32.lib")
@@ -225,7 +226,7 @@ std::string ConvertWStringToString(const std::wstring& wstr) {
 
 std::vector<Model> tankuri;
 
-void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
+void RenderModels(Shader& lightingShader, Tank& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
 	std::vector<Model>& mountains,
 	Helicopter& helicopter1, Helicopter& helicopter2,
 	std::vector<Model>& clouds
@@ -239,8 +240,10 @@ void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tan
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 1);
-	lightingShader.SetMat4("model", tank1.GetModelMatrix());
-	tank1.Draw(lightingShader);
+	lightingShader.SetMat4("model", tank1.Body.GetModelMatrix());
+	tank1.Body.Draw(lightingShader);
+	lightingShader.SetMat4("model", tank1.Head.GetModelMatrix());
+	tank1.Head.Draw(lightingShader);
 	lightingShader.SetMat4("model", tank2.GetModelMatrix());
 	tank2.Draw(lightingShader);
 	lightingShader.SetMat4("model", tank3.GetModelMatrix());
@@ -282,16 +285,19 @@ void RenderModels(Shader& lightingShader, Model& tank1, Model& tank2, Model& tan
 	}
 }
 
-void PozitionateModels(Model& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
+void PozitionateModels(Tank& tank1, Model& tank2, Model& tank3, Model& tank4, Model& tank5, Model& tank6, Model& tank7, Model& tank8,
 	std::vector<Model>& mountains,
 	Helicopter& helicopter1, Helicopter& helicopter2,
 	std::vector<Model>& clouds
 )
 {
 	//---- Tancuri ----
-	tank1.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
-	tank1.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank1.SetRotationAngle(180.0f);
+	tank1.Body.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
+	tank1.Body.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tank1.Body.SetRotationAngle(180.0f);
+	tank1.Head.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
+	tank1.Head.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tank1.Head.SetRotationAngle(180.0f);
 	tank2.SetPosition(glm::vec3(-12.0f, 0.0f, 20.0f));
 	tank2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	tank2.SetRotationAngle(180.0f);
@@ -561,6 +567,9 @@ int main()
 	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
+	std::string tank_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_body.obj");
+	std::string tank_turretObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_turret.obj");
+
 	//std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mountain\\mount.blend1.obj");
 	std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mount.blend1.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\Human\\human.obj");
@@ -579,7 +588,7 @@ int main()
 
 
 	//---- Creare Modele
-	Model tank1(piratObjFileName, false);
+	Tank tank1(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false));
 	Model tank2(piratObjFileName, false);
 	Model tank3(piratObjFileName, false);
 	Model tank4(piratObjFileName, false);
@@ -631,7 +640,7 @@ int main()
 		
 		// Input
 		//processInput(window);
-		processInput(window, tank1);		// aici ar cam trb modificat pentru a putea controla toate tancurile, acum se poate controla doar tancul tank1
+		processInput(window, tank2);		// aici ar cam trb modificat pentru a putea controla toate tancurile, acum se poate controla doar tancul tank1
 
 		// Clear buffers
 		float timeOfDay = glfwGetTime(); // Adjust this based on your time scale
@@ -789,6 +798,14 @@ void processInput(GLFWwindow* window, Model& piratObjModel)
 				piratObjModel.SetRotationAngle(rotationAngle);
 				piratObjModel.SetRotationAxis(rotationAxis);
 			}
+		}
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		{
+			//la fel ca la tasta "A" doar ca ar trebui sa se roteasca numai tureta
+		}
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		{
+			//la fel ca la tasta "D" doar ca ar trebui sa se roteasca numai tureta
 		}
 	}
 
