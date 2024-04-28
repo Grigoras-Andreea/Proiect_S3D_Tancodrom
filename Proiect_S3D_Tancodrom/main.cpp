@@ -772,13 +772,18 @@ void SetObjSelectedOrNot(std::vector<Tank>& tanks, int tankNumber) {
 			tanks[i].SetIsSelected(false);
 		}
 	}*/
-	
-	for (int i = 0; i < tanks.size(); i++) {
+	tanks[tankNumber].SetIsSelected(true);
+	/*for (int i = 0; i < tanks.size(); i++) {
 		if (i != tankNumber)
 			tanks[i].SetIsSelected(false);
 		else
-			tanks[tankNumber].SetIsSelected(!tanks[tankNumber].GetIsSelected());
-	}
+		{
+			if (tanks[tankNumber].GetIsSelected())
+				tanks[tankNumber].SetIsSelected(false);
+			else
+				tanks[tankNumber].SetIsSelected(true);
+		}
+	}*/
 	
 }
 
@@ -801,28 +806,18 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
 	//---- EXIT APP ----
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-
-	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-		SetObjSelectedOrNot(tanks, 1);
-	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-		SetObjSelectedOrNot(tanks, 2);
-	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-		SetObjSelectedOrNot(tanks, 3);
-	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-		SetObjSelectedOrNot(tanks, 4);
-	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
-		SetObjSelectedOrNot(tanks, 5);
-	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
-		SetObjSelectedOrNot(tanks, 6);
-	if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS)
-		SetObjSelectedOrNot(tanks, 7);
-	if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS)
-		SetObjSelectedOrNot(tanks, 8);
+	tankIsSelected = IsAnObjectSelected(tanks);
+	
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+		for (int i = 0; i < tanks.size(); i++) {
+			if (tanks[i].GetIsSelected())
+				tanks[i].SetIsSelected(false);
+		}
 
 
 	//---- Control miscari model(tank)
-	tankIsSelected = IsAnObjectSelected(tanks);
-	if(IsAnObjectSelected(tanks))
+	
+	if(tankIsSelected)
 	for (int i = 0; i < tanks.size(); i++) 
 	{
 		if (tanks[i].GetIsSelected()) 
@@ -986,8 +981,26 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
 	//	pCamera->LookAt(tankPosition);
 	//}
 	//---- Putem misca din sageti camera numai daca nu avem un model selectat
-	if (!IsAnObjectSelected(tanks))
+	if (!tankIsSelected)
 	{
+		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+			SetObjSelectedOrNot(tanks, 1);
+		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+			SetObjSelectedOrNot(tanks, 2);
+		if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+			SetObjSelectedOrNot(tanks, 3);
+		if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+			SetObjSelectedOrNot(tanks, 4);
+		if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+			SetObjSelectedOrNot(tanks, 5);
+		if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
+			SetObjSelectedOrNot(tanks, 6);
+		if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS)
+			SetObjSelectedOrNot(tanks, 7);
+		if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS)
+			SetObjSelectedOrNot(tanks, 8);
+
+
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::FORWARD, (float)deltaTime * 5);
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
