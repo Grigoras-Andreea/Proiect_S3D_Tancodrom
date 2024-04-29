@@ -32,6 +32,8 @@
 #pragma comment (lib, "assimp-vc143-mt.lib")
 
 
+bool isNight = false;
+
 // Define a simple Color struct
 struct Color {
 	float r, g, b; // Red, green, and blue components
@@ -57,6 +59,7 @@ float calculateInterpolationFactor(float timeOfDay) {
 }
 void updateBackgroundColor(float timeOfDay) {
 	// Define key colors
+	
 	Color lightBlue(0.5f, 0.7f, 1.0f);    // Light blue
 	Color purple(0.988f, 0.831f, 0.967f);       // Purple
 	Color darkBlue(0.0f, 0.0f, 0.2f);     // Dark blue
@@ -69,6 +72,7 @@ void updateBackgroundColor(float timeOfDay) {
 	Color interpolatedColor(0.0f, 0.0f, 0.0f);
 	if (interpolationFactor < 0.1f) {
 		interpolatedColor = lerp(darkBlue, sunrise, interpolationFactor  * 10.0f);
+		isNight = false;
 	}
 	else if (interpolationFactor < 0.2f) {
 		interpolatedColor = lerp(sunrise, lightBlue, (interpolationFactor - 0.1f) * 10.0f);
@@ -78,9 +82,12 @@ void updateBackgroundColor(float timeOfDay) {
 	}
 	else if (interpolationFactor < 0.5f) {
 		interpolatedColor = lerp(lightBlue, darkBlue, (interpolationFactor - 0.4f) * 10.0f);
+		if (interpolationFactor >= 0.49f)
+			isNight = true;
 	}
 	else {
 		interpolatedColor = lerp(darkBlue, darkBlue, (interpolationFactor - 0.5f) * 4.0f);
+		isNight = true;
 	}
 
 	// Set the background color using glClearColor
@@ -441,7 +448,7 @@ void rotateElice(Helicopter& helicopter1, Helicopter& helicopter2) {
 	rotate_elice_spate(helicopter1.ProppelerBack, deltaTime);
 	rotate_elice_spate(helicopter2.ProppelerBack, deltaTime);
 }
-bool isNight = false;
+
 
 int main()
 {
@@ -672,15 +679,11 @@ int main()
 		lightPos.x = lightX;
 		lightPos.y = fabs(lightZ);
 
+
+		
 		// Use lighting shader
 		lightingShader.Use();
 
-		if (lightX == -350 || lightX == 350) {
-			if(isNight)
-				isNight = false;
-			else
-				isNight = true;
-		}
 
 		if (lightZ < 0) {
 			lightPos.x = -lightPos.x;
@@ -731,7 +734,7 @@ int main()
 		// Set light model matrix and draw the lamp object
 		glm::mat4 lightModel = glm::translate(glm::mat4(1.0), lightPos);
 		if(isNight)
-			lightModel = glm::scale(lightModel, glm::vec3(7.0f)); // a smaller cube
+			lightModel = glm::scale(lightModel, glm::vec3(6.0f)); // a smaller cube
 		else
 			lightModel = glm::scale(lightModel, glm::vec3(10.0f)); // a smaller cube
 		//lightModel = glm::scale(lightModel, glm::vec3(0.5f)); // a smaller cube
