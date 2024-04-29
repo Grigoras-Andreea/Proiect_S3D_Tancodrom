@@ -82,7 +82,7 @@ void updateBackgroundColor(float timeOfDay) {
 	}
 	else if (interpolationFactor < 0.5f) {
 		interpolatedColor = lerp(lightBlue, darkBlue, (interpolationFactor - 0.4f) * 10.0f);
-		if (interpolationFactor >= 0.49f)
+		if (interpolationFactor >= 0.498f)
 			isNight = true;
 	}
 	else {
