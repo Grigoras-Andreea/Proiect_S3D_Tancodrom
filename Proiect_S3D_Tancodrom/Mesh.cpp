@@ -1,4 +1,4 @@
-#include "Mesh.h"
+﻿#include "Mesh.h"
 
 Mesh::Mesh(const vector<Vertex>& vertices, const vector<unsigned int>& indices, const vector<Texture>& textures)
 {
@@ -6,20 +6,29 @@ Mesh::Mesh(const vector<Vertex>& vertices, const vector<unsigned int>& indices, 
 
     std::cout << "reserve vertices " << std::endl;
     numVertices = vertices.size();
-    this->vertices.reset(new Vertex[numVertices]);
+    //this->vertices.reset(new Vertex[numVertices]);
+    this->vertices = std::vector<Vertex>();
+
+    // Sau, dacă vrei să redimensionezi vectorul în funcție de numVertices
+    this->vertices.resize(numVertices);
+
 
     std::cout << "start copy vertices " << std::endl;
     for (size_t i = 0; i < vertices.size(); ++i) {
-        this->vertices.get()[i] = vertices[i];
+        this->vertices[i] = vertices[i];
     }
 
     std::cout << "reserve indices " << std::endl;
     numIndexes = indices.size();
-    this->indices.reset(new unsigned int[numIndexes]);
+    this->indices = std::vector<unsigned int>();
+    this->indices.resize(numIndexes);
+
+    // Sau, dacă vrei să redimensionezi vectorul în funcție de numVertices
+    this->vertices.resize(numVertices);
 
     std::cout << "start copy indices " << std::endl;
     for (size_t i = 0; i < indices.size(); ++i) {
-        this->indices.get()[i] = indices[i];
+        this->indices[i] = indices[i];
     }
 
     std::cout << "start copy textures " << std::endl;
@@ -31,7 +40,7 @@ Mesh::Mesh(const vector<Vertex>& vertices, const vector<unsigned int>& indices, 
     std::cout << "end mesh constructor " << std::endl;
 }
 
-Mesh::Mesh(unsigned int numVertices, std::shared_ptr <Vertex> vertices, unsigned int numIndexes, std::shared_ptr <unsigned int> indices, const vector<Texture>& textures)
+Mesh::Mesh(unsigned int numVertices, std::vector <Vertex> vertices, unsigned int numIndexes, std::vector <unsigned int> indices, const vector<Texture>& textures)
 {
     std::cout << "start mesh constructor. num vertice = " << numVertices << " num indexes " << numIndexes << std::endl;
 
@@ -107,10 +116,10 @@ void Mesh::setupMesh()
     // A great thing about structs is that their memory layout is sequential for all its items.
     // The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
     // again translates to 3/2 floats which translates to a byte array.
-    glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(Vertex), &vertices.get()[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndexes * sizeof(unsigned int), &indices.get()[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndexes * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
     // set the vertex attribute pointers
     // vertex Positions

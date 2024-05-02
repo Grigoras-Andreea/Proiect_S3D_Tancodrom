@@ -16,15 +16,15 @@ class Mesh
 public:
     // mesh Data
     unsigned int numVertices;
-    std::shared_ptr <Vertex> vertices;
+    std::vector <Vertex> vertices;
 
     unsigned int numIndexes;
-    std::shared_ptr <unsigned int> indices;
+    std::vector <unsigned int> indices;
     vector<Texture>      textures;
     unsigned int VAO;
 
     Mesh(const vector<Vertex>& vertices, const vector<unsigned int>& indices, const vector<Texture>& textures);
-    Mesh(unsigned int numVertices, std::shared_ptr <Vertex> vertices, unsigned int numIndexes, std::shared_ptr <unsigned int> indices, const vector<Texture>& textures);
+    Mesh(unsigned int numVertices, std::vector <Vertex> vertices, unsigned int numIndexes, std::vector <unsigned int> indices, const vector<Texture>& textures);
     void Draw(Shader& shader);
 
 
