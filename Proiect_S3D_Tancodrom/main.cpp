@@ -34,6 +34,7 @@
 
 bool isNight = false;
 unsigned int floorTexture;
+unsigned int cloudTexture;
 Model tank;
 
 // Define a simple Color struct
@@ -259,7 +260,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 
 	tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
 	tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	tank.SetRotationAngle(180.0f);
+	//tank.SetRotationAngle(180.0f);
 	lightingShader.SetMat4("model", tank.GetModelMatrix());
 	tank.Draw(lightingShader);
 	
@@ -268,26 +269,26 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	//glBindTexture(GL_TEXTURE_2D, 1);
 
 
-	//lightingShader.SetMat4("model", helicopter1.Body.GetModelMatrix());
-	//helicopter1.Body.Draw(lightingShader);
-	//lightingShader.SetMat4("model", helicopter1.ProppelerUp.GetModelMatrix());
-	//helicopter1.ProppelerUp.Draw(lightingShader);
-	//lightingShader.SetMat4("model", helicopter1.ProppelerBack.GetModelMatrix());
-	//helicopter1.ProppelerBack.Draw(lightingShader);
-	//lightingShader.SetMat4("model", helicopter2.Body.GetModelMatrix());
-	//helicopter2.Body.Draw(lightingShader);
-	//lightingShader.SetMat4("model", helicopter2.ProppelerUp.GetModelMatrix());
-	//helicopter2.ProppelerUp.Draw(lightingShader);
-	//lightingShader.SetMat4("model", helicopter2.ProppelerBack.GetModelMatrix());
-	//helicopter2.ProppelerBack.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopter1.Body.GetModelMatrix());
+	helicopter1.Body.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopter1.ProppelerUp.GetModelMatrix());
+	helicopter1.ProppelerUp.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopter1.ProppelerBack.GetModelMatrix());
+	helicopter1.ProppelerBack.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopter2.Body.GetModelMatrix());
+	helicopter2.Body.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopter2.ProppelerUp.GetModelMatrix());
+	helicopter2.ProppelerUp.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopter2.ProppelerBack.GetModelMatrix());
+	helicopter2.ProppelerBack.Draw(lightingShader);
 
 
-	////glBindTexture(GL_TEXTURE_2D, 4);
-	//for (int i = 0; i < 25; i++)
-	//{
-	//	lightingShader.SetMat4("model", clouds[i].GetModelMatrix());
-	//	clouds[i].Draw(lightingShader);
-	//}
+	glBindTexture(GL_TEXTURE_2D, cloudTexture);
+	for (int i = 0; i < 25; i++)
+	{
+		lightingShader.SetMat4("model", clouds[i].GetModelMatrix());
+		clouds[i].Draw(lightingShader);
+	}
 }
 
 void PozitionateModels(std::vector<Tank>& tanks,
@@ -620,7 +621,7 @@ int main()
 	//unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	floorTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass_floor2.png");
 	//unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
-	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\white.jpg");
+	cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\blue.jpg");
 	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
 
 	float radius = 350.0f; // Raza cercului pe care se va rota lumina
