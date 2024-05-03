@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{7c653ad6-899e-4c51-94e0-2ae0fd0e30ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -40,6 +43,36 @@
   <ItemGroup>
     <None Include="KeyBinder.tpp">
       <Filter>Header Files</Filter>
+    </None>
+    <None Include="..\Shaders\Lamp.fs">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\Lamp.vs">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\PhongLight.fs">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\PhongLight.vs">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\ShadowMapping.fs">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\ShadowMapping.vs">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\ShadowMappingDepth.fs">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\ShadowMappingDepth.vs">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\modelFS.glsl">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Shaders\modelVS.glsl">
+      <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -33,6 +33,8 @@
 
 
 bool isNight = false;
+unsigned int floorTexture;
+Model tank;
 
 // Define a simple Color struct
 struct Color {
@@ -169,7 +171,7 @@ void renderFloor()
 		// set up vertex data (and buffer(s)) and configure vertex attributes
 		float planeVertices[] = {
 			// positions            // normals         // texcoords
-			500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,  75.0f,  0.0f,
+			500.0f, 0.0f,  500.0f,  0.0f, 1.0f, 0.0f,  75.0f,  0.0f,
 			-500.0f, -0.0f,  500.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
 			-500.0f, -0.0f, -500.0f,  0.0f, 1.0f, 0.0f,   0.0f, 75.0f,
 
@@ -231,69 +233,61 @@ std::string ConvertWStringToString(const std::wstring& wstr) {
 	return str;
 }
 
-void RenderModels(Shader& lightingShader, std::vector<Tank>& tanks,
+void RenderModels(Shader& lightingShader, Shader& modelShader, 
+	std::vector<Tank>& tanks,
 	std::vector<Model>& mountains,
 	Helicopter& helicopter1, Helicopter& helicopter2,
 	std::vector<Model>& clouds
 )
 {
-	glBindTexture(GL_TEXTURE_2D, 2);
+	//glBindTexture(GL_TEXTURE_2D, 3);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	for (int i = 0; i < 4; i++) 
 	{
 		lightingShader.SetMat4("model", mountains[i].GetModelMatrix());
 		mountains[i].Draw(lightingShader);
+		
 	}
 
-	glBindTexture(GL_TEXTURE_2D, 1);
-	for (int i = 0; i < tanks.size(); i++) {
+	//glBindTexture(GL_TEXTURE_2D, 2);
+	/*for (int i = 0; i < tanks.size(); i++) {
 		lightingShader.SetMat4("model", tanks[i].Body.GetModelMatrix());
 		tanks[i].Body.Draw(lightingShader);
 		lightingShader.SetMat4("model", tanks[i].Head.GetModelMatrix());
 		tanks[i].Head.Draw(lightingShader);
-	}
-	/*lightingShader.SetMat4("model", tank1.Body.GetModelMatrix());
-	tanks[i].Body.Draw(lightingShader);
-	lightingShader.SetMat4("model", tank1.Head.GetModelMatrix());
-	tank1.Head.Draw(lightingShader);
-	lightingShader.SetMat4("model", tank2.GetModelMatrix());
-	tank2.Draw(lightingShader);
-	lightingShader.SetMat4("model", tank3.GetModelMatrix());
-	tank3.Draw(lightingShader);
-	lightingShader.SetMat4("model", tank4.GetModelMatrix());
-	tank4.Draw(lightingShader);
-	lightingShader.SetMat4("model", tank5.GetModelMatrix());
-	tank5.Draw(lightingShader);
-	lightingShader.SetMat4("model", tank6.GetModelMatrix());
-	tank6.Draw(lightingShader);
-	lightingShader.SetMat4("model", tank7.GetModelMatrix());
-	tank7.Draw(lightingShader);
-	lightingShader.SetMat4("model", tank8.GetModelMatrix());
-	tank8.Draw(lightingShader);*/
-	glBindTexture(GL_TEXTURE_2D, 2);
+	}*/
+
+	tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
+	tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	tank.SetRotationAngle(180.0f);
+	lightingShader.SetMat4("model", tank.GetModelMatrix());
+	tank.Draw(lightingShader);
+	
+	glBindTexture(GL_TEXTURE_2D, floorTexture);
 	renderFloor();
-	glBindTexture(GL_TEXTURE_2D, 1);
+	//glBindTexture(GL_TEXTURE_2D, 1);
 
 
-	lightingShader.SetMat4("model", helicopter1.Body.GetModelMatrix());
-	helicopter1.Body.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter1.ProppelerUp.GetModelMatrix());
-	helicopter1.ProppelerUp.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter1.ProppelerBack.GetModelMatrix());
-	helicopter1.ProppelerBack.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter2.Body.GetModelMatrix());
-	helicopter2.Body.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter2.ProppelerUp.GetModelMatrix());
-	helicopter2.ProppelerUp.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter2.ProppelerBack.GetModelMatrix());
-	helicopter2.ProppelerBack.Draw(lightingShader);
+	//lightingShader.SetMat4("model", helicopter1.Body.GetModelMatrix());
+	//helicopter1.Body.Draw(lightingShader);
+	//lightingShader.SetMat4("model", helicopter1.ProppelerUp.GetModelMatrix());
+	//helicopter1.ProppelerUp.Draw(lightingShader);
+	//lightingShader.SetMat4("model", helicopter1.ProppelerBack.GetModelMatrix());
+	//helicopter1.ProppelerBack.Draw(lightingShader);
+	//lightingShader.SetMat4("model", helicopter2.Body.GetModelMatrix());
+	//helicopter2.Body.Draw(lightingShader);
+	//lightingShader.SetMat4("model", helicopter2.ProppelerUp.GetModelMatrix());
+	//helicopter2.ProppelerUp.Draw(lightingShader);
+	//lightingShader.SetMat4("model", helicopter2.ProppelerBack.GetModelMatrix());
+	//helicopter2.ProppelerBack.Draw(lightingShader);
 
 
-	glBindTexture(GL_TEXTURE_2D, 4);
-	for (int i = 0; i < 25; i++)
-	{
-		lightingShader.SetMat4("model", clouds[i].GetModelMatrix());
-		clouds[i].Draw(lightingShader);
-	}
+	////glBindTexture(GL_TEXTURE_2D, 4);
+	//for (int i = 0; i < 25; i++)
+	//{
+	//	lightingShader.SetMat4("model", clouds[i].GetModelMatrix());
+	//	clouds[i].Draw(lightingShader);
+	//}
 }
 
 void PozitionateModels(std::vector<Tank>& tanks,
@@ -429,9 +423,8 @@ void moveClouds(std::vector<Model>& clouds)
 	if (clouds[14].GetPosition().x > -400.0f && clouds[16].GetPosition().x > -400.0f)
 		for (int i = 0; i < 25; i++)
 			clouds[i].SetPosition(clouds[i].GetPosition() + glm::vec3(-0.002f, 0.0f, -0.002f));
-
+	
 }
-
 
 void rotate_elice(Model& helicpter3_elice, double deltaTime)
 {
@@ -560,7 +553,7 @@ int main()
 	pCamera = new Camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(0.0, 2.0, 3.0));
 
 	glm::vec3 lightPos(0.0f, 2.0f, 1.0f);
-
+	
 	wchar_t buffer[MAX_PATH];
 	GetCurrentDirectoryW(MAX_PATH, buffer);
 
@@ -581,17 +574,19 @@ int main()
 	Shader lampShader((currentPathChr + std::string("\\Shaders\\Lamp.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\Lamp.fs")).c_str()));
 	Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
 	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
+	Shader modelShader((currentPath + "\\Shaders\\modelVS.glsl").c_str(), (currentPath + "\\Shaders\\modelFS.glsl").c_str());
 
 	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
-	std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
+	//std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
 	std::string tank_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_body.obj");
 	std::string tank_turretObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_turret.obj");
 
-	//std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mountain\\mount.blend1.obj");
-	std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mount.blend1.obj");
+	std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mountain\\mount.blend1.obj");
+	//std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mount.blend1.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\Human\\human.obj");
-	//std::string piratObjFileName = (currentPath + "\\Models\\WWII_Tank_Germany_Panzer_III_v1_L2.123c56cb92d1-9485-44e9-a197-a7bddb48c29f\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
+	std::string piratObjFileName = (currentPath + "\\Models\\WWII_Tank_Germany_Panzer_III_v1_L2.123c56cb92d1-9485-44e9-a197-a7bddb48c29f\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
+	tank = Model(piratObjFileName, false);
 	//std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_bell_nou.obj");
 	std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_Bell\\Heli_bell_nou.obj");
 	std::string heli_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_body2.obj");
@@ -605,6 +600,7 @@ int main()
 	std::string cloud5ObjFileName = (std::string(currentPathChr) + "\\Models\\altostratus01.obj");
 
 
+	
 	//---- Creare Modele
 	std::vector<Tank> tanks;
 	tanks.insert(tanks.end(), 8, Tank(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false)));
@@ -621,9 +617,11 @@ int main()
 	
 	std::vector<Model> mountains(4, Model(mountainObjFileName, false));
 
-	unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
-	unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
-	unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\white.jpg");
+	//unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
+	floorTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass_floor2.png");
+	//unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
+	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\white.jpg");
+	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
 
 	float radius = 350.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.131f;
@@ -656,15 +654,12 @@ int main()
 		lightPos.x = lightX;
 		lightPos.y = fabs(lightZ);
 
-
 		
 		// Use lighting shader
 		lightingShader.Use();
 
-
 		if (lightZ < 0) {
 			lightPos.x = -lightPos.x;
-			
 		}
 
 		// change between day and night
@@ -692,9 +687,12 @@ int main()
 		lightingShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lightingShader.SetMat4("view", pCamera->GetViewMatrix());
 
-
+	
+		
+		//glBindTexture(GL_TEXTURE_2D, 3);
+		//renderFloor();
 		// Set model matrix and draw the model
-		RenderModels(lightingShader, tanks, mountains, helicopter1, helicopter2, clouds);
+		RenderModels(lightingShader, modelShader, tanks, mountains, helicopter1, helicopter2, clouds);
 		processInput(window, tanks);
 
 		// Use lamp shader
@@ -715,6 +713,10 @@ int main()
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+
+		
+
+		
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
 		glfwPollEvents();

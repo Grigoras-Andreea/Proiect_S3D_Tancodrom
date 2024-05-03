@@ -146,6 +146,16 @@
     <ClCompile Include="Tank.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shaders\Lamp.fs" />
+    <None Include="..\Shaders\Lamp.vs" />
+    <None Include="..\Shaders\modelFS.glsl" />
+    <None Include="..\Shaders\modelVS.glsl" />
+    <None Include="..\Shaders\PhongLight.fs" />
+    <None Include="..\Shaders\PhongLight.vs" />
+    <None Include="..\Shaders\ShadowMapping.fs" />
+    <None Include="..\Shaders\ShadowMapping.vs" />
+    <None Include="..\Shaders\ShadowMappingDepth.fs" />
+    <None Include="..\Shaders\ShadowMappingDepth.vs" />
     <None Include="KeyBinder.tpp" />
   </ItemGroup>
   <ItemGroup>

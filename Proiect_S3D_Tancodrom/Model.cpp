@@ -57,7 +57,7 @@ void Model::loadModel(string const& path, bool bSmoothNormals)
         return;
     }
     // retrieve the directory path of the filepath
-    directory = path.substr(0, path.find_last_of('/'));
+    directory = path.substr(0, path.find_last_of('\\'));
 
     // process ASSIMP's root node recursively
     processNode(scene->mRootNode, scene);
@@ -202,7 +202,11 @@ vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type,
 unsigned int TextureFromFile(const char* path, const string& directory, bool gamma)
 {
     string filename = string(path);
-    filename = directory + '/' + filename;
+    filename = directory + '\\' + filename;
+    if (filename.substr(filename.length() - 4) != ".jpg") {
+        filename += ".jpg"; // Adaugă extensia ".jpg" la șir
+    }
+
 
     unsigned int textureID;
     glGenTextures(1, &textureID);
