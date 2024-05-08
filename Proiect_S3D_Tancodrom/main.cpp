@@ -213,7 +213,7 @@ void Cleanup()
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow* window, std::vector<Tank>& tanks);
+void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters);
 void checkShellsLifetime() 
 {
 	for (auto it = shells.begin(); it != shells.end();) {
@@ -257,7 +257,7 @@ std::string ConvertWStringToString(const std::wstring& wstr) {
 void RenderModels(Shader& lightingShader, Shader& modelShader, 
 	std::vector<Tank>& tanks,
 	std::vector<Model>& mountains,
-	Helicopter& helicopter1, Helicopter& helicopter2,
+	std::vector<Helicopter>& helicopters,
 	std::vector<Model>& clouds
 )
 {
@@ -298,18 +298,18 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	
 	
 	glBindTexture(GL_TEXTURE_2D, tankTexture);
-	lightingShader.SetMat4("model", helicopter1.Body.GetModelMatrix());
-	helicopter1.Body.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter1.ProppelerUp.GetModelMatrix());
-	helicopter1.ProppelerUp.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter1.ProppelerBack.GetModelMatrix());
-	helicopter1.ProppelerBack.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter2.Body.GetModelMatrix());
-	helicopter2.Body.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter2.ProppelerUp.GetModelMatrix());
-	helicopter2.ProppelerUp.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopter2.ProppelerBack.GetModelMatrix());
-	helicopter2.ProppelerBack.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopters[0].Body.GetModelMatrix());
+	helicopters[0].Body.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopters[0].ProppelerUp.GetModelMatrix());
+	helicopters[0].ProppelerUp.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopters[0].ProppelerBack.GetModelMatrix());
+	helicopters[0].ProppelerBack.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopters[1].Body.GetModelMatrix());
+	helicopters[1].Body.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopters[1].ProppelerUp.GetModelMatrix());
+	helicopters[1].ProppelerUp.Draw(lightingShader);
+	lightingShader.SetMat4("model", helicopters[1].ProppelerBack.GetModelMatrix());
+	helicopters[1].ProppelerBack.Draw(lightingShader);
 
 
 
@@ -324,7 +324,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 
 void PozitionateModels(std::vector<Tank>& tanks,
 	std::vector<Model>& mountains,
-	Helicopter& helicopter1, Helicopter& helicopter2,
+	std::vector<Helicopter>& helicopters,
 	std::vector<Model>& clouds
 )
 {
@@ -376,21 +376,21 @@ void PozitionateModels(std::vector<Tank>& tanks,
 	}
 
 	//---- Elicoptere ----
-	helicopter1.Body.SetPosition(glm::vec3(20.25f, 20.0f, -30.0f));
-	helicopter1.Body.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	helicopter1.Body.SetRotationAngle(0.0f);
-	helicopter1.ProppelerUp.SetPosition(glm::vec3(20.0f, 20.0f, -30.0f));
-	helicopter1.ProppelerUp.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	helicopter1.ProppelerBack.SetPosition(glm::vec3(20.5f, 23.63f, -41.27f));
-	helicopter1.ProppelerBack.SetRotationAxis(glm::vec3(1.0f, 0.0f, 0.0f));
+	helicopters[0].Body.SetPosition(glm::vec3(20.25f, 20.0f, -30.0f));
+	helicopters[0].Body.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	helicopters[0].Body.SetRotationAngle(0.0f);
+	helicopters[0].ProppelerUp.SetPosition(glm::vec3(20.0f, 20.0f, -30.0f));
+	helicopters[0].ProppelerUp.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	helicopters[0].ProppelerBack.SetPosition(glm::vec3(20.5f, 23.63f, -41.27f));
+	helicopters[0].ProppelerBack.SetRotationAxis(glm::vec3(1.0f, 0.0f, 0.0f));
 
-	helicopter2.Body.SetPosition(glm::vec3(19.75f, 20.0f, 30.0f));
-	helicopter2.Body.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	helicopter2.Body.SetRotationAngle(180.0f);
-	helicopter2.ProppelerUp.SetPosition(glm::vec3(20.0f, 20.0f, 30.0f));
-	helicopter2.ProppelerUp.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	helicopter2.ProppelerBack.SetPosition(glm::vec3(19.5f, 23.63f, 41.27f));
-	helicopter2.ProppelerBack.SetRotationAxis(glm::vec3(1.0f, 0.0f, 0.0f));
+	helicopters[1].Body.SetPosition(glm::vec3(19.75f, 20.0f, 30.0f));
+	helicopters[1].Body.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	helicopters[1].Body.SetRotationAngle(180.0f);
+	helicopters[1].ProppelerUp.SetPosition(glm::vec3(20.0f, 20.0f, 30.0f));
+	helicopters[1].ProppelerUp.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	helicopters[1].ProppelerBack.SetPosition(glm::vec3(19.5f, 23.63f, 41.27f));
+	helicopters[1].ProppelerBack.SetRotationAxis(glm::vec3(1.0f, 0.0f, 0.0f));
 
 	//---- Nori ----
 	clouds[0].SetPosition(glm::vec3(30.0f, 140.0f, 210.0f));
@@ -466,12 +466,12 @@ void rotate_elice_spate(Model& helicpter3_elice_spate, double deltaTime)
 {
 	helicpter3_elice_spate.SetRotationAngle(helicpter3_elice_spate.GetRotationAngle() + 100.0f * deltaTime * 50);
 }
-void rotateElice(Helicopter& helicopter1, Helicopter& helicopter2) {
-	rotate_elice(helicopter1.ProppelerUp, deltaTime);
-	rotate_elice(helicopter2.ProppelerUp, deltaTime);
+void rotateElice(std::vector<Helicopter>& helicopters ) {
+	rotate_elice(helicopters[0].ProppelerUp, deltaTime);
+	rotate_elice(helicopters[1].ProppelerUp, deltaTime);
 
-	rotate_elice_spate(helicopter1.ProppelerBack, deltaTime);
-	rotate_elice_spate(helicopter2.ProppelerBack, deltaTime);
+	rotate_elice_spate(helicopters[0].ProppelerBack, deltaTime);
+	rotate_elice_spate(helicopters[1].ProppelerBack, deltaTime);
 }
 
 int main()
@@ -640,6 +640,10 @@ int main()
 	Helicopter helicopter1(Model(heli_bodyObjFileName, false), Model(heli_eliceObjFileName, false) , Model(heli_elice_spateObjFileName, false));
 	Helicopter helicopter2(Model(heli_bodyObjFileName, false), Model(heli_eliceObjFileName, false), Model(heli_elice_spateObjFileName, false));
 
+	std::vector<Helicopter> helicopters;
+	helicopters.push_back(helicopter1);
+	helicopters.push_back(helicopter2);
+
 	std::vector<Model> clouds;
 	clouds.insert(clouds.end(), 7, Model(cloudObjFileName, false));
 	clouds.insert(clouds.end(), 4, Model(cloud2ObjFileName, false));
@@ -658,7 +662,7 @@ int main()
 	float radius = 350.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.131f;
 
-	PozitionateModels(tanks, mountains, helicopter1, helicopter2, clouds);
+	PozitionateModels(tanks, mountains, helicopters, clouds);
 
 	while (!glfwWindowShouldClose(window)) {
 		// Per-frame time logic
@@ -669,7 +673,7 @@ int main()
 
 		checkShellsLifetime();
 		moveClouds(clouds);
-		rotateElice(helicopter1, helicopter2);
+		rotateElice(helicopters);
 		
 		// Input
 		//processInput(window);
@@ -726,8 +730,8 @@ int main()
 		//glBindTexture(GL_TEXTURE_2D, 3);
 		//renderFloor();
 		// Set model matrix and draw the model
-		RenderModels(lightingShader, modelShader, tanks, mountains, helicopter1, helicopter2, clouds);
-		processInput(window, tanks);
+		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds);
+		processInput(window, tanks, helicopters);
 
 		// Use lamp shader
 		lampShader.Use();
@@ -775,25 +779,40 @@ bool IsAnObjectSelected(std::vector<Tank>& tanks) {
 	return false;
 }
 
+bool IsAHelicopterSelected(std::vector<Helicopter>& helicopters) {
+	for (int i = 0; i < helicopters.size(); i++) {
+		if (helicopters[i].GetIsSelected())
+			return true;
+	}
+	return false;
+}
+
 glm::vec3 rotateVector(const glm::vec3& vec, float angle, const glm::vec3& axis) {
 	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), angle, axis);
 	return glm::vec3(rotationMatrix * glm::vec4(vec, 1.0f));
 }
 
 bool tankIsSelected = false;
+bool helicopterIsSelected = false;
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
+void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters)
 {
 	//---- EXIT APP ----
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 	
 	tankIsSelected = IsAnObjectSelected(tanks);
+	helicopterIsSelected = IsAHelicopterSelected(helicopters);
 	
 	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
 		for (int i = 0; i < tanks.size(); i++) {
 			if (tanks[i].GetIsSelected())
 				tanks[i].SetIsSelected(false);
+		}
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+		for (int i = 0; i < helicopters.size(); i++) {
+			if (helicopters[i].GetIsSelected())
+				helicopters[i].SetIsSelected(false);
 		}
 	//---- Control miscari model(tank)
 	if(tankIsSelected)
@@ -933,8 +952,28 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
 		}
 	}
 
+	if(helicopterIsSelected)
+		for (int i = 0; i < helicopters.size(); i++)
+		{
+			if (helicopters[i].GetIsSelected())
+			{
+				glm::vec3 helicopterPosition = helicopters[i].Body.GetPosition();
+				float helicopterRotationAngle = helicopters[i].Body.GetRotationAngle();
+				glm::vec3 helicopterRotationAxis = helicopters[i].Body.GetRotationAxis();
+				// Offset-ul camerei față de helicopter
+				glm::vec3 cameraOffset = glm::vec3(0.0f, 13.0f, -23.0f); // Offset-ul inițial
+				// Rotăm offset-ul camerei în funcție de rotația helicopterului
+				cameraOffset = rotateVector(cameraOffset, glm::radians(helicopterRotationAngle), helicopterRotationAxis);
+				// Poziția camerei va fi poziția helicopterului plus offset-ul
+				glm::vec3 cameraPosition = helicopterPosition + cameraOffset;
+				// Setăm poziția camerei
+				pCamera->SetPosition(cameraPosition);
+				// Orientăm camera spre helicopter
+				pCamera->LookAt(helicopterPosition);
+			}
+		}
 	//---- Putem misca din sageti camera numai daca nu avem un model selectat
-	if (!tankIsSelected)
+	if (!tankIsSelected || !helicopterIsSelected)
 	{
 		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
 			tanks[0].SetIsSelected(true);
@@ -952,6 +991,10 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
 			tanks[6].SetIsSelected(true);
 		if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS)
 			tanks[7].SetIsSelected(true);
+		if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS)
+			helicopters[0].SetIsSelected(true);
+		if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
+			helicopters[1].SetIsSelected(true);
 
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -986,7 +1029,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	if (!tankIsSelected) // am facut aceasta conditie ca sa nu putem modifica deloc camera cu mouse-ul atunci cand un model este selectat
+	if (!tankIsSelected && !helicopterIsSelected) // am facut aceasta conditie ca sa nu putem modifica deloc camera cu mouse-ul atunci cand un model este selectat
 		pCamera->MouseControl((float)xpos, (float)ypos);
 }
 
