@@ -33,8 +33,7 @@
 
 
 bool isNight = false;
-unsigned int floorTexture;
-unsigned int cloudTexture;
+unsigned int floorTexture, cloudTexture, tankTexture;
 Model tank;
 
 // Define a simple Color struct
@@ -250,7 +249,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		
 	}
 
-	//glBindTexture(GL_TEXTURE_2D, 2);
+	glBindTexture(GL_TEXTURE_2D, tankTexture);
 	for (int i = 0; i < tanks.size(); i++) {
 		lightingShader.SetMat4("model", tanks[i].Body.GetModelMatrix());
 		tanks[i].Body.Draw(lightingShader);
@@ -258,17 +257,18 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		tanks[i].Head.Draw(lightingShader);
 	}
 
-	tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
-	tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
+	//tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	//tank.SetRotationAngle(180.0f);
-	lightingShader.SetMat4("model", tank.GetModelMatrix());
-	tank.Draw(lightingShader);
+	//lightingShader.SetMat4("model", tank.GetModelMatrix());
+	//tank.Draw(lightingShader);
 	
 	glBindTexture(GL_TEXTURE_2D, floorTexture);
 	renderFloor();
 	//glBindTexture(GL_TEXTURE_2D, 1);
-
-
+	
+	
+	glBindTexture(GL_TEXTURE_2D, tankTexture);
 	lightingShader.SetMat4("model", helicopter1.Body.GetModelMatrix());
 	helicopter1.Body.Draw(lightingShader);
 	lightingShader.SetMat4("model", helicopter1.ProppelerUp.GetModelMatrix());
@@ -442,7 +442,6 @@ void rotateElice(Helicopter& helicopter1, Helicopter& helicopter2) {
 	rotate_elice_spate(helicopter1.ProppelerBack, deltaTime);
 	rotate_elice_spate(helicopter2.ProppelerBack, deltaTime);
 }
-
 
 int main()
 {
@@ -618,7 +617,7 @@ int main()
 	
 	std::vector<Model> mountains(4, Model(mountainObjFileName, false));
 
-	//unsigned int floorTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
+	tankTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	floorTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass_floor2.png");
 	//unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
 	cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\blue.jpg");
