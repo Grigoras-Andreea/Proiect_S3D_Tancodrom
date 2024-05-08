@@ -828,14 +828,17 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
 				forwardDirection.x * sinAngleHead - forwardDirection.z * cosAngleHead
 			);
 
-			if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && fireCooldown + 2 < lastFrame)
+			if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && fireCooldown + 1 < lastFrame)
 			{
 				fireCooldown = lastFrame;
 
 				TankShell newShell = TankShell(Model(TankShellObjFilename, true), deltaTime, -rotatedForwardDirectionHead);
 				//newShell.Shell.SetScale(glm::vec3(0.05f));
 				newShell.Shell.SetScale(glm::vec3(0.1f));
-				newShell.Shell.SetPosition(glm::vec3(tanks[i].Head.GetPosition().x, tanks[i].Head.GetPosition().y + 3.f, tanks[i].Head.GetPosition().z));
+				newShell.Shell.SetPosition(glm::vec3(tanks[i].Head.GetPosition().x, tanks[i].Head.GetPosition().y + 2.27f, tanks[i].Head.GetPosition().z) + newShell.moveDir * static_cast <float>(8));
+
+				//it->Shell.SetPosition(it->Shell.GetPosition() + (it->moveDir * movementSpeed * static_cast<float>(deltaTime)));
+				
 				newShell.Shell.SetRotationAxis(tanks[i].Head.GetRotationAxis());
 				newShell.Shell.SetRotationAngle(tanks[i].Head.GetRotationAngle() + 180);
 				
