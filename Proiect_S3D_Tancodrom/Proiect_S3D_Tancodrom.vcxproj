@@ -144,6 +144,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Tank.cpp" />
+    <ClCompile Include="TankShell.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\Lamp.fs" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Tank.h" />
+    <ClInclude Include="TankShell.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>

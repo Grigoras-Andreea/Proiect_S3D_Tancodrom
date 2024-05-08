@@ -25,6 +25,7 @@
 #include <stb_image.h>
 #include "Helicopter.h"
 #include "Tank.h"
+#include "TankShell.h"
 
 #pragma comment (lib, "glfw3dll.lib")
 #pragma comment (lib, "glew32.lib")
@@ -35,6 +36,9 @@
 bool isNight = false;
 unsigned int floorTexture, cloudTexture, tankTexture;
 Model tank;
+std::string TankShellObjFilename;
+std::vector<TankShell> shells;
+double fireCooldown = 0;
 
 // Define a simple Color struct
 struct Color {
@@ -198,6 +202,8 @@ void renderFloor()
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+double deltaTime = 0.0f;	// time between current frame and last frame
+double lastFrame = 0.0f;
 
 void Cleanup()
 {
@@ -208,10 +214,25 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window, std::vector<Tank>& tanks);
+void checkShellsLifetime() 
+{
+	for (auto it = shells.begin(); it != shells.end();) {
+		std::cout << "  -  " << it->spawnTime << "\n";
+		if (it->spawnTime > 10) {
+			it = shells.erase(it);
+		}
+		else {
+			float movementSpeed = 20.0f;
+			it->Shell.SetPosition(it->Shell.GetPosition() + (it->moveDir * movementSpeed * static_cast<float>(deltaTime)));
 
+			it->spawnTime += deltaTime;
+			++it;
+		}
+	}
+
+
+}
 // timing
-double deltaTime = 0.0f;	// time between current frame and last frame
-double lastFrame = 0.0f;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -256,6 +277,15 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", tanks[i].Head.GetModelMatrix());
 		tanks[i].Head.Draw(lightingShader);
 	}
+	glBindTexture(GL_TEXTURE_2D, floorTexture);
+	renderFloor();
+	glBindTexture(GL_TEXTURE_2D, tankTexture);
+	for (int i = 0; i < shells.size(); i++) {
+		lightingShader.SetMat4("model", shells[i].Shell.GetModelMatrix());
+		shells[i].Shell.Draw(lightingShader);
+	}
+
+
 
 	//tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
 	//tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -263,8 +293,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	//lightingShader.SetMat4("model", tank.GetModelMatrix());
 	//tank.Draw(lightingShader);
 	
-	glBindTexture(GL_TEXTURE_2D, floorTexture);
-	renderFloor();
+	
 	//glBindTexture(GL_TEXTURE_2D, 1);
 	
 	
@@ -281,6 +310,8 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	helicopter2.ProppelerUp.Draw(lightingShader);
 	lightingShader.SetMat4("model", helicopter2.ProppelerBack.GetModelMatrix());
 	helicopter2.ProppelerBack.Draw(lightingShader);
+
+
 
 
 	glBindTexture(GL_TEXTURE_2D, cloudTexture);
@@ -575,12 +606,13 @@ int main()
 	Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
 	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
 	Shader modelShader((currentPath + "\\Shaders\\modelVS.glsl").c_str(), (currentPath + "\\Shaders\\modelFS.glsl").c_str());
-
+	
 	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	//std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
 	std::string tank_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_body.obj");
 	std::string tank_turretObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_turret.obj");
+	TankShellObjFilename = (std::string(currentPathChr) + "\\Models\\Tank_Shell\\Tank Shell2.obj");
 
 	std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mountain\\mount.blend1.obj");
 	//std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mount.blend1.obj");
@@ -634,6 +666,8 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+
+		checkShellsLifetime();
 		moveClouds(clouds);
 		rotateElice(helicopter1, helicopter2);
 		
@@ -761,14 +795,13 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
 			if (tanks[i].GetIsSelected())
 				tanks[i].SetIsSelected(false);
 		}
-
 	//---- Control miscari model(tank)
-	
 	if(tankIsSelected)
 	for (int i = 0; i < tanks.size(); i++) 
 	{
 		if (tanks[i].GetIsSelected()) 
 		{
+			// la apasarea tastei F daca avem un tank selectat vom crea un shell
 			glm::vec3 movementDirectionBody(0.0f);
 			glm::vec3 movementDirectionHead(0.0f);
 			float rotationAngleBody = tanks[i].Body.GetRotationAngle();
@@ -795,6 +828,19 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
 				forwardDirection.x * sinAngleHead - forwardDirection.z * cosAngleHead
 			);
 
+			if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && fireCooldown + 2 < lastFrame)
+			{
+				fireCooldown = lastFrame;
+
+				TankShell newShell = TankShell(Model(TankShellObjFilename, true), deltaTime, -rotatedForwardDirectionHead);
+				//newShell.Shell.SetScale(glm::vec3(0.05f));
+				newShell.Shell.SetScale(glm::vec3(0.1f));
+				newShell.Shell.SetPosition(glm::vec3(tanks[i].Head.GetPosition().x, tanks[i].Head.GetPosition().y + 3.f, tanks[i].Head.GetPosition().z));
+				newShell.Shell.SetRotationAxis(tanks[i].Head.GetRotationAxis());
+				newShell.Shell.SetRotationAngle(tanks[i].Head.GetRotationAngle() + 180);
+				
+				shells.push_back(newShell);
+			}
 
 			// Miscare fata (tasta W)
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
@@ -872,7 +918,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks)
 			float tankRotationAngle = tanks[i].Head.GetRotationAngle();
 			glm::vec3 tankRotationAxis = tanks[i].Head.GetRotationAxis();
 			// Offset-ul camerei față de tank
-			glm::vec3 cameraOffset = glm::vec3(0.0f, 8.0f, -20.0f); // Offset-ul inițial
+			glm::vec3 cameraOffset = glm::vec3(0.0f, 6.0f, -20.0f); // Offset-ul inițial
 			// Rotăm offset-ul camerei în funcție de rotația tankului
 			cameraOffset = rotateVector(cameraOffset, glm::radians(tankRotationAngle), tankRotationAxis);
 			// Poziția camerei va fi poziția tankului plus offset-ul
