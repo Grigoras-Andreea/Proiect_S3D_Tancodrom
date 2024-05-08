@@ -77,4 +77,6 @@ void main()
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
     
     FragColor = vec4(lighting, 1.0);
+    //FragColor = vec4(lighting, fs_in.TexCoords.a);
+    //FragColor = texture(texture_diffuse, fs_in.TexCoords );
 }

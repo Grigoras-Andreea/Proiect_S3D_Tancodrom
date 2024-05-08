@@ -241,7 +241,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	std::vector<Model>& clouds
 )
 {
-	//glBindTexture(GL_TEXTURE_2D, 3);
+	glBindTexture(GL_TEXTURE_2D, floorTexture);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	for (int i = 0; i < 4; i++) 
 	{
@@ -251,12 +251,12 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	}
 
 	//glBindTexture(GL_TEXTURE_2D, 2);
-	/*for (int i = 0; i < tanks.size(); i++) {
+	for (int i = 0; i < tanks.size(); i++) {
 		lightingShader.SetMat4("model", tanks[i].Body.GetModelMatrix());
 		tanks[i].Body.Draw(lightingShader);
 		lightingShader.SetMat4("model", tanks[i].Head.GetModelMatrix());
 		tanks[i].Head.Draw(lightingShader);
-	}*/
+	}
 
 	tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
 	tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
