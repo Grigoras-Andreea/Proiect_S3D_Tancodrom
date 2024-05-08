@@ -957,6 +957,111 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 		{
 			if (helicopters[i].GetIsSelected())
 			{
+				glm::vec3 movementDirectionBody(0.0f);
+				glm::vec3 movementDirectionProppelerUp(0.0f);
+				glm::vec3 movementDirectionProppelerBack(0.0f);
+				float rotationAngleBody = helicopters[i].Body.GetRotationAngle();
+				float rotationAngleProppelerUp = helicopters[i].ProppelerUp.GetRotationAngle();
+				float rotationAngleProppelerBack = helicopters[i].ProppelerBack.GetRotationAngle();
+
+				// Calculul direcției de mișcare în funcție de unghiul de rotație
+				float radianRotationAngleBody = glm::radians(-rotationAngleBody); // Convertim unghiul în radiani
+				float cosAngleBody = cos(radianRotationAngleBody);
+				float sinAngleBody = sin(radianRotationAngleBody);
+
+				float radianRotationAngleProppelerUp = glm::radians(-rotationAngleProppelerUp); 
+
+				float radianRotationAngleProppelerBack = glm::radians(-rotationAngleProppelerBack);
+
+				glm::vec3 forwardDirection(0.0f, 0.0f, 1.0f);
+				glm::vec3 rotatedForwardDirectionBody(
+					forwardDirection.x * cosAngleBody + forwardDirection.z * sinAngleBody,
+					forwardDirection.y,
+					forwardDirection.x * sinAngleBody - forwardDirection.z * cosAngleBody
+				);
+
+				//miscare in fata
+				if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+				{
+					movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
+					// Aplică viteza de mișcare
+					float movementSpeed = 2.5f; // Ajustează după necesități
+					glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					helicopters[i].Body.SetPosition(newPositionBody);
+					helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+					helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					
+				}
+
+				//miscare in spate
+				if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+				{
+					movementDirectionBody += rotatedForwardDirectionBody; // Înainte
+					// Aplică viteza de mișcare
+					float movementSpeed = 2.5f; // Ajustează după necesități
+					glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					helicopters[i].Body.SetPosition(newPositionBody);
+					helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+					helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+				}
+
+				// Rotație la stânga (tasta A) - mai trebuie vazut cum se roteste elicea + la elicea de sus exista o mica deviatie
+				if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+				{
+					float rotationSpeed = 20.0f; // Ajustează după necesități
+					glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+					rotationAngleBody += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					rotationAngleProppelerBack += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					rotationAngleProppelerUp += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					helicopters[i].Body.SetRotationAngle(rotationAngleBody);
+					helicopters[i].ProppelerBack.SetRotationAngle(rotationAngleProppelerBack);
+					helicopters[i].ProppelerUp.SetRotationAngle(rotationAngleProppelerUp);
+
+				}
+
+				// Rotație la dreapta (tasta D) - mai trebuie vazut cum se roteste elicea + la elicea de sus exista o mica deviatie
+				if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+				{
+					float rotationSpeed = 20.0f; // Ajustează după necesități
+					glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+					rotationAngleBody -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					rotationAngleProppelerBack -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					rotationAngleProppelerUp -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+					helicopters[i].Body.SetRotationAngle(rotationAngleBody);
+					helicopters[i].ProppelerBack.SetRotationAngle(rotationAngleProppelerBack);
+					helicopters[i].ProppelerUp.SetRotationAngle(rotationAngleProppelerUp);
+
+				}
+
+				//coborare elicopter (tasta Q)
+				if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+				{
+					float movementSpeed = 2.5f; // Ajustează după necesități
+					glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
+					glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
+					glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
+					helicopters[i].Body.SetPosition(newPositionBody);
+					helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+					helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+				}
+
+				//ridicare elicopter (tasta E)
+				if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+				{
+					float movementSpeed = 2.5f; // Ajustează după necesități
+					glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
+					glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
+					glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
+					helicopters[i].Body.SetPosition(newPositionBody);
+					helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+					helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+				}
+
+
 				glm::vec3 helicopterPosition = helicopters[i].Body.GetPosition();
 				float helicopterRotationAngle = helicopters[i].Body.GetRotationAngle();
 				glm::vec3 helicopterRotationAxis = helicopters[i].Body.GetRotationAxis();
