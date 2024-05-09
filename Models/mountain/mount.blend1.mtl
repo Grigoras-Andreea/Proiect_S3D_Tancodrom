@@ -9,6 +9,8 @@ Ks 0.001641 0.001641 0.001641
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd ground_grass_3264_4062_Small_vechi.jpg
+
 
 newmtl Material.001
 Ns 96.078431
