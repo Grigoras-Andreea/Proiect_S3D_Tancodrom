@@ -659,7 +659,7 @@ int main()
 	tankTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	floorTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass_floor2.png");
 	//unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
-	cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\blue.jpg");
+	cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\blue2.jpg");
 	tankTexture2 = CreateTexture(std::string(currentPathChr) + "\\Models\\cabina.jpg");
 	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
 
