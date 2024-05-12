@@ -873,7 +873,44 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 	return false;
 }
 
+bool HelicopterFrontCollision(Helicopter& selectedHelicopter, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains) {
+	// Assuming helicopters and selectedHelicopter exist, you can check collision with other helicopters
+	for (int i = 0; i < helicopters.size(); i++) {
+		if (&selectedHelicopter != &helicopters[i]) {
+			// Avoid checking collision with itself
+			float distance = glm::distance(selectedHelicopter.Body.GetPosition(), helicopters[i].Body.GetPosition());
+			float collisionThreshold = 6.7f;
+			if (distance < collisionThreshold) {
+				// Collision detected
+				return true;
+			}
+		
+		}
+	}
 
+	// Assuming helicopters and selectedHelicopter exist, you can check collision with tanks
+	for (int i = 0; i < tanks.size(); i++) {
+		float distance = glm::distance(selectedHelicopter.Body.GetPosition(), tanks[i].Body.GetPosition());
+		float collisionThreshold = 3.7f;
+		if (distance < collisionThreshold) {
+			// Collision detected
+			return true;
+		}
+	}
+
+	// Assuming mountains and selectedHelicopter exist, you can check collision with mountains
+	for (int i = 0; i < mountains.size(); i++) {
+		float distance = glm::distance(selectedHelicopter.Body.GetPosition(), mountains[i].GetPosition());
+		float collisionThreshold = 101.7f;
+		if (distance < collisionThreshold) {
+			// Collision detected
+			return true;
+		}
+	}
+
+	// No collision detected
+	return false;
+}
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains)
@@ -976,6 +1013,18 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 						tanks[i].Body.SetRotationAngle(rotationAngleBody);
 					}
 				}
+				else
+				{
+					movementDirectionBody += rotatedForwardDirectionBody; // Înapoi
+					movementDirectionHead += rotatedForwardDirectionHead; // Înapoi
+
+					// Aplică viteza de mișcare
+					float movementSpeed = 2.5f; // Ajustează după necesități
+					glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					tanks[i].Body.SetPosition(newPositionBody);
+					tanks[i].Head.SetPosition(newPositionHead);
+				}
 			}
 			// Miscare spate (tasta S) 
 			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -1008,6 +1057,18 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 						tanks[i].Body.SetRotationAngle(rotationAngleBody);
 						//tank.Body.SetRotationAxis(rotationAxis);
 					}
+				}
+				else
+				{
+					movementDirectionBody -= rotatedForwardDirectionBody; // Înapoi
+					movementDirectionHead -= rotatedForwardDirectionHead; // Înapoi
+
+					// Aplică viteza de mișcare
+					float movementSpeed = 2.5f; // Ajustează după necesități
+					glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					tanks[i].Body.SetPosition(newPositionBody);
+					tanks[i].Head.SetPosition(newPositionHead);
 				}
 			}
 			if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
@@ -1071,30 +1132,61 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				//miscare in fata
 				if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 				{
-					movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
-					// Aplică viteza de mișcare
-					float movementSpeed = 2.5f; // Ajustează după necesități
-					glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					helicopters[i].Body.SetPosition(newPositionBody);
-					helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
-					helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					if (helicopters[i].Body.GetPosition().y > -1.0f && HelicopterFrontCollision(helicopters[i], tanks, helicopters, mountains) == false)
+					{
+						movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
+						// Aplică viteza de mișcare
+						float movementSpeed = 2.5f; // Ajustează după necesități
+						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						helicopters[i].Body.SetPosition(newPositionBody);
+						helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+						helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+						
+					}
+					else
+					{
+						movementDirectionBody += rotatedForwardDirectionBody; // Înapoi
+						// Aplică viteza de mișcare
+						float movementSpeed = 2.5f; // Ajustează după necesități
+						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						helicopters[i].Body.SetPosition(newPositionBody);
+						helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+						helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					}
 					
 				}
 
 				//miscare in spate
 				if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 				{
-					movementDirectionBody += rotatedForwardDirectionBody; // Înainte
-					// Aplică viteza de mișcare
-					float movementSpeed = 2.5f; // Ajustează după necesități
-					glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					helicopters[i].Body.SetPosition(newPositionBody);
-					helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
-					helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					if (helicopters[i].Body.GetPosition().y > -1.0f && HelicopterFrontCollision(helicopters[i], tanks, helicopters, mountains) == false)
+					{
+						movementDirectionBody += rotatedForwardDirectionBody; // Înainte
+						// Aplică viteza de mișcare
+						float movementSpeed = 2.5f; // Ajustează după necesități
+						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						helicopters[i].Body.SetPosition(newPositionBody);
+						helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+						helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					}
+					else
+					{
+						movementDirectionBody -= rotatedForwardDirectionBody; // Înapoi
+						// Aplică viteza de mișcare
+						float movementSpeed = 2.5f; // Ajustează după necesități
+						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+						helicopters[i].Body.SetPosition(newPositionBody);
+						helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+						helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					}
 				}
 
 				// Rotație la stânga (tasta A) - mai trebuie vazut cum se roteste elicea + la elicea de sus exista o mica deviatie
