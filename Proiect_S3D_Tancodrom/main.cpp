@@ -840,7 +840,7 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 	// Assuming tanks and selectedTank exist, you can check collision with other tanks
 	for (int i = 0; i < tanks.size(); i++) {
 		if (&selectedTank != &tanks[i]) { // Avoid checking collision with itself
-			float distance = glm::distance(selectedTank.Body.GetPosition(), tanks[i].Body.GetPosition());
+	 		float distance = glm::distance(selectedTank.Body.GetPosition(), tanks[i].Body.GetPosition());
 			float collisionThreshold = 6.7f;
 			if (distance < collisionThreshold) {
 				// Collision detected
@@ -848,9 +848,32 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 			}
 		}
 	}
+
+	// Assuming tanks and selectedTank exist, you can check collision with helicopters
+	for (int i = 0; i < helicopters.size(); i++) {
+		float distance = glm::distance(selectedTank.Body.GetPosition(), helicopters[i].Body.GetPosition());
+		float collisionThreshold = 6.7f;
+		if (distance < collisionThreshold) {
+			// Collision detected
+			return true;
+		}
+	}
+
+	// Assuming mountains and selectedTank exist, you can check collision with mountains
+	for (int i = 0; i < mountains.size(); i++) {
+		float distance = glm::distance(selectedTank.Body.GetPosition(), mountains[i].GetPosition());
+		float collisionThreshold = 101.7f;
+		if (distance < collisionThreshold) {
+			// Collision detected
+			return true;
+		}
+	}
+
 	// No collision detected
 	return false;
 }
+
+
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains)
@@ -957,31 +980,34 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 			// Miscare spate (tasta S) 
 			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			{
-				movementDirectionBody += rotatedForwardDirectionBody; // Înainte
-				movementDirectionHead += rotatedForwardDirectionHead; // Înainte
-				// Aplică viteza de mișcare
-				float movementSpeed = 2.5f; // Ajustează după necesități
-				glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-				glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-				tanks[i].Body.SetPosition(newPositionBody);
-				tanks[i].Head.SetPosition(newPositionHead);
-				// Rotație la stânga (tasta A)
-				if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+				if (TankFrontCollision(tanks[i], tanks, helicopters, mountains) == false)
 				{
-					float rotationSpeed = 20.0f; // Ajustează după necesități
-					glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-					rotationAngleBody += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
-					tanks[i].Body.SetRotationAngle(rotationAngleBody);
-				}
-				// Rotație la dreapta (tasta D)
-				if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-				{
-					float rotationSpeed = 20.0f; // Ajustează după necesități
-					glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
-					rotationAngleBody -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
-					//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
-					tanks[i].Body.SetRotationAngle(rotationAngleBody);
-					//tank.Body.SetRotationAxis(rotationAxis);
+					movementDirectionBody += rotatedForwardDirectionBody; // Înainte
+					movementDirectionHead += rotatedForwardDirectionHead; // Înainte
+					// Aplică viteza de mișcare
+					float movementSpeed = 2.5f; // Ajustează după necesități
+					glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					tanks[i].Body.SetPosition(newPositionBody);
+					tanks[i].Head.SetPosition(newPositionHead);
+					// Rotație la stânga (tasta A)
+					if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+					{
+						float rotationSpeed = 20.0f; // Ajustează după necesități
+						glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+						rotationAngleBody += rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+						tanks[i].Body.SetRotationAngle(rotationAngleBody);
+					}
+					// Rotație la dreapta (tasta D)
+					if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+					{
+						float rotationSpeed = 20.0f; // Ajustează după necesități
+						glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
+						rotationAngleBody -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
+						//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
+						tanks[i].Body.SetRotationAngle(rotationAngleBody);
+						//tank.Body.SetRotationAxis(rotationAxis);
+					}
 				}
 			}
 			if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
