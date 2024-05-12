@@ -70,7 +70,7 @@ Color lerp(const Color& x, const Color& y, float t) {
 float calculateInterpolationFactor(float timeOfDay) {
 	// Calculate the interpolation factor based on time of day (0 to 1)
 	// Ensure that the interpolation factor resets to 0 at the start of each day
-	const float hoursPerDay = 48.0f;
+	const float hoursPerDay = 96.0f;
 	return fmod(timeOfDay, hoursPerDay) / hoursPerDay;
 }
 void updateBackgroundColor(float timeOfDay) {
@@ -670,8 +670,8 @@ int main()
 	tankTexture2 = CreateTexture(std::string(currentPathChr) + "\\Models\\cabina.jpg");
 	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
 
-	float radius = 350.0f; // Raza cercului pe care se va rota lumina
-	float speed = 0.131f;
+	float radius = 354.0f; // Raza cercului pe care se va rota lumina
+	float speed = 0.065f;
 
 	PozitionateModels(tanks, mountains, helicopters, clouds);
 
@@ -841,7 +841,7 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 	for (int i = 0; i < tanks.size(); i++) {
 		if (&selectedTank != &tanks[i]) { // Avoid checking collision with itself
 			float distance = glm::distance(selectedTank.Body.GetPosition(), tanks[i].Body.GetPosition());
-			float collisionThreshold = 8.2f;
+			float collisionThreshold = 6.7f;
 			if (distance < collisionThreshold) {
 				// Collision detected
 				return true;
@@ -852,8 +852,6 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 	return false;
 }
 
-bool tankIsSelected = false;
-bool helicopterIsSelected = false;
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains)
 {
