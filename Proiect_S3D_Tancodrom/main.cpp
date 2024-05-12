@@ -912,6 +912,15 @@ bool HelicopterFrontCollision(Helicopter& selectedHelicopter, std::vector<Tank>&
 	return false;
 }
 
+
+glm::vec3 tankPreviousPositionBody = glm::vec3(0.0f);
+glm::vec3 tankPpreviousPositionHead = glm::vec3(0.0f);
+
+glm::vec3 helicopterPreviousPositionBody = glm::vec3(0.0f);
+glm::vec3 helicopterPreviousPositionElice = glm::vec3(0.0f);
+glm::vec3 helicopterPreviousPositionEliceSpate = glm::vec3(0.0f);
+
+
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains)
 {
@@ -965,6 +974,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				forwardDirection.x * sinAngleHead - forwardDirection.z * cosAngleHead
 			);
 
+
 			if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && fireCooldown + 1 < lastFrame)
 			{
 				fireCooldown = lastFrame;
@@ -988,6 +998,9 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				if (TankFrontCollision(tanks[i], tanks, helicopters, mountains) == false)
 				{
 
+					tankPreviousPositionBody = tanks[i].Body.GetPosition();
+					tankPpreviousPositionHead = tanks[i].Head.GetPosition();
+
 					movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
 					movementDirectionHead -= rotatedForwardDirectionHead; // Înainte
 					// Aplică viteza de mișcare
@@ -996,6 +1009,8 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
 					tanks[i].Body.SetPosition(newPositionBody);
 					tanks[i].Head.SetPosition(newPositionHead);
+
+
 					// Rotație la stânga (tasta A)
 					if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 					{
@@ -1015,15 +1030,9 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				}
 				else
 				{
-					movementDirectionBody += rotatedForwardDirectionBody; // Înapoi
-					movementDirectionHead += rotatedForwardDirectionHead; // Înapoi
-
-					// Aplică viteza de mișcare
-					float movementSpeed = 2.5f; // Ajustează după necesități
-					glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					tanks[i].Body.SetPosition(newPositionBody);
-					tanks[i].Head.SetPosition(newPositionHead);
+					//move the tank back
+					tanks[i].Body.SetPosition(tankPreviousPositionBody);
+					tanks[i].Head.SetPosition(tankPpreviousPositionHead);
 				}
 			}
 			// Miscare spate (tasta S) 
@@ -1031,6 +1040,10 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 			{
 				if (TankFrontCollision(tanks[i], tanks, helicopters, mountains) == false)
 				{
+
+					tankPreviousPositionBody = tanks[i].Body.GetPosition();
+					tankPpreviousPositionHead = tanks[i].Head.GetPosition();
+
 					movementDirectionBody += rotatedForwardDirectionBody; // Înainte
 					movementDirectionHead += rotatedForwardDirectionHead; // Înainte
 					// Aplică viteza de mișcare
@@ -1039,6 +1052,8 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
 					tanks[i].Body.SetPosition(newPositionBody);
 					tanks[i].Head.SetPosition(newPositionHead);
+
+
 					// Rotație la stânga (tasta A)
 					if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 					{
@@ -1060,15 +1075,9 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				}
 				else
 				{
-					movementDirectionBody -= rotatedForwardDirectionBody; // Înapoi
-					movementDirectionHead -= rotatedForwardDirectionHead; // Înapoi
-
-					// Aplică viteza de mișcare
-					float movementSpeed = 2.5f; // Ajustează după necesități
-					glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					tanks[i].Body.SetPosition(newPositionBody);
-					tanks[i].Head.SetPosition(newPositionHead);
+					//move the tank back
+					tanks[i].Body.SetPosition(tankPreviousPositionBody);
+					tanks[i].Head.SetPosition(tankPpreviousPositionHead);
 				}
 			}
 			if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
@@ -1134,6 +1143,11 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				{
 					if (helicopters[i].Body.GetPosition().y > -1.0f && HelicopterFrontCollision(helicopters[i], tanks, helicopters, mountains) == false)
 					{
+
+						helicopterPreviousPositionBody = helicopters[i].Body.GetPosition();
+						helicopterPreviousPositionElice = helicopters[i].ProppelerUp.GetPosition();
+						helicopterPreviousPositionEliceSpate = helicopters[i].ProppelerBack.GetPosition();
+
 						movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
 						// Aplică viteza de mișcare
 						float movementSpeed = 2.5f; // Ajustează după necesități
@@ -1147,15 +1161,9 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					}
 					else
 					{
-						movementDirectionBody += rotatedForwardDirectionBody; // Înapoi
-						// Aplică viteza de mișcare
-						float movementSpeed = 2.5f; // Ajustează după necesități
-						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-						glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-						helicopters[i].Body.SetPosition(newPositionBody);
-						helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
-						helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+						helicopters[i].Body.SetPosition(helicopterPreviousPositionBody);
+						helicopters[i].ProppelerUp.SetPosition(helicopterPreviousPositionElice);
+						helicopters[i].ProppelerBack.SetPosition(helicopterPreviousPositionEliceSpate);
 					}
 					
 				}
@@ -1165,6 +1173,11 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				{
 					if (helicopters[i].Body.GetPosition().y > -1.0f && HelicopterFrontCollision(helicopters[i], tanks, helicopters, mountains) == false)
 					{
+
+						helicopterPreviousPositionBody = helicopters[i].Body.GetPosition();
+						helicopterPreviousPositionElice = helicopters[i].ProppelerUp.GetPosition();
+						helicopterPreviousPositionEliceSpate = helicopters[i].ProppelerBack.GetPosition();
+
 						movementDirectionBody += rotatedForwardDirectionBody; // Înainte
 						// Aplică viteza de mișcare
 						float movementSpeed = 2.5f; // Ajustează după necesități
@@ -1177,15 +1190,9 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					}
 					else
 					{
-						movementDirectionBody -= rotatedForwardDirectionBody; // Înapoi
-						// Aplică viteza de mișcare
-						float movementSpeed = 2.5f; // Ajustează după necesități
-						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-						glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-						helicopters[i].Body.SetPosition(newPositionBody);
-						helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
-						helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+						helicopters[i].Body.SetPosition(helicopterPreviousPositionBody);
+						helicopters[i].ProppelerUp.SetPosition(helicopterPreviousPositionElice);
+						helicopters[i].ProppelerBack.SetPosition(helicopterPreviousPositionEliceSpate);
 					}
 				}
 
