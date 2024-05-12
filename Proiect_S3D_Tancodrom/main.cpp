@@ -1108,7 +1108,6 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 		if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
 			helicopters[1].SetIsSelected(true);
 
-
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::FORWARD, (float)deltaTime * 5);
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -1121,6 +1120,9 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 			pCamera->ProcessKeyboard(Camera::UP, (float)deltaTime * 5);
 		if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::DOWN, (float)deltaTime * 5);
+
+		if(pCamera->GetPosition().y < 0.3f)
+			pCamera->SetPosition(glm::vec3(pCamera->GetPosition().x, 0.3f, pCamera->GetPosition().z));
 
 		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
 			int width, height;
