@@ -1085,7 +1085,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 			}
 		}
 	//---- Putem misca din sageti camera numai daca nu avem un model selectat
-	if (!tankIsSelected || !helicopterIsSelected)
+	if (!tankIsSelected && !helicopterIsSelected)
 	{
 		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
 			tanks[0].SetIsSelected(true);
