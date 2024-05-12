@@ -27,6 +27,9 @@
 #include "Tank.h"
 #include "TankShell.h"
 
+#include <irrKlang.h>
+using namespace irrklang;
+
 #pragma comment (lib, "glfw3dll.lib")
 #pragma comment (lib, "glew32.lib")
 #pragma comment (lib, "OpenGL32.lib")
@@ -34,7 +37,7 @@
 
 
 bool isNight = false;
-unsigned int floorTexture, cloudTexture, tankTexture;
+unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2;
 Model tank;
 std::string TankShellObjFilename;
 std::vector<TankShell> shells;
@@ -270,7 +273,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		
 	}
 
-	glBindTexture(GL_TEXTURE_2D, tankTexture);
+	glBindTexture(GL_TEXTURE_2D, tankTexture2);
 	for (int i = 0; i < tanks.size(); i++) {
 		lightingShader.SetMat4("model", tanks[i].Body.GetModelMatrix());
 		tanks[i].Body.Draw(lightingShader);
@@ -279,7 +282,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	}
 	glBindTexture(GL_TEXTURE_2D, floorTexture);
 	renderFloor();
-	glBindTexture(GL_TEXTURE_2D, tankTexture);
+	glBindTexture(GL_TEXTURE_2D, tankTexture2);
 	for (int i = 0; i < shells.size(); i++) {
 		lightingShader.SetMat4("model", shells[i].Shell.GetModelMatrix());
 		shells[i].Shell.Draw(lightingShader);
@@ -656,13 +659,27 @@ int main()
 	tankTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	floorTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass_floor2.png");
 	//unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
-	cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\blue2.jpg");
+	cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\blue.jpg");
+	tankTexture2 = CreateTexture(std::string(currentPathChr) + "\\Models\\cabina.jpg");
 	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
 
 	float radius = 350.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.131f;
 
 	PozitionateModels(tanks, mountains, helicopters, clouds);
+
+
+
+
+	ISoundEngine* engine = createIrrKlangDevice();
+	if (!engine) {
+		return 0;
+	}
+
+	engine->play2D("media/WarMusic.ogg", true);
+	
+
+
 
 	while (!glfwWindowShouldClose(window)) {
 		// Per-frame time logic
