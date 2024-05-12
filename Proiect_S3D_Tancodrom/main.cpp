@@ -1057,25 +1057,32 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				//coborare elicopter (tasta Q)
 				if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 				{
-					float movementSpeed = 2.5f; // Ajustează după necesități
-					glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
-					glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
-					glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
-					helicopters[i].Body.SetPosition(newPositionBody);
-					helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
-					helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					if (helicopters[i].Body.GetPosition().y > -0.5f)
+					{
+						float movementSpeed = 2.5f; // Ajustează după necesități
+						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
+						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
+						glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
+						helicopters[i].Body.SetPosition(newPositionBody);
+						helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+						helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					}
+					
 				}
 
 				//ridicare elicopter (tasta E)
 				if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 				{
-					float movementSpeed = 2.5f; // Ajustează după necesități
-					glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
-					glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
-					glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
-					helicopters[i].Body.SetPosition(newPositionBody);
-					helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
-					helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					if (helicopters[i].Body.GetPosition().y < 100.0f)
+					{
+						float movementSpeed = 2.5f; // Ajustează după necesități
+						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
+						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
+						glm::vec3 newPositionProppelerBack = helicopters[i].ProppelerBack.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
+						helicopters[i].Body.SetPosition(newPositionBody);
+						helicopters[i].ProppelerUp.SetPosition(newPositionProppelerUp);
+						helicopters[i].ProppelerBack.SetPosition(newPositionProppelerBack);
+					}
 				}
 
 
@@ -1118,7 +1125,6 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 		if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
 			helicopters[1].SetIsSelected(true);
 
-
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::FORWARD, (float)deltaTime * 5);
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -1131,6 +1137,9 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 			pCamera->ProcessKeyboard(Camera::UP, (float)deltaTime * 5);
 		if (glfwGetKey(window, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::DOWN, (float)deltaTime * 5);
+
+		if(pCamera->GetPosition().y < 0.3f)
+			pCamera->SetPosition(glm::vec3(pCamera->GetPosition().x, 0.3f, pCamera->GetPosition().z));
 
 		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
 			int width, height;
