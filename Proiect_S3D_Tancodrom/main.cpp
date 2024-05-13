@@ -989,6 +989,7 @@ glm::vec3 helicopterPreviousPositionBody = glm::vec3(0.0f);
 glm::vec3 helicopterPreviousPositionElice = glm::vec3(0.0f);
 glm::vec3 helicopterPreviousPositionEliceSpate = glm::vec3(0.0f);
 
+float movementSpeedForward = 2.5f; // Ajustează după necesități
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains)
@@ -1083,9 +1084,10 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
 					movementDirectionHead -= rotatedForwardDirectionHead; // Înainte
 					// Aplică viteza de mișcare
-					float movementSpeed = 2.5f; // Ajustează după necesități
-					glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
-					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeed * static_cast<float>(deltaTime));
+					if(movementSpeedForward < 15.0f)
+					movementSpeedForward += 0.02f;
+					glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeedForward * static_cast<float>(deltaTime));
+					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeedForward * static_cast<float>(deltaTime));
 					tanks[i].Body.SetPosition(newPositionBody);
 					tanks[i].Head.SetPosition(newPositionHead);
 
@@ -1114,6 +1116,22 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					tanks[i].Head.SetPosition(tankPpreviousPositionHead);
 				}
 			}
+
+			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE)
+			{
+				if (movementSpeedForward > 2.5f)
+				{
+					movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
+					movementDirectionHead -= rotatedForwardDirectionHead; // Înainte
+					// Aplică viteza de mișcare
+					movementSpeedForward -= 0.1f;
+					glm::vec3 newPositionBody = tanks[i].Body.GetPosition() + (movementDirectionBody * movementSpeedForward * static_cast<float>(deltaTime));
+					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeedForward * static_cast<float>(deltaTime));
+					tanks[i].Body.SetPosition(newPositionBody);
+					tanks[i].Head.SetPosition(newPositionHead);
+				}
+			}
+
 			// Miscare spate (tasta S) 
 			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			{
