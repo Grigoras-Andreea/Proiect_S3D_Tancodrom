@@ -244,6 +244,46 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 	}
 }
 
+void CheckShellCollisionForMountain(std::vector<Model>& mountains, std::vector<TankShell>& shells)
+{
+	for (auto& mountain : mountains) {
+
+		float collisionThreshold = 95.0f;
+
+		for (auto& shell : shells) {
+			// Verifică coliziunea între shell și tanc
+			if (glm::distance(shell.Shell.GetPosition(), mountain.GetPosition()) < collisionThreshold) {
+				// Dacă există coliziune, șterge shell-ul și tancul lovit
+				shells.erase(std::remove_if(shells.begin(), shells.end(),
+										[&](const TankShell& s) { return &s == &shell; }), shells.end());
+				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
+			}
+		}
+	}
+
+}
+
+void CheckShellCollisionForHelicopter(std::vector<Helicopter>& helicopters, std::vector<TankShell>& shells)
+{
+	for (auto& helicopter : helicopters) {
+
+		float collisionThreshold = 5.0f;
+
+		for (auto& shell : shells) {
+			// Verifică coliziunea între shell și tanc
+			if (glm::distance(shell.Shell.GetPosition(), helicopter.Body.GetPosition()) < collisionThreshold) {
+				// Dacă există coliziune, șterge shell-ul și tancul lovit
+				shells.erase(std::remove_if(shells.begin(), shells.end(),
+										[&](const TankShell& s) { return &s == &shell; }), shells.end());
+				helicopters.erase(std::remove_if(helicopters.begin(), helicopters.end(),
+										[&](const Helicopter& h) { return &h == &helicopter; }), helicopters.end());
+				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
+			}
+		}
+	}
+
+}
+
 void checkShellsLifetime(std::vector<Tank>& tanks)
 {
 	for (auto it = shells.begin(); it != shells.end();) {
@@ -254,8 +294,6 @@ void checkShellsLifetime(std::vector<Tank>& tanks)
 		else {
 			float movementSpeed = 20.0f;
 			it->Shell.SetPosition(it->Shell.GetPosition() + (it->moveDir * movementSpeed * static_cast<float>(deltaTime)));
-
-			
 
 			it->spawnTime += deltaTime;
 			++it;
@@ -722,6 +760,8 @@ int main()
 
 		checkShellsLifetime(tanks);
 		CheckShellCollision(tanks, shells);
+		CheckShellCollisionForHelicopter(helicopters, shells);
+		CheckShellCollisionForMountain(mountains, shells);
 		moveClouds(clouds);
 		rotateElice(helicopters);
 		
