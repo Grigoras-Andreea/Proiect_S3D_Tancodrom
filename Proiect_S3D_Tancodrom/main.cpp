@@ -41,7 +41,7 @@ using namespace irrklang;
 //bool tankIsSelected = false;
 //bool helicopterIsSelected = false;
 bool isNight = false, tankIsSelected = false, helicopterIsSelected = false;
-unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture;
+unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture,grassTexture,treeTexture;
 Model tank;
 std::string TankShellObjFilename;
 std::vector<TankShell> shells;
@@ -363,7 +363,9 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	std::vector<Tank>& tanks,
 	std::vector<Model>& mountains,
 	std::vector<Helicopter>& helicopters,
-	std::vector<Model>& clouds
+	std::vector<Model>& clouds,
+	std::vector <Model>& grass,
+	std::vector <Model>& trees
 )
 {
 	glBindTexture(GL_TEXTURE_2D, floorTexture);
@@ -393,6 +395,18 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", shells[i].Shell.GetModelMatrix());
 		shells[i].Shell.Draw(lightingShader);
 	}
+	// Adăugarea copacilor
+	for (int i = 0; i < trees.size(); i++) {
+		lightingShader.SetMat4("model", trees[i].GetModelMatrix());
+		trees[i].Draw(lightingShader);
+	}
+
+	// Adăugarea ierbii
+	for (int i = 0; i < grass.size(); i++) {
+		lightingShader.SetMat4("model", grass[i].GetModelMatrix());
+		grass[i].Draw(lightingShader);
+	}
+
 
 	//tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
 	//tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -459,7 +473,9 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 void PozitionateModels(std::vector<Tank>& tanks,
 	std::vector<Model>& mountains,
 	std::vector<Helicopter>& helicopters,
-	std::vector<Model>& clouds
+	std::vector<Model>& clouds,
+	std::vector<Model>& grass,
+	std::vector<Model>& trees
 )
 {
 	//---- Tancuri ----
@@ -582,6 +598,17 @@ void PozitionateModels(std::vector<Tank>& tanks,
 		clouds[i].SetRotationAngle(180.0f);
 		clouds[i].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	}
+	//------Copaci------
+	trees[0].SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
+	trees[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//trees[1].SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	//trees[0].SetScale(glm::vec3(0.2f));
+	//------iarba------
+	grass[0].SetPosition(glm::vec3(11.0f, 0.0f, 11.0f));
+	//grass[0].SetScale(glm::vec3(0.9));
+	grass[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+
+
 }
 
 void moveClouds(std::vector<Model>& clouds)
@@ -745,6 +772,11 @@ int main()
 	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
 	//std::string piratObjFileName = (currentPath + "\\Models\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	//std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
+	std:: string treeObjFileName = (std::string(currentPathChr) + "\\Models\\Tree\\Tree.obj");
+	
+	//std::string grassObjFileName = (std::string(currentPathChr) + "\\Models\\grass_model\\grass_model.obj");
+	std::string grassObjFileName = (std::string(currentPathChr) + "\\Models\\grass2\\High\\High Grass.obj");
+
 	std::string tank_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_body.obj");
 	std::string tank_turretObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_turret.obj");
 	TankShellObjFilename = (std::string(currentPathChr) + "\\Models\\Tank_Shell\\Tank Shell2.obj");
@@ -787,7 +819,12 @@ int main()
 	clouds.insert(clouds.end(), 5, Model(cloud5ObjFileName, false));
 	
 	std::vector<Model> mountains(4, Model(mountainObjFileName, false));
-
+	std:: vector<Model> trees(4, Model(treeObjFileName, false));
+	trees.insert(trees.end(), 4, Model(treeObjFileName, false));
+	std::vector<Model>grass (4, Model(grassObjFileName, false));
+	grass.insert(grass.end(), 4, Model(grassObjFileName, false));
+	
+	grassTexture= CreateTexture(std::string(currentPathChr) + "\\Models\\grass2\\Tex\\Grass.png");
 	tankTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	floorTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass_floor2.png");
 	//unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
@@ -800,7 +837,7 @@ int main()
 	float radius = 354.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.065f;
 
-	PozitionateModels(tanks, mountains, helicopters, clouds);
+	PozitionateModels(tanks, mountains, helicopters, clouds,trees,grass);
 
 
 
@@ -905,7 +942,7 @@ int main()
 		//glBindTexture(GL_TEXTURE_2D, 3);
 		//renderFloor();
 		// Set model matrix and draw the model
-		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds);
+		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds,grass,trees);
 		processInput(window, tanks, helicopters, mountains);
 
 		// Use lamp shader
