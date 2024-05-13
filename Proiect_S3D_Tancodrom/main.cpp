@@ -237,6 +237,8 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 				shells.erase(std::remove_if(shells.begin(), shells.end(),
 					[&](const TankShell& s) { return &s == &shell; }), shells.end());
 				tank.isDestroyed = true;
+				tank.Body.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
+				tank.Head.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
 				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
 			}
 		}
