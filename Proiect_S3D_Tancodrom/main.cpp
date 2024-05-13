@@ -236,8 +236,7 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 				// Dacă există coliziune, șterge shell-ul și tancul lovit
 				shells.erase(std::remove_if(shells.begin(), shells.end(),
 					[&](const TankShell& s) { return &s == &shell; }), shells.end());
-				tanks.erase(std::remove_if(tanks.begin(), tanks.end(),
-					[&](const Tank& t) { return &t == &tank; }), tanks.end());
+				tank.isDestroyed = true;
 				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
 			}
 		}
@@ -275,8 +274,7 @@ void CheckShellCollisionForHelicopter(std::vector<Helicopter>& helicopters, std:
 				// Dacă există coliziune, șterge shell-ul și tancul lovit
 				shells.erase(std::remove_if(shells.begin(), shells.end(),
 										[&](const TankShell& s) { return &s == &shell; }), shells.end());
-				helicopters.erase(std::remove_if(helicopters.begin(), helicopters.end(),
-										[&](const Helicopter& h) { return &h == &helicopter; }), helicopters.end());
+				helicopter.isDestroyed = true;
 				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
 			}
 		}
@@ -299,8 +297,6 @@ void checkShellsLifetime(std::vector<Tank>& tanks)
 			++it;
 		}
 	}
-
-
 }
 // timing
 
@@ -342,6 +338,8 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 
 	glBindTexture(GL_TEXTURE_2D, tankTexture2);
 	for (int i = 0; i < tanks.size(); i++) {
+		if(tanks[i].isDestroyed)
+			continue;
 		lightingShader.SetMat4("model", tanks[i].Body.GetModelMatrix());
 		tanks[i].Body.Draw(lightingShader);
 		lightingShader.SetMat4("model", tanks[i].Head.GetModelMatrix());
@@ -355,8 +353,6 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		shells[i].Shell.Draw(lightingShader);
 	}
 
-
-
 	//tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
 	//tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	//tank.SetRotationAngle(180.0f);
@@ -368,18 +364,26 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	
 	
 	glBindTexture(GL_TEXTURE_2D, tankTexture);
-	lightingShader.SetMat4("model", helicopters[0].Body.GetModelMatrix());
-	helicopters[0].Body.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopters[0].ProppelerUp.GetModelMatrix());
-	helicopters[0].ProppelerUp.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopters[0].ProppelerBack.GetModelMatrix());
-	helicopters[0].ProppelerBack.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopters[1].Body.GetModelMatrix());
-	helicopters[1].Body.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopters[1].ProppelerUp.GetModelMatrix());
-	helicopters[1].ProppelerUp.Draw(lightingShader);
-	lightingShader.SetMat4("model", helicopters[1].ProppelerBack.GetModelMatrix());
-	helicopters[1].ProppelerBack.Draw(lightingShader);
+	if (helicopters[0].isDestroyed == false)
+	{
+		lightingShader.SetMat4("model", helicopters[0].Body.GetModelMatrix());
+		helicopters[0].Body.Draw(lightingShader);
+		lightingShader.SetMat4("model", helicopters[0].ProppelerUp.GetModelMatrix());
+		helicopters[0].ProppelerUp.Draw(lightingShader);
+		lightingShader.SetMat4("model", helicopters[0].ProppelerBack.GetModelMatrix());
+		helicopters[0].ProppelerBack.Draw(lightingShader);
+	}
+	
+	if (helicopters[1].isDestroyed == false)
+	{
+		lightingShader.SetMat4("model", helicopters[1].Body.GetModelMatrix());
+		helicopters[1].Body.Draw(lightingShader);
+		lightingShader.SetMat4("model", helicopters[1].ProppelerUp.GetModelMatrix());
+		helicopters[1].ProppelerUp.Draw(lightingShader);
+		lightingShader.SetMat4("model", helicopters[1].ProppelerBack.GetModelMatrix());
+		helicopters[1].ProppelerBack.Draw(lightingShader);
+	}
+	
 
 
 
@@ -1351,7 +1355,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 	{
 		static bool isJadorTankPlaying = false;
 		static bool isHelicopterPlaying = false;
-		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && tanks[0].isDestroyed == false)
 		{
 			tanks[0].SetIsSelected(true);
 
@@ -1366,8 +1370,9 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				engine->play2D("media/JadorTank.ogg", true);
 			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && tanks[1].isDestroyed == false)
 		{
+			
 			tanks[1].SetIsSelected(true);
 			if (!isJadorTankPlaying) {
 				engine->play2D("media/JadorTank.ogg", true);
@@ -1379,7 +1384,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				engine->play2D("media/JadorTank.ogg", true);
 			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && tanks[2].isDestroyed == false)
 		{
 			tanks[2].SetIsSelected(true);
 			if (!isJadorTankPlaying) {
@@ -1391,7 +1396,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				engine->play2D("media/JadorTank.ogg", true);
 			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS && tanks[3].isDestroyed == false)
 		{
 			tanks[3].SetIsSelected(true);
 			if (!isJadorTankPlaying) {
@@ -1403,7 +1408,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				engine->play2D("media/JadorTank.ogg", true);
 			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS && tanks[4].isDestroyed == false)
 		{
 			tanks[4].SetIsSelected(true);
 			if (!isJadorTankPlaying) {
@@ -1415,7 +1420,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				engine->play2D("media/JadorTank.ogg", true);
 			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS && tanks[5].isDestroyed == false)
 		{
 			tanks[5].SetIsSelected(true);
 			if (!isJadorTankPlaying) {
@@ -1427,7 +1432,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				engine->play2D("media/JadorTank.ogg", true);
 			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS && tanks[6].isDestroyed == false)
 		{
 			tanks[6].SetIsSelected(true);
 			if (!isJadorTankPlaying) {
@@ -1439,7 +1444,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				engine->play2D("media/JadorTank.ogg", true);
 			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS && tanks[7].isDestroyed == false)
 		{
 			tanks[7].SetIsSelected(true);
 			if (!isJadorTankPlaying) {
@@ -1451,7 +1456,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				engine->play2D("media/JadorTank.ogg", true);
 			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS && helicopters[0].isDestroyed == false)
 		{
 			helicopters[0].SetIsSelected(true);
 			if (!isHelicopterPlaying) {
@@ -1463,7 +1468,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				engine3->play2D("media/Fazlija-Helikopter.ogg", true);
 			}
 		}
-		if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS && helicopters[1].isDestroyed == false)
 		{
 			helicopters[1].SetIsSelected(true);
 			if (!isHelicopterPlaying) {

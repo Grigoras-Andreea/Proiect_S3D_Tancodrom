@@ -8,6 +8,7 @@ public:
 	Model ProppelerUp;
 	Model ProppelerBack;
 	Model Body;
+	bool isDestroyed;
 
 
 	Helicopter(Model Body, Model ProppelerUp, Model ProppelerBack);

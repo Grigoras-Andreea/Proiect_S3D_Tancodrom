@@ -6,6 +6,7 @@ Helicopter::Helicopter(Model Body, Model ProppelerUp, Model ProppelerBack)
 	this->ProppelerUp = ProppelerUp;
 	this->ProppelerBack = ProppelerBack;
 	isSelected = false;
+	isDestroyed = false;
 }
 
 void Helicopter::SetIsSelected(bool isSelected)

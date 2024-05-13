@@ -7,6 +7,7 @@ class Tank
 public:
 	Model Head;
 	Model Body;
+	bool isDestroyed;
 
 	Tank(Model Body, Model Head);
 
