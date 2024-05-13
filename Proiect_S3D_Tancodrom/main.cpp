@@ -41,7 +41,7 @@ using namespace irrklang;
 //bool tankIsSelected = false;
 //bool helicopterIsSelected = false;
 bool isNight = false, tankIsSelected = false, helicopterIsSelected = false;
-unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2;
+unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture;
 Model tank;
 std::string TankShellObjFilename;
 std::vector<TankShell> shells;
@@ -362,10 +362,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	//tank.Draw(lightingShader);
 	
 	
-	//glBindTexture(GL_TEXTURE_2D, 1);
-	
-	
-	glBindTexture(GL_TEXTURE_2D, tankTexture);
+	glBindTexture(GL_TEXTURE_2D, helicopterTexture);
 	if (helicopters[0].isDestroyed == false)
 	{
 		lightingShader.SetMat4("model", helicopters[0].Body.GetModelMatrix());
@@ -735,6 +732,7 @@ int main()
 	cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\blue2.jpg");
 	tankTexture2 = CreateTexture(std::string(currentPathChr) + "\\Models\\cabina.jpg");
 	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
+	helicopterTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Heli_Bell\\HH65C.jpg");
 
 	float radius = 354.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.065f;
