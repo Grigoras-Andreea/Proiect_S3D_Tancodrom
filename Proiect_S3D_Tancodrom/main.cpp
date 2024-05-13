@@ -751,7 +751,6 @@ int main()
 
 	//engine->play2D("media/JadorTank.ogg", true);
 	engine2->play2D("media/WarMusic.ogg", true);
-	engine->setSoundVolume(0.0f);
 	
 
 
@@ -772,14 +771,14 @@ int main()
 		// Input
 		//processInput(window);
 
-		if (tankIsSelected) {
+		/*if (tankIsSelected) {
 			engine->setSoundVolume(1.0f);
 			engine2->setSoundVolume(0.0f);
 		}
 		else {
 			engine->setSoundVolume(0.0f);
 			engine2->setSoundVolume(1.0f);
-		}
+		}*/
 		if (helicopterIsSelected) {
 			engine3->setSoundVolume(1.0f);
 			engine2->setSoundVolume(0.0f);
@@ -1057,6 +1056,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 
 			if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && fireCooldown + 1 < lastFrame)
 			{
+				engine->play2D("media/TankFireSound.ogg", false);
 				fireCooldown = lastFrame;
 
 				TankShell newShell = TankShell(Model(TankShellObjFilename, true), deltaTime, -rotatedForwardDirectionHead);
@@ -1371,108 +1371,47 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 	//---- Putem misca din sageti camera numai daca nu avem un model selectat
 	if (!tankIsSelected && !helicopterIsSelected)
 	{
-		static bool isJadorTankPlaying = false;
 		static bool isHelicopterPlaying = false;
 		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && tanks[0].isDestroyed == false)
 		{
 			tanks[0].SetIsSelected(true);
 
-			// Verifică dacă sunetul JadorTank este deja redat
-			if (!isJadorTankPlaying) {
-				engine->play2D("media/JadorTank.ogg", true);
-				isJadorTankPlaying = true;
-			}
-			else {
-				// Sunetul este deja redat, deci îl redai de la început
-				engine->stopAllSounds();
-				engine->play2D("media/JadorTank.ogg", true);
-			}
 		}
 		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && tanks[1].isDestroyed == false)
 		{
 			
 			tanks[1].SetIsSelected(true);
-			if (!isJadorTankPlaying) {
-				engine->play2D("media/JadorTank.ogg", true);
-				isJadorTankPlaying = true;
-			}
-			else {
-				// Sunetul este deja redat, deci îl redai de la început
-				engine->stopAllSounds();
-				engine->play2D("media/JadorTank.ogg", true);
-			}
+			
 		}
 		if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && tanks[2].isDestroyed == false)
 		{
 			tanks[2].SetIsSelected(true);
-			if (!isJadorTankPlaying) {
-				engine->play2D("media/JadorTank.ogg", true);
-				isJadorTankPlaying = true;
-			}
-			else {
-				engine->stopAllSounds();
-				engine->play2D("media/JadorTank.ogg", true);
-			}
+			
 		}
 		if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS && tanks[3].isDestroyed == false)
 		{
 			tanks[3].SetIsSelected(true);
-			if (!isJadorTankPlaying) {
-				engine->play2D("media/JadorTank.ogg", true);
-				isJadorTankPlaying = true;
-			}
-			else {
-				engine->stopAllSounds();
-				engine->play2D("media/JadorTank.ogg", true);
-			}
+			
 		}
 		if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS && tanks[4].isDestroyed == false)
 		{
 			tanks[4].SetIsSelected(true);
-			if (!isJadorTankPlaying) {
-				engine->play2D("media/JadorTank.ogg", true);
-				isJadorTankPlaying = true;
-			}
-			else {
-				engine->stopAllSounds();
-				engine->play2D("media/JadorTank.ogg", true);
-			}
+			
 		}
 		if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS && tanks[5].isDestroyed == false)
 		{
 			tanks[5].SetIsSelected(true);
-			if (!isJadorTankPlaying) {
-				engine->play2D("media/JadorTank.ogg", true);
-				isJadorTankPlaying = true;
-			}
-			else {
-				engine->stopAllSounds();
-				engine->play2D("media/JadorTank.ogg", true);
-			}
+			
 		}
 		if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS && tanks[6].isDestroyed == false)
 		{
 			tanks[6].SetIsSelected(true);
-			if (!isJadorTankPlaying) {
-				engine->play2D("media/JadorTank.ogg", true);
-				isJadorTankPlaying = true;
-			}
-			else {
-				engine->stopAllSounds();
-				engine->play2D("media/JadorTank.ogg", true);
-			}
+			
 		}
 		if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS && tanks[7].isDestroyed == false)
 		{
 			tanks[7].SetIsSelected(true);
-			if (!isJadorTankPlaying) {
-				engine->play2D("media/JadorTank.ogg", true);
-				isJadorTankPlaying = true;
-			}
-			else {
-				engine->stopAllSounds();
-				engine->play2D("media/JadorTank.ogg", true);
-			}
+			
 		}
 		if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS && helicopters[0].isDestroyed == false)
 		{
