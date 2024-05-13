@@ -932,15 +932,25 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 	helicopterIsSelected = IsAHelicopterSelected(helicopters);
 	
 	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+	{
 		for (int i = 0; i < tanks.size(); i++) {
 			if (tanks[i].GetIsSelected())
 				tanks[i].SetIsSelected(false);
 		}
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+		pCamera->Reset(width, height);
+	}
 	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
+	{
 		for (int i = 0; i < helicopters.size(); i++) {
 			if (helicopters[i].GetIsSelected())
 				helicopters[i].SetIsSelected(false);
 		}
+		int width, height;
+		glfwGetWindowSize(window, &width, &height);
+		pCamera->Reset(width, height);
+	}
 	//---- Control miscari model(tank)
 	if(tankIsSelected)
 	for (int i = 0; i < tanks.size(); i++) 
