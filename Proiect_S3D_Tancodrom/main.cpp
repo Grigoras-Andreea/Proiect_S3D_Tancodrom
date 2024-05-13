@@ -41,10 +41,14 @@ using namespace irrklang;
 //bool tankIsSelected = false;
 //bool helicopterIsSelected = false;
 bool isNight = false, tankIsSelected = false, helicopterIsSelected = false;
-unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture,grassTexture,treeTexture;
+unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture;
+std::string cloudObjFileName;
 Model tank;
 std::string TankShellObjFilename;
 std::vector<TankShell> shells;
+std::vector<TankShell> explosions;
+
+
 double fireCooldown = 0;
 ISoundEngine* engine = createIrrKlangDevice();
 ISoundEngine* engine2 = createIrrKlangDevice();
@@ -262,13 +266,21 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains);
 
 void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shells) {
+	
 	for (auto& tank : tanks) {
 
 		float collisionThreshold = 6.0f;
 
 		for (auto& shell : shells) {
 			// Verifică coliziunea între shell și tanc
-			if (glm::distance(shell.Shell.GetPosition(), tank.Body.GetPosition()) < collisionThreshold) {
+			if (glm::distance(shell.Shell.GetPosition(), tank.Body.GetPosition()) < collisionThreshold ) {
+				TankShell newExplosion = TankShell(Model(cloudObjFileName, true), deltaTime, glm::vec3(0.0f, 0.2f, 0.0f));
+				newExplosion.Shell.SetRotationAngle(180.0f);
+				newExplosion.Shell.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+				newExplosion.Shell.SetScale(glm::vec3(0.1f));
+				newExplosion.Shell.SetPosition(tank.Body.GetPosition());
+				
+				//explosions.push_back(newExplosion);
 				// Dacă există coliziune, șterge shell-ul și tancul lovit
 				shells.erase(std::remove_if(shells.begin(), shells.end(),
 					[&](const TankShell& s) { return &s == &shell; }), shells.end());
@@ -276,10 +288,14 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 				tank.Body.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
 				tank.Head.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
 				explosionSound->play2D("media/NuclearBombExplosionSound.ogg", false);
+
+				
+
 				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
 			}
 		}
 	}
+
 }
 
 void CheckShellCollisionForMountain(std::vector<Model>& mountains, std::vector<TankShell>& shells)
@@ -390,23 +406,19 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	renderFloor();
 
 	
+
 	glBindTexture(GL_TEXTURE_2D, tankTexture2);
 	for (int i = 0; i < shells.size(); i++) {
 		lightingShader.SetMat4("model", shells[i].Shell.GetModelMatrix());
 		shells[i].Shell.Draw(lightingShader);
 	}
-	// Adăugarea copacilor
-	for (int i = 0; i < trees.size(); i++) {
-		lightingShader.SetMat4("model", trees[i].GetModelMatrix());
-		trees[i].Draw(lightingShader);
+	
+	
+	glBindTexture(GL_TEXTURE_2D, explosionTexture);
+	for (int i = 0; i < explosions.size(); i++) {
+		lightingShader.SetMat4("model", explosions[i].Shell.GetModelMatrix());
+		explosions[i].Shell.Draw(lightingShader);
 	}
-
-	// Adăugarea ierbii
-	for (int i = 0; i < grass.size(); i++) {
-		lightingShader.SetMat4("model", grass[i].GetModelMatrix());
-		grass[i].Draw(lightingShader);
-	}
-
 
 	//tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
 	//tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -460,7 +472,6 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", helicopters[1].ProppelerBack.GetModelMatrix());
 		helicopters[1].ProppelerBack.Draw(lightingShader);
 	}
-
 
 	glBindTexture(GL_TEXTURE_2D, cloudTexture);
 	for (int i = 0; i < 25; i++)
@@ -792,11 +803,13 @@ int main()
 	std::string heli_eliceObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_elice2.obj");
 	std::string heli_elice_spateObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_elice_back.obj");
 
-	std::string cloudObjFileName = (std::string(currentPathChr) + "\\Models\\cumulus00.obj");
+	cloudObjFileName = (std::string(currentPathChr) + "\\Models\\cumulus01.obj");
 	std::string cloud2ObjFileName = (std::string(currentPathChr) + "\\Models\\cumulus01.obj");
 	std::string cloud3ObjFileName = (std::string(currentPathChr) + "\\Models\\cumulus02.obj");
 	std::string cloud4ObjFileName = (std::string(currentPathChr) + "\\Models\\altostratus00.obj");
 	std::string cloud5ObjFileName = (std::string(currentPathChr) + "\\Models\\altostratus01.obj");
+
+	std::string sunObjFileName = (std::string(currentPathChr) + "\\Models\\Sun\\sol.obj");
 
 
 	
@@ -832,7 +845,9 @@ int main()
 	tankTexture2 = CreateTexture(std::string(currentPathChr) + "\\Models\\cabina.jpg");
 	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
 	helicopterTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Heli_Bell\\HH65C.jpg");
-	explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass3.png");
+	//explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\explosion.png");
+	explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\explosionTexture2.jpg");
+	unsigned int sunTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Sun\\2k_sun.jpg");
 
 	float radius = 354.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.065f;
@@ -840,12 +855,12 @@ int main()
 	PozitionateModels(tanks, mountains, helicopters, clouds,trees,grass);
 
 
+	Model soare = Model(sunObjFileName, false);
+	soare.SetRotationAngle(0.0f);
+	soare.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	soare.SetPosition(glm::vec3(0.0f, 20.0f, 0.0f));
+	soare.SetScale(glm::vec3(5.0f));
 
-
-	
-	if (!engine) {
-		return 0;
-	}
 
 	//engine->play2D("media/WarMusic.ogg", true);
 
@@ -907,13 +922,11 @@ int main()
 		
 		// Use lighting shader
 		lightingShader.Use();
-
 		if (lightZ < 0) {
 			lightPos.x = -lightPos.x;
 		}
 
 		// change between day and night
-
 		if (isNight)
 		{
 			lightingShader.SetVec3("lightColor", 0.7f, 0.7f, 1.0f);
@@ -925,7 +938,6 @@ int main()
 		else
 		{
 			lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 0.9f);
-
 			lightingShader.SetFloat("Ka", 0.2f);
 			lightingShader.SetFloat("Kd", 0.7f);
 			lightingShader.SetFloat("Ks", 0.5f);
@@ -942,7 +954,16 @@ int main()
 		//glBindTexture(GL_TEXTURE_2D, 3);
 		//renderFloor();
 		// Set model matrix and draw the model
-		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds,grass,trees);
+		
+
+
+		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds);
+		glBindTexture(GL_TEXTURE_2D, sunTexture);
+		soare.SetPosition(lightPos);
+		//soare.SetScale(glm::vec3(225.0f));
+
+		lightingShader.SetMat4("model", soare.GetModelMatrix());
+		soare.Draw(lightingShader);
 		processInput(window, tanks, helicopters, mountains);
 
 		// Use lamp shader
@@ -950,7 +971,12 @@ int main()
 		lampShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lampShader.SetMat4("view", pCamera->GetViewMatrix());
 
-		// Set light model matrix and draw the lamp object
+
+
+
+		//lightModel = glm::translate(glm::mat4(1.0), lightPos);
+
+		 //Set light model matrix and draw the lamp object
 		glm::mat4 lightModel = glm::translate(glm::mat4(1.0), lightPos);
 		if(isNight)
 			lightModel = glm::scale(lightModel, glm::vec3(6.0f)); // a smaller cube
@@ -960,10 +986,12 @@ int main()
 		lampShader.SetMat4("model", lightModel);
 
 		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, sunTexture);
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-
+		
+		//soare.Draw(lampShader);
 		
 
 		
