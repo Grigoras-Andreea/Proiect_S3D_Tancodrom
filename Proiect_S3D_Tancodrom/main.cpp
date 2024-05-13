@@ -41,9 +41,9 @@ using namespace irrklang;
 //bool tankIsSelected = false;
 //bool helicopterIsSelected = false;
 bool isNight = false, tankIsSelected = false, helicopterIsSelected = false;
-unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture,grassTexture,treeTexture;
+unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture, grassTexture, treeTexture, watchTowerTexture;
 std::string cloudObjFileName, destroyedTankObjFileName;
-Model tank;
+Model tank, watchTower, watchTower2;
 std::string TankShellObjFilename;
 std::vector<TankShell> shells;
 std::vector<TankShell> explosions;
@@ -301,6 +301,7 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 				tank.Body = destroyedTank;
 				//tank.Body.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f);
 				tank.Head.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
+				
 				explosionSound->play2D("media/NuclearBombExplosionSound.ogg", false);
 
 				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
@@ -416,17 +417,21 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", tanks[i].Head.GetModelMatrix());
 		tanks[i].Head.Draw(lightingShader);
 	}
+
+	glBindTexture(GL_TEXTURE_2D, watchTowerTexture);
+	lightingShader.SetMat4("model", watchTower.GetModelMatrix());
+	watchTower.Draw(lightingShader);
+	lightingShader.SetMat4("model", watchTower2.GetModelMatrix());
+	watchTower2.Draw(lightingShader);
+
 	glBindTexture(GL_TEXTURE_2D, floorTexture);
 	renderFloor();
-
-	
 
 	glBindTexture(GL_TEXTURE_2D, tankTexture2);
 	for (int i = 0; i < shells.size(); i++) {
 		lightingShader.SetMat4("model", shells[i].Shell.GetModelMatrix());
 		shells[i].Shell.Draw(lightingShader);
-	}
-	
+	}	
 	
 	glBindTexture(GL_TEXTURE_2D, explosionTexture);
 	for (int i = 0; i < explosions.size(); i++) {
@@ -499,13 +504,14 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", trees[i].GetModelMatrix());
 		trees[i].Draw(lightingShader);
 	}
+	
 	glBindTexture(GL_TEXTURE_2D, grassTexture);
 	// Adăugarea ierbii
 	for (int i = 0; i < grass.size(); i++) {
 		lightingShader.SetMat4("model", grass[i].GetModelMatrix());
 		grass[i].Draw(lightingShader);
 	}
-
+	
 }
 
 void PozitionateModels(std::vector<Tank>& tanks,
@@ -803,6 +809,7 @@ int main()
 	//Shader lightingShader((currentPathChr + std::string("\\Shaders\\PhongLight.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\PhongLight.fs")).c_str()));
 	Shader lampShader((currentPathChr + std::string("\\Shaders\\Lamp.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\Lamp.fs")).c_str()));
 	Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
+	
 	//Shader blendingShader((currentPath + "\\Shaders\\Blending.vs").c_str(), (currentPath + "\\Shaders\\Blending.fs").c_str());
 	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
 	Shader modelShader((currentPath + "\\Shaders\\modelVS.glsl").c_str(), (currentPath + "\\Shaders\\modelFS.glsl").c_str());
@@ -830,6 +837,7 @@ int main()
 	std::string heli_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_body2.obj");
 	std::string heli_eliceObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_elice2.obj");
 	std::string heli_elice_spateObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_elice_back.obj");
+	std::string watchTowerObjFileName = (std::string(currentPathChr) + "\\Models\\watchTower\\watchTowerNew.obj");
 
 	cloudObjFileName = (std::string(currentPathChr) + "\\Models\\cumulus01.obj");
 	std::string cloud2ObjFileName = (std::string(currentPathChr) + "\\Models\\cumulus01.obj");
@@ -875,6 +883,7 @@ int main()
 	helicopterTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Heli_Bell\\HH65C.jpg");
 	//explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\explosion.png");
 	explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\explosionTexture2.jpg");
+	watchTowerTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\watchTower\\textures\\watchTower.jpg");
 	unsigned int sunTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Sun\\2k_sun.jpg");
 
 	float radius = 354.0f; // Raza cercului pe care se va rota lumina
@@ -882,6 +891,16 @@ int main()
 
 	PozitionateModels(tanks, mountains, helicopters, clouds,trees,grass);
 
+	watchTower = Model(watchTowerObjFileName, false);
+	watchTower.SetRotationAngle(0.0f);
+	watchTower.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	watchTower.SetPosition(glm::vec3(-50.0f, 0.0f, 0.0f));
+	watchTower.SetScale(glm::vec3(1.7f));
+	watchTower2 = Model(watchTowerObjFileName, false);
+	watchTower2.SetRotationAngle(0.0f);
+	watchTower2.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	watchTower2.SetPosition(glm::vec3(50.0f, 0.0f, 0.0f));
+	watchTower2.SetScale(glm::vec3(1.7f));
 
 	Model soare = Model(sunObjFileName, false);
 	soare.SetRotationAngle(0.0f);
@@ -890,6 +909,7 @@ int main()
 	soare.SetScale(glm::vec3(5.0f));
 
 	engine2->play2D("media/WarMusic.ogg", true);
+	explosionSound->setSoundVolume(0.7f);
 	engine->setSoundVolume(1.0f);
 	helicopterSound->play2D("media/HelicopterSound.ogg", true);
 
@@ -900,7 +920,6 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-
 		checkShellsLifetime(tanks);
 		CheckShellCollision(tanks, shells);
 		CheckShellCollisionForHelicopter(helicopters, shells);
@@ -908,17 +927,6 @@ int main()
 		moveClouds(clouds);
 		rotateElice(helicopters);
 		
-		// Input
-		//processInput(window);
-
-		/*if (tankIsSelected) {
-			engine->setSoundVolume(1.0f);
-			engine2->setSoundVolume(0.0f);
-		}
-		else {
-			engine->setSoundVolume(0.0f);
-			engine2->setSoundVolume(1.0f);
-		}*/
 		if (helicopterIsSelected) {
 			//engine2->setSoundVolume(1.0f);
 			helicopterSound->setSoundVolume(1.0f);
@@ -972,20 +980,9 @@ int main()
 		lightingShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lightingShader.SetMat4("view", pCamera->GetViewMatrix());
 
-	
-		
-		//glBindTexture(GL_TEXTURE_2D, 3);
-		//renderFloor();
-		// Set model matrix and draw the model
-		
-
 
 		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds,grass,trees);
 
-		/*glBindTexture(GL_TEXTURE_2D, tankTexture2);
-		lightingShader.SetMat4("model", destroyedTank.GetModelMatrix());
-		destroyedTank.Draw(lightingShader);*/
-		
 		
 		glBindTexture(GL_TEXTURE_2D, sunTexture);
 		soare.SetPosition(lightPos);
@@ -997,23 +994,23 @@ int main()
 		lampShader.Use();
 		lampShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lampShader.SetMat4("view", pCamera->GetViewMatrix());
-
-
-
-
-		//lightModel = glm::translate(glm::mat4(1.0), lightPos);
-
-		 //Set light model matrix and draw the lamp object
+		
+		//Set light model matrix and draw the lamp object
 		glm::mat4 lightModel = glm::translate(glm::mat4(1.0), lightPos);
-		if(isNight)
+		if (isNight)
+		{
 			lightModel = glm::scale(lightModel, glm::vec3(6.0f)); // a smaller cube
+			glBindTexture(GL_TEXTURE_2D, floorTexture);
+		}
 		else
+		{
 			lightModel = glm::scale(lightModel, glm::vec3(10.0f)); // a smaller cube
+			glBindTexture(GL_TEXTURE_2D, sunTexture);
+		}
 		//lightModel = glm::scale(lightModel, glm::vec3(0.5f)); // a smaller cube
 		lampShader.SetMat4("model", lightModel);
 
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, sunTexture);
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -1092,6 +1089,18 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 		}
 	}
 
+	float distance = glm::distance(selectedTank.Body.GetPosition(), watchTower.GetPosition());
+	float collisionThreshold = 7.0f;
+	if (distance < collisionThreshold) {
+		// Collision detected
+		return true;
+	}
+	distance = glm::distance(selectedTank.Body.GetPosition(), watchTower2.GetPosition());
+	collisionThreshold = 7.0f;
+	if (distance < collisionThreshold) {
+		// Collision detected
+		return true;
+	}
 	// No collision detected
 	return false;
 }
