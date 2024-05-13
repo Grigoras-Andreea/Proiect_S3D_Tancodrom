@@ -293,14 +293,15 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 				shells.erase(std::remove_if(shells.begin(), shells.end(),
 					[&](const TankShell& s) { return &s == &shell; }), shells.end());
 				if (tank.isDamaged)
+				{
 					tank.isDestroyed = true;
+					tank.Body.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
+				}
 				tank.isDamaged = true;
 				tank.Body = destroyedTank;
 				//tank.Body.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f);
 				tank.Head.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
 				explosionSound->play2D("media/NuclearBombExplosionSound.ogg", false);
-
-				
 
 				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
 			}
@@ -887,14 +888,6 @@ int main()
 	soare.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	soare.SetPosition(glm::vec3(0.0f, 20.0f, 0.0f));
 	soare.SetScale(glm::vec3(5.0f));
-
-
-	/*Model destroyedTank = Model(destroyedTankObjFileName, false);
-	destroyedTank.SetRotationAngle(0.0f);
-	destroyedTank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	destroyedTank.SetPosition(glm::vec3(0.0f, 0.2f, 0.0f));
-	destroyedTank.SetScale(glm::vec3(0.03f));*/
-
 
 	engine2->play2D("media/WarMusic.ogg", true);
 	engine->setSoundVolume(1.0f);
