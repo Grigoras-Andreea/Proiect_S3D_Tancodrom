@@ -42,7 +42,7 @@ using namespace irrklang;
 //bool helicopterIsSelected = false;
 bool isNight = false, tankIsSelected = false, helicopterIsSelected = false;
 unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture,grassTexture,treeTexture;
-std::string cloudObjFileName;
+std::string cloudObjFileName, destroyedTankObjFileName;
 Model tank;
 std::string TankShellObjFilename;
 std::vector<TankShell> shells;
@@ -274,18 +274,28 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 		for (auto& shell : shells) {
 			// Verifică coliziunea între shell și tanc
 			if (glm::distance(shell.Shell.GetPosition(), tank.Body.GetPosition()) < collisionThreshold ) {
-				TankShell newExplosion = TankShell(Model(cloudObjFileName, true), deltaTime, glm::vec3(0.0f, 0.2f, 0.0f));
+				/*TankShell newExplosion = TankShell(Model(cloudObjFileName, true), deltaTime, glm::vec3(0.0f, 0.2f, 0.0f));
 				newExplosion.Shell.SetRotationAngle(180.0f);
 				newExplosion.Shell.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 				newExplosion.Shell.SetScale(glm::vec3(0.1f));
 				newExplosion.Shell.SetPosition(tank.Body.GetPosition());
-				
+				*/
 				//explosions.push_back(newExplosion);
 				// Dacă există coliziune, șterge shell-ul și tancul lovit
+				
+				Model destroyedTank = Model(destroyedTankObjFileName, false);
+				destroyedTank.SetRotationAngle(tank.Body.GetRotationAngle());
+				destroyedTank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+				destroyedTank.SetPosition(tank.Body.GetPosition());
+				destroyedTank.SetScale(glm::vec3(0.03f));
+				
 				shells.erase(std::remove_if(shells.begin(), shells.end(),
 					[&](const TankShell& s) { return &s == &shell; }), shells.end());
-				tank.isDestroyed = true;
-				tank.Body.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
+				if (tank.isDamaged)
+					tank.isDestroyed = true;
+				tank.isDamaged = true;
+				tank.Body = destroyedTank;
+				//tank.Body.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f);
 				tank.Head.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
 				explosionSound->play2D("media/NuclearBombExplosionSound.ogg", false);
 
@@ -399,6 +409,8 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 			continue;
 		lightingShader.SetMat4("model", tanks[i].Body.GetModelMatrix());
 		tanks[i].Body.Draw(lightingShader);
+		if (tanks[i].isDamaged)
+			continue;
 		lightingShader.SetMat4("model", tanks[i].Head.GetModelMatrix());
 		tanks[i].Head.Draw(lightingShader);
 	}
@@ -479,13 +491,13 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", clouds[i].GetModelMatrix());
 		clouds[i].Draw(lightingShader);
 	}
-	glBindTexture(GL_TEXTURE_2D, grassTexture);
+	glBindTexture(GL_TEXTURE_2D, treeTexture);
 	// Adăugarea copacilor
 	for (int i = 0; i < trees.size(); i++) {
 		lightingShader.SetMat4("model", trees[i].GetModelMatrix());
 		trees[i].Draw(lightingShader);
 	}
-	glBindTexture(GL_TEXTURE_2D, treeTexture);
+	glBindTexture(GL_TEXTURE_2D, grassTexture);
 	// Adăugarea ierbii
 	for (int i = 0; i < grass.size(); i++) {
 		lightingShader.SetMat4("model", grass[i].GetModelMatrix());
@@ -801,6 +813,7 @@ int main()
 	//std::string grassObjFileName = (std::string(currentPathChr) + "\\Models\\grass_model\\grass_model.obj");
 	std::string grassObjFileName = (std::string(currentPathChr) + "\\Models\\grass2\\High\\High Grass.obj");
 
+	destroyedTankObjFileName = (std::string(currentPathChr) + "\\Models\\DestroyedTank\\obj.obj");
 	std::string tank_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_body.obj");
 	std::string tank_turretObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger_turret.obj");
 	TankShellObjFilename = (std::string(currentPathChr) + "\\Models\\Tank_Shell\\Tank Shell2.obj");
@@ -875,12 +888,15 @@ int main()
 	soare.SetScale(glm::vec3(5.0f));
 
 
-	//engine->play2D("media/WarMusic.ogg", true);
+	/*Model destroyedTank = Model(destroyedTankObjFileName, false);
+	destroyedTank.SetRotationAngle(0.0f);
+	destroyedTank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	destroyedTank.SetPosition(glm::vec3(0.0f, 0.2f, 0.0f));
+	destroyedTank.SetScale(glm::vec3(0.03f));*/
 
-	//engine->play2D("media/JadorTank.ogg", true);
+
 	engine2->play2D("media/WarMusic.ogg", true);
 	engine->setSoundVolume(1.0f);
-	//engine2->play2D("media/WarMusic.ogg", true);
 	helicopterSound->play2D("media/HelicopterSound.ogg", true);
 
 
@@ -971,10 +987,14 @@ int main()
 
 
 		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds,grass,trees);
+
+		/*glBindTexture(GL_TEXTURE_2D, tankTexture2);
+		lightingShader.SetMat4("model", destroyedTank.GetModelMatrix());
+		destroyedTank.Draw(lightingShader);*/
+		
+		
 		glBindTexture(GL_TEXTURE_2D, sunTexture);
 		soare.SetPosition(lightPos);
-		//soare.SetScale(glm::vec3(225.0f));
-
 		lightingShader.SetMat4("model", soare.GetModelMatrix());
 		soare.Draw(lightingShader);
 		processInput(window, tanks, helicopters, mountains);

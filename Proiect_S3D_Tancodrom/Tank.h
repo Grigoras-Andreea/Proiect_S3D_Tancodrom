@@ -8,6 +8,7 @@ public:
 	Model Head;
 	Model Body;
 	bool isDestroyed;
+	bool isDamaged;
 
 	Tank(Model Body, Model Head);
 

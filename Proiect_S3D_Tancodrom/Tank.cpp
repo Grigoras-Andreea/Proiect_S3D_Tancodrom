@@ -6,6 +6,7 @@ Tank::Tank(Model Body, Model Head)
 	this->Head = Head;
 	isSelected = false;
 	isDestroyed = false;
+	isDamaged = false;
 }
 
 void Tank::SetIsSelected(bool isSelected)
