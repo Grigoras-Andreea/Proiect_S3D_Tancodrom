@@ -41,7 +41,7 @@ using namespace irrklang;
 //bool tankIsSelected = false;
 //bool helicopterIsSelected = false;
 bool isNight = false, tankIsSelected = false, helicopterIsSelected = false;
-unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture;
+unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture;
 Model tank;
 std::string TankShellObjFilename;
 std::vector<TankShell> shells;
@@ -49,6 +49,8 @@ double fireCooldown = 0;
 ISoundEngine* engine = createIrrKlangDevice();
 ISoundEngine* engine2 = createIrrKlangDevice();
 ISoundEngine* engine3 = createIrrKlangDevice();
+ISoundEngine* explosionSound = createIrrKlangDevice();
+ISoundEngine* helicopterSound = createIrrKlangDevice();
 
 // Define a simple Color struct
 struct Color {
@@ -176,7 +178,7 @@ unsigned int CreateTexture(const std::string& strTexturePath)
 
 	return textureId;
 }
-unsigned int planeVAO = 0;
+unsigned int planeVAO = 0, eplaneVAO = 0;
 void renderFloor()
 {
 	unsigned int planeVBO;
@@ -211,6 +213,40 @@ void renderFloor()
 	glBindVertexArray(planeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
+void renderExplosion()
+{
+	unsigned int planeVBO;
+
+	if (eplaneVAO == 0) {
+		// set up vertex data (and buffer(s)) and configure vertex attributes
+		float planeVertices[] = {
+			// positions            // normals         // texcoords
+			50.0f, 0.0f,  50.0f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
+			-50.0f, -0.0f,  50.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+			-50.0f, -0.0f, -50.0f,  0.0f, 1.0f, 0.0f,   0.0f, 1.0f,
+
+			50.0f, -0.0f,  50.0f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
+			-50.0f, -0.0f, -50.0f,  0.0f, 1.0f, 0.0f,   0.0f, 1.0f,
+			50.0f, -0.0f, -50.0f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f
+		};
+		// plane VAO
+		glGenVertexArrays(1, &eplaneVAO);
+		glGenBuffers(1, &planeVBO);
+		glBindVertexArray(eplaneVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+		glBindVertexArray(0);
+	}
+
+	glBindVertexArray(eplaneVAO);
+	//glDrawArrays(GL_TRIANGLES, 0, 6);
+}
 
 double deltaTime = 0.0f;	// time between current frame and last frame
 double lastFrame = 0.0f;
@@ -239,6 +275,7 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 				tank.isDestroyed = true;
 				tank.Body.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
 				tank.Head.SetPosition(glm::vec3(0.0f, -20.0f, 0.0f));
+				explosionSound->play2D("media/NuclearBombExplosionSound.ogg", false);
 				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
 			}
 		}
@@ -337,7 +374,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		mountains[i].Draw(lightingShader);
 		
 	}
-
+	
 	glBindTexture(GL_TEXTURE_2D, tankTexture2);
 	for (int i = 0; i < tanks.size(); i++) {
 		if(tanks[i].isDestroyed)
@@ -349,6 +386,8 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	}
 	glBindTexture(GL_TEXTURE_2D, floorTexture);
 	renderFloor();
+
+	
 	glBindTexture(GL_TEXTURE_2D, tankTexture2);
 	for (int i = 0; i < shells.size(); i++) {
 		lightingShader.SetMat4("model", shells[i].Shell.GetModelMatrix());
@@ -361,6 +400,31 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	//lightingShader.SetMat4("model", tank.GetModelMatrix());
 	//tank.Draw(lightingShader);
 	
+	//glBindVertexArray(4);
+	//float grassVertices[] = {
+	//	// positions            // texture Coords 
+	//	5.0f, -0.5f,  0.0f,  1.0f, 0.0f,
+	//	-5.0f, -0.5f,  0.0f,  0.0f, 0.0f,
+	//	-5.0f, -0.5f, 0.0f,  0.0f, 1.0f,
+
+	//	5.0f, -0.5f,  0.0f,  1.0f, 0.0f,
+	//	-5.0f, -0.5f, 0.0f,  0.0f, 1.0f,
+	//	5.0f, -0.5f, 0.0f,  1.0f, 1.0f
+	//};
+	/*renderExplosion();
+	glBindTexture(GL_TEXTURE_2D, explosionTexture);
+	glm::mat4 model2 = glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	model2 = glm::scale(model2, glm::vec3(0.02f, 0.02f, 0.02f));
+	model2 = glm::translate(model2, glm::vec3(0.0f, -0.2f, 0.0f));
+	lightingShader.SetMat4("model", model2);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	model2 = glm::rotate(model2, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	lightingShader.SetMat4("model", model2);
+	glDrawArrays(GL_TRIANGLES, 0, 6);*/
+
+
+
 	
 	glBindTexture(GL_TEXTURE_2D, helicopterTexture);
 	if (helicopters[0].isDestroyed == false)
@@ -382,9 +446,6 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", helicopters[1].ProppelerBack.GetModelMatrix());
 		helicopters[1].ProppelerBack.Draw(lightingShader);
 	}
-	
-
-
 
 
 	glBindTexture(GL_TEXTURE_2D, cloudTexture);
@@ -677,6 +738,7 @@ int main()
 	//Shader lightingShader((currentPathChr + std::string("\\Shaders\\PhongLight.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\PhongLight.fs")).c_str()));
 	Shader lampShader((currentPathChr + std::string("\\Shaders\\Lamp.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\Lamp.fs")).c_str()));
 	Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
+	//Shader blendingShader((currentPath + "\\Shaders\\Blending.vs").c_str(), (currentPath + "\\Shaders\\Blending.fs").c_str());
 	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
 	Shader modelShader((currentPath + "\\Shaders\\modelVS.glsl").c_str(), (currentPath + "\\Shaders\\modelFS.glsl").c_str());
 	
@@ -733,6 +795,7 @@ int main()
 	tankTexture2 = CreateTexture(std::string(currentPathChr) + "\\Models\\cabina.jpg");
 	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
 	helicopterTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Heli_Bell\\HH65C.jpg");
+	explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass3.png");
 
 	float radius = 354.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.065f;
@@ -751,7 +814,9 @@ int main()
 
 	//engine->play2D("media/JadorTank.ogg", true);
 	engine2->play2D("media/WarMusic.ogg", true);
-	
+	engine->setSoundVolume(1.0f);
+	//engine2->play2D("media/WarMusic.ogg", true);
+	helicopterSound->play2D("media/HelicopterSound.ogg", true);
 
 
 	while (!glfwWindowShouldClose(window)) {
@@ -780,12 +845,12 @@ int main()
 			engine2->setSoundVolume(1.0f);
 		}*/
 		if (helicopterIsSelected) {
-			engine3->setSoundVolume(1.0f);
-			engine2->setSoundVolume(0.0f);
+			//engine2->setSoundVolume(1.0f);
+			helicopterSound->setSoundVolume(1.0f);
 		}
-		else if(!tankIsSelected) {
-			engine3->setSoundVolume(0.0f);
-			engine2->setSoundVolume(1.0f);
+		else{
+			//engine2->setSoundVolume(0.0f);
+			helicopterSound->setSoundVolume(0.0f);
 		}
 				
 		// Clear buffers
@@ -977,8 +1042,6 @@ bool HelicopterFrontCollision(Helicopter& selectedHelicopter, std::vector<Tank>&
 	// No collision detected
 	return false;
 }
-
-
 
 
 glm::vec3 tankPreviousPositionBody = glm::vec3(0.0f);
@@ -1371,7 +1434,6 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 	//---- Putem misca din sageti camera numai daca nu avem un model selectat
 	if (!tankIsSelected && !helicopterIsSelected)
 	{
-		static bool isHelicopterPlaying = false;
 		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && tanks[0].isDestroyed == false)
 		{
 			tanks[0].SetIsSelected(true);
@@ -1416,26 +1478,12 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 		if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS && helicopters[0].isDestroyed == false)
 		{
 			helicopters[0].SetIsSelected(true);
-			if (!isHelicopterPlaying) {
-				engine3->play2D("media/Fazlija-Helikopter.ogg", true);
-				isHelicopterPlaying = true;
-			}
-			else {
-				engine3->stopAllSounds();
-				engine3->play2D("media/Fazlija-Helikopter.ogg", true);
-			}
+			
 		}
 		if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS && helicopters[1].isDestroyed == false)
 		{
 			helicopters[1].SetIsSelected(true);
-			if (!isHelicopterPlaying) {
-				engine3->play2D("media/Fazlija-Helikopter.ogg", true);
-				isHelicopterPlaying = true;
-			}
-			else {
-				engine3->stopAllSounds();
-				engine3->play2D("media/Fazlija-Helikopter.ogg", true);
-			}
+			
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
