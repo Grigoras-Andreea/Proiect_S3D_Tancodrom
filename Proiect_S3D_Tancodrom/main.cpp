@@ -41,7 +41,7 @@ using namespace irrklang;
 //bool tankIsSelected = false;
 //bool helicopterIsSelected = false;
 bool isNight = false, tankIsSelected = false, helicopterIsSelected = false;
-unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture;
+unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture,grassTexture,treeTexture;
 std::string cloudObjFileName;
 Model tank;
 std::string TankShellObjFilename;
@@ -479,6 +479,19 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", clouds[i].GetModelMatrix());
 		clouds[i].Draw(lightingShader);
 	}
+	glBindTexture(GL_TEXTURE_2D, grassTexture);
+	// Adăugarea copacilor
+	for (int i = 0; i < trees.size(); i++) {
+		lightingShader.SetMat4("model", trees[i].GetModelMatrix());
+		trees[i].Draw(lightingShader);
+	}
+	glBindTexture(GL_TEXTURE_2D, treeTexture);
+	// Adăugarea ierbii
+	for (int i = 0; i < grass.size(); i++) {
+		lightingShader.SetMat4("model", grass[i].GetModelMatrix());
+		grass[i].Draw(lightingShader);
+	}
+
 }
 
 void PozitionateModels(std::vector<Tank>& tanks,
@@ -957,7 +970,7 @@ int main()
 		
 
 
-		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds);
+		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds,grass,trees);
 		glBindTexture(GL_TEXTURE_2D, sunTexture);
 		soare.SetPosition(lightPos);
 		//soare.SetScale(glm::vec3(225.0f));
