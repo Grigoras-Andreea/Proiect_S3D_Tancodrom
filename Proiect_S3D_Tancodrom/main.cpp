@@ -286,7 +286,8 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 				Model destroyedTank = Model(destroyedTankObjFileName, false);
 				destroyedTank.SetRotationAngle(tank.Body.GetRotationAngle());
 				destroyedTank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-				destroyedTank.SetPosition(tank.Body.GetPosition());
+				glm::vec3 newPos = glm::vec3(tank.Body.GetPosition().x, tank.Body.GetPosition().y+0.4f, tank.Body.GetPosition().z);
+				destroyedTank.SetPosition(newPos);
 				destroyedTank.SetScale(glm::vec3(0.03f));
 				
 				shells.erase(std::remove_if(shells.begin(), shells.end(),
