@@ -224,7 +224,27 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains);
-void checkShellsLifetime() 
+
+void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shells) {
+	for (auto& tank : tanks) {
+
+		float collisionThreshold = 6.0f;
+
+		for (auto& shell : shells) {
+			// Verifică coliziunea între shell și tanc
+			if (glm::distance(shell.Shell.GetPosition(), tank.Body.GetPosition()) < collisionThreshold) {
+				// Dacă există coliziune, șterge shell-ul și tancul lovit
+				shells.erase(std::remove_if(shells.begin(), shells.end(),
+					[&](const TankShell& s) { return &s == &shell; }), shells.end());
+				tanks.erase(std::remove_if(tanks.begin(), tanks.end(),
+					[&](const Tank& t) { return &t == &tank; }), tanks.end());
+				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
+			}
+		}
+	}
+}
+
+void checkShellsLifetime(std::vector<Tank>& tanks)
 {
 	for (auto it = shells.begin(); it != shells.end();) {
 		std::cout << "  -  " << it->spawnTime << "\n";
@@ -234,6 +254,8 @@ void checkShellsLifetime()
 		else {
 			float movementSpeed = 20.0f;
 			it->Shell.SetPosition(it->Shell.GetPosition() + (it->moveDir * movementSpeed * static_cast<float>(deltaTime)));
+
+			
 
 			it->spawnTime += deltaTime;
 			++it;
@@ -698,7 +720,8 @@ int main()
 		lastFrame = currentFrame;
 
 
-		checkShellsLifetime();
+		checkShellsLifetime(tanks);
+		CheckShellCollision(tanks, shells);
 		moveClouds(clouds);
 		rotateElice(helicopters);
 		
@@ -911,6 +934,8 @@ bool HelicopterFrontCollision(Helicopter& selectedHelicopter, std::vector<Tank>&
 	// No collision detected
 	return false;
 }
+
+
 
 
 glm::vec3 tankPreviousPositionBody = glm::vec3(0.0f);
