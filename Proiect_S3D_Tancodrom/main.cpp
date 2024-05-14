@@ -265,7 +265,7 @@ void Cleanup()
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains);
+void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains,std::vector<Model>&trees);
 
 void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shells) {
 	
@@ -346,6 +346,24 @@ void CheckShellCollisionForHelicopter(std::vector<Helicopter>& helicopters, std:
 				shells.erase(std::remove_if(shells.begin(), shells.end(),
 										[&](const TankShell& s) { return &s == &shell; }), shells.end());
 				helicopter.isDestroyed = true;
+				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
+			}
+		}
+	}
+
+}
+void CheckCollisionForTree(std::vector<Model>& trees, std::vector<TankShell>& shells)
+{
+	for (auto& tree : trees) {
+
+		float collisionThreshold = 5.0f;
+
+		for (auto& shell : shells) {
+			// Verifică coliziunea între shell și tanc
+			if (glm::distance(shell.Shell.GetPosition(), tree.GetPosition()) < collisionThreshold) {
+				// Dacă există coliziune, șterge shell-ul și tancul lovit
+				shells.erase(std::remove_if(shells.begin(), shells.end(),
+					[&](const TankShell& s) { return &s == &shell; }), shells.end());
 				return; // Ieșim din buclă pentru a evita verificarea coliziunilor multiple în același cadru
 			}
 		}
@@ -701,6 +719,9 @@ void PozitionateModels(std::vector<Tank>& tanks,
 	grass[4].SetPosition(glm::vec3(-70.0f, 0.0f, -50.0f));
 	grass[4].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	grass[4].SetScale(glm::vec3(3.0f));
+	grass[5].SetPosition(glm::vec3(0.0f, 0.0f, 20.0f));
+grass[5].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+grass[5].SetScale(glm::vec3(3.0f));
 	
 
 
@@ -1019,6 +1040,7 @@ int main()
 		CheckShellCollision(tanks, shells);
 		CheckShellCollisionForHelicopter(helicopters, shells);
 		CheckShellCollisionForMountain(mountains, shells);
+		CheckCollisionForTree(trees, shells);
 		moveClouds(clouds);
 		rotateElice(helicopters);
 
@@ -1109,7 +1131,7 @@ int main()
 		soare.SetPosition(lightPos);
 		lightingShader.SetMat4("model", soare.GetModelMatrix());
 		soare.Draw(lightingShader);
-		processInput(window, tanks, helicopters, mountains);
+		processInput(window, tanks, helicopters, mountains,trees);
 
 		// Use lamp shader
 		lampShader.Use();
@@ -1177,7 +1199,7 @@ glm::vec3 rotateVector(const glm::vec3& vec, float angle, const glm::vec3& axis)
 	return glm::vec3(rotationMatrix * glm::vec4(vec, 1.0f));
 }
 
-bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains) {
+bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains,std::vector<Model>&trees) {
 	// Assuming tanks and selectedTank exist, you can check collision with other tanks
 	for (int i = 0; i < tanks.size(); i++) {
 		if (&selectedTank != &tanks[i]) { // Avoid checking collision with itself
@@ -1209,6 +1231,16 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 			return true;
 		}
 	}
+	//Assuming selectedTank and tree exist, you can check collision with trees
+for (int i = 0; i < trees.size(); i++) {
+		float distance = glm::distance(selectedTank.Body.GetPosition(), trees[i].GetPosition());
+		float collisionThreshold = 7.0f;
+		if (distance < collisionThreshold) {
+			// Collision detected
+			return true;
+		}
+	}
+
 
 	float distance = glm::distance(selectedTank.Body.GetPosition(), watchTower.GetPosition());
 	float collisionThreshold = 7.0f;
@@ -1276,7 +1308,7 @@ glm::vec3 helicopterPreviousPositionEliceSpate = glm::vec3(0.0f);
 float movementSpeedForward = 2.5f; // Ajustează după necesități
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains)
+void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains,std::vector<Model>&trees)
 {
 	//---- EXIT APP ----
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -1360,7 +1392,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 			// Miscare fata (tasta W)
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			{
-				if (TankFrontCollision(tanks[i], tanks, helicopters, mountains) == false)
+				if (TankFrontCollision(tanks[i], tanks, helicopters, mountains,trees) == false)
 				{
 
 					tankPreviousPositionBody = tanks[i].Body.GetPosition();
@@ -1420,7 +1452,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 			// Miscare spate (tasta S) 
 			if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			{
-				if (TankFrontCollision(tanks[i], tanks, helicopters, mountains) == false)
+				if (TankFrontCollision(tanks[i], tanks, helicopters, mountains,trees) == false)
 				{
 
 					tankPreviousPositionBody = tanks[i].Body.GetPosition();
