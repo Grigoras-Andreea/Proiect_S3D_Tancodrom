@@ -1,6 +1,8 @@
 ﻿#include <Windows.h>
 #include <locale>
+
 #include <codecvt>
+#include <random>
 
 #include <stdlib.h> // necesare pentru citirea shader-elor
 #include <stdio.h>
@@ -513,6 +515,12 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	}
 	
 }
+float generateRandom(float min, float max) {
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dis(min, max);
+	return dis(gen);
+}
 
 void PozitionateModels(std::vector<Tank>& tanks,
 	std::vector<Model>& mountains,
@@ -642,18 +650,61 @@ void PozitionateModels(std::vector<Tank>& tanks,
 		clouds[i].SetRotationAngle(180.0f);
 		clouds[i].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	}
-	//------Copaci------
-	trees[0].SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
+
+	/*------Copaci------*/
+	trees[0].SetPosition(glm::vec3(10.0f, 0.0f, 70.0f));
+	trees[0].SetScale(glm::vec3(100.0f));
 	trees[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//trees[1].SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
-	//trees[0].SetScale(glm::vec3(0.2f));
+	trees[1].SetPosition(glm::vec3(0.0f, 0.0f, 11.0f));
+	trees[1].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	trees[2].SetPosition(glm::vec3(0.0f, 0.0f, 12.0f));
+	trees[2].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	trees[3].SetPosition(glm::vec3(0.0f, 0.0f, 13.0f));
+	trees[3].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	trees[4].SetPosition(glm::vec3(0.0f, 0.0f, 14.0f));
+	trees[4].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	trees[5].SetPosition(glm::vec3(0.0f, 0.0f, 15.0f));
+	trees[5].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+	
+
+	// Generarea și plasarea aleatoare a arborilor
+	//for (int i = 0; i <70; ++i) {
+	//	
+	//	// Generare aleatorie a poziției și scalei
+	//	float randomPosX = generateRandom(-150.0f, 150.0f); // Modifică limitele în funcție de dimensiunile scenei
+	//	float randomPosZ = generateRandom(-150.0f, 150.0f); // Modifică limitele în funcție de dimensiunile scenei
+	//	float randomScale = generateRandom(0.5f, 1.5f); // Modifică limitele în funcție de scala dorită a arborilor
+
+	//	trees[i].SetPosition(glm::vec3(randomPosX, 0.0f, randomPosZ)); // Modifică limitele în funcție de dimensiunile scenei]
+	//	trees[i].SetScale(glm::vec3(10.0f));
+	//	trees[i].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+
+	//	
+	//}
+
 	//------iarba------
-	grass[0].SetPosition(glm::vec3(11.0f, 0.0f, 11.0f));
-	//grass[0].SetScale(glm::vec3(0.9));
+	grass[0].SetPosition(glm::vec3(-10.0f, 0.0f, 50.0f));
 	grass[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	grass[0].SetScale(glm::vec3(3.0f));
+	grass[1].SetPosition(glm::vec3(-30.0f, 0.0f, 50.0f));
+	grass[1].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	grass[1].SetScale(glm::vec3(3.0f));
+	grass[2].SetPosition(glm::vec3(-50.0f, 0.0f, 50.0f));
+	grass[2].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	grass[2].SetScale(glm::vec3(3.0f));
+	grass[3].SetPosition(glm::vec3(-70.0f, 0.0f, 50.0f));
+	grass[3].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	grass[3].SetScale(glm::vec3(3.0f));
+	grass[4].SetPosition(glm::vec3(-70.0f, 0.0f, -50.0f));
+	grass[4].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	grass[4].SetScale(glm::vec3(3.0f));
+	
 
 
 }
+
 
 void moveClouds(std::vector<Model>& clouds)
 {
@@ -868,11 +919,11 @@ int main()
 	clouds.insert(clouds.end(), 5, Model(cloud5ObjFileName, false));
 	
 	std::vector<Model> mountains(4, Model(mountainObjFileName, false));
-	std:: vector<Model> trees(4, Model(treeObjFileName, false));
-	trees.insert(trees.end(), 4, Model(treeObjFileName, false));
-	std::vector<Model>grass (4, Model(grassObjFileName, false));
-	grass.insert(grass.end(), 4, Model(grassObjFileName, false));
-	
+	std:: vector<Model> trees(100, Model(treeObjFileName, false));
+	trees.insert(trees.end(), 100, Model(treeObjFileName, false));
+	std::vector<Model>grass (100, Model(grassObjFileName, false));
+	grass.insert(grass.end(), 100, Model(grassObjFileName, false));
+	treeTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Tree\\Render.jpeg");
 	grassTexture= CreateTexture(std::string(currentPathChr) + "\\Models\\grass2\\Tex\\Grass.png");
 	tankTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	floorTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass_floor2.png");
