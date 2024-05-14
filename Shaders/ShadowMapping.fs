@@ -73,8 +73,22 @@ void main()
     vec3 specular = Ks * spec * lightColor;    
     
     // calculate shadow
-    float shadow = ShadowCalculation(fs_in.FragPosLightSpace);                      
-    vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
+    //float shadow = ShadowCalculation(fs_in.FragPosLightSpace);                      
+    float shadow = 0.0f;
+    vec3 lightCoords = fs_in.FragPosLightSpace.xyz / fs_in.FragPosLightSpace.w;
+    if(lightCoords.z <= 1.0f)
+    {
+        lightCoords = (lightCoords + 1.0f) / 2.0f;
+        
+        float closestDepth = texture(shadowMap, lightCoords.xy).r;
+        float currentDepth = lightCoords.z;
+        float bias = 0.005f;
+        if(currentDepth > closestDepth + bias)
+            shadow =  1.0f;
+
+    }
+    
+    vec3 lighting = (ambient + (1.0 - shadow) * ((1.0 - shadow)*diffuse + specular)) * color;    
     
     FragColor = vec4(lighting, 1.0);
     //FragColor = vec4(lighting, fs_in.TexCoords.a);
