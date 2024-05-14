@@ -885,6 +885,7 @@ int main()
 	explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\explosionTexture2.jpg");
 	watchTowerTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\watchTower\\textures\\watchTower.jpg");
 	unsigned int sunTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Sun\\2k_sun.jpg");
+	unsigned int moonTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Sun\\moonmap2k.jpg");
 
 	float radius = 354.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.065f;
@@ -948,7 +949,7 @@ int main()
 		float lightX = radius * cos(speed * time);
 		float lightZ = radius * sin(speed * time);
 		lightPos.x = lightX;
-		lightPos.y = fabs(lightZ);
+		lightPos.y = fabs(lightZ)+50;
 
 		
 		// Use lighting shader
@@ -962,14 +963,14 @@ int main()
 		{
 			lightingShader.SetVec3("lightColor", 0.7f, 0.7f, 1.0f);
 
-			lightingShader.SetFloat("Ka", 0.1);
+			lightingShader.SetFloat("Ka", 0.2);
 			lightingShader.SetFloat("Kd", 0.3);
 			lightingShader.SetFloat("Ks", 0.3);
 		}
 		else
 		{
 			lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 0.9f);
-			lightingShader.SetFloat("Ka", 0.2f);
+			lightingShader.SetFloat("Ka", 0.3f);
 			lightingShader.SetFloat("Kd", 0.7f);
 			lightingShader.SetFloat("Ks", 0.5f);
 		}
@@ -983,8 +984,10 @@ int main()
 
 		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds,grass,trees);
 
-		
-		glBindTexture(GL_TEXTURE_2D, sunTexture);
+		if(!isNight)
+			glBindTexture(GL_TEXTURE_2D, sunTexture);
+		else
+			glBindTexture(GL_TEXTURE_2D, moonTexture);
 		soare.SetPosition(lightPos);
 		lightingShader.SetMat4("model", soare.GetModelMatrix());
 		soare.Draw(lightingShader);
@@ -1000,7 +1003,7 @@ int main()
 		if (isNight)
 		{
 			lightModel = glm::scale(lightModel, glm::vec3(6.0f)); // a smaller cube
-			glBindTexture(GL_TEXTURE_2D, floorTexture);
+			glBindTexture(GL_TEXTURE_2D, moonTexture);
 		}
 		else
 		{
