@@ -1538,43 +1538,43 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 	//---- Putem misca din sageti camera numai daca nu avem un model selectat
 	if (!tankIsSelected && !helicopterIsSelected)
 	{
-		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && tanks[0].isDestroyed == false)
+		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && tanks[0].isDamaged == false)
 		{
 			tanks[0].SetIsSelected(true);
 
 		}
-		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && tanks[1].isDestroyed == false)
+		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && tanks[1].isDamaged == false)
 		{
 			
 			tanks[1].SetIsSelected(true);
 			
 		}
-		if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && tanks[2].isDestroyed == false)
+		if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && tanks[2].isDamaged == false)
 		{
 			tanks[2].SetIsSelected(true);
 			
 		}
-		if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS && tanks[3].isDestroyed == false)
+		if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS && tanks[3].isDamaged == false)
 		{
 			tanks[3].SetIsSelected(true);
 			
 		}
-		if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS && tanks[4].isDestroyed == false)
+		if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS && tanks[4].isDamaged == false)
 		{
 			tanks[4].SetIsSelected(true);
 			
 		}
-		if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS && tanks[5].isDestroyed == false)
+		if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS && tanks[5].isDamaged == false)
 		{
 			tanks[5].SetIsSelected(true);
 			
 		}
-		if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS && tanks[6].isDestroyed == false)
+		if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS && tanks[6].isDamaged == false)
 		{
 			tanks[6].SetIsSelected(true);
 			
 		}
-		if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS && tanks[7].isDestroyed == false)
+		if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS && tanks[7].isDamaged == false)
 		{
 			tanks[7].SetIsSelected(true);
 			
