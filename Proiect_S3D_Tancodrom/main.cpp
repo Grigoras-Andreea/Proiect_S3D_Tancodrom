@@ -519,12 +519,12 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", clouds[i].GetModelMatrix());
 		clouds[i].Draw(lightingShader);
 	}
-	glBindTexture(GL_TEXTURE_2D, treeTexture);
-	// Adăugarea copacilor
-	for (int i = 0; i < trees.size(); i++) {
-		lightingShader.SetMat4("model", trees[i].GetModelMatrix());
-		trees[i].Draw(lightingShader);
-	}
+	//glBindTexture(GL_TEXTURE_2D, treeTexture);
+	//// Adăugarea copacilor
+	//for (int i = 0; i < trees.size(); i++) {
+	//	lightingShader.SetMat4("model", trees[i].GetModelMatrix());
+	//	trees[i].Draw(lightingShader);
+	//}
 	
 	glBindTexture(GL_TEXTURE_2D, grassTexture);
 	// Adăugarea ierbii
@@ -534,6 +534,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 	}
 	
 }
+
 float generateRandom(float min, float max) {
 	static std::random_device rd;
 	static std::mt19937 gen(rd());
@@ -1040,7 +1041,7 @@ int main()
 		CheckShellCollision(tanks, shells);
 		CheckShellCollisionForHelicopter(helicopters, shells);
 		CheckShellCollisionForMountain(mountains, shells);
-		CheckCollisionForTree(trees, shells);
+		//CheckCollisionForTree(trees, shells);
 		moveClouds(clouds);
 		rotateElice(helicopters);
 
