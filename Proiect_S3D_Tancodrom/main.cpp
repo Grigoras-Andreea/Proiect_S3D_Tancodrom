@@ -1200,12 +1200,21 @@ glm::vec3 rotateVector(const glm::vec3& vec, float angle, const glm::vec3& axis)
 	return glm::vec3(rotationMatrix * glm::vec4(vec, 1.0f));
 }
 
+glm::vec3 CalculateTankForwardDirection(float rotationAngle) {
+	// Calculate the forward direction vector based on the rotation angle
+	float x = sin(rotationAngle);
+	float z = cos(rotationAngle);
+
+	return glm::vec3(x, 0.0f, z); // Assuming tank movement is only along the x-z plane
+}
+
+
 bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vector<Helicopter>& helicopters, std::vector<Model>& mountains,std::vector<Model>&trees) {
 	// Assuming tanks and selectedTank exist, you can check collision with other tanks
 	for (int i = 0; i < tanks.size(); i++) {
 		if (&selectedTank != &tanks[i]) { // Avoid checking collision with itself
 	 		float distance = glm::distance(selectedTank.Body.GetPosition(), tanks[i].Body.GetPosition());
-			float collisionThreshold = 5.3f;
+			float collisionThreshold = 5.5f;
 			if (distance < collisionThreshold) {
 				// Collision detected
 				return true;
@@ -1233,14 +1242,14 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 		}
 	}
 	//Assuming selectedTank and tree exist, you can check collision with trees
-	for (int i = 0; i < trees.size(); i++) {
-		float distance = glm::distance(selectedTank.Body.GetPosition(), trees[i].GetPosition());
-		float collisionThreshold = 1.0f;
-		if (distance < collisionThreshold) {
-			// Collision detected
-			return true;
-		}
-	}
+	//for (int i = 0; i < trees.size(); i++) {
+	//	float distance = glm::distance(selectedTank.Body.GetPosition(), trees[i].GetPosition());
+	//	float collisionThreshold = 1.0f;
+	//	if (distance < collisionThreshold) {
+	//		// Collision detected
+	//		return true;
+	//	}
+	//}
 
 
 	float distance = glm::distance(selectedTank.Body.GetPosition(), watchTower.GetPosition());
