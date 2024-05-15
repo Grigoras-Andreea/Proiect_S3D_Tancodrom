@@ -1104,7 +1104,7 @@ int main()
 			lightingShader.SetVec3("lightColor", 0.7f, 0.7f, 1.0f);
 
 			lightingShader.SetFloat("Ka", 0.2);
-			lightingShader.SetFloat("Kd", 0.3);
+			lightingShader.SetFloat("Kd", 0.4);
 			lightingShader.SetFloat("Ks", 0.3);
 		}
 		else
@@ -1204,7 +1204,7 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 	for (int i = 0; i < tanks.size(); i++) {
 		if (&selectedTank != &tanks[i]) { // Avoid checking collision with itself
 	 		float distance = glm::distance(selectedTank.Body.GetPosition(), tanks[i].Body.GetPosition());
-			float collisionThreshold = 6.7f;
+			float collisionThreshold = 5.3f;
 			if (distance < collisionThreshold) {
 				// Collision detected
 				return true;
@@ -1232,9 +1232,9 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 		}
 	}
 	//Assuming selectedTank and tree exist, you can check collision with trees
-for (int i = 0; i < trees.size(); i++) {
+	for (int i = 0; i < trees.size(); i++) {
 		float distance = glm::distance(selectedTank.Body.GetPosition(), trees[i].GetPosition());
-		float collisionThreshold = 7.0f;
+		float collisionThreshold = 1.0f;
 		if (distance < collisionThreshold) {
 			// Collision detected
 			return true;
@@ -1436,8 +1436,11 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 
 			if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE)
 			{
-				if (movementSpeedForward > 2.5f)
+				if (movementSpeedForward > 2.5f && TankFrontCollision(tanks[i], tanks, helicopters, mountains, trees) == false)
 				{
+					tankPreviousPositionBody = tanks[i].Body.GetPosition();
+					tankPpreviousPositionHead = tanks[i].Head.GetPosition();
+
 					movementDirectionBody -= rotatedForwardDirectionBody; // Înainte
 					movementDirectionHead -= rotatedForwardDirectionHead; // Înainte
 					// Aplică viteza de mișcare
@@ -1446,6 +1449,13 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeedForward * static_cast<float>(deltaTime));
 					tanks[i].Body.SetPosition(newPositionBody);
 					tanks[i].Head.SetPosition(newPositionHead);
+				}
+				else if (TankFrontCollision(tanks[i], tanks, helicopters, mountains, trees) == true)
+				{
+					//move the tank back
+					tanks[i].Body.SetPosition(tankPreviousPositionBody);
+					tanks[i].Head.SetPosition(tankPpreviousPositionHead);
+					movementSpeedForward = 2.5f;
 				}
 			}
 
