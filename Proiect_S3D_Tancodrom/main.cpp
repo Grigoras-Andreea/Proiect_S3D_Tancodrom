@@ -551,23 +551,23 @@ void PozitionateModels(std::vector<Tank>& tanks,
 )
 {
 	//---- Tancuri ----
-	tanks[0].Body.SetPosition(glm::vec3(7.0f, 0.0f, 30.0f));
-	tanks[0].Head.SetPosition(glm::vec3(7.0f, 0.0f, 30.0f));
-	tanks[1].Body.SetPosition(glm::vec3(-18.0f, 0.0f, 20.0f));
-	tanks[1].Head.SetPosition(glm::vec3(-18.0f, 0.0f, 20.0f));
-	tanks[2].Body.SetPosition(glm::vec3(-35.0f, 0.0f, 20.0f));
-	tanks[2].Head.SetPosition(glm::vec3(-35.0f, 0.0f, 20.0f));
-	tanks[3].Body.SetPosition(glm::vec3(24.0f, 0.0f, 27.0f));
-	tanks[3].Head.SetPosition(glm::vec3(24.0f, 0.0f, 27.0f));
-	tanks[4].Body.SetPosition(glm::vec3(7.0f, 0.0f, -20.0f));
-	tanks[4].Head.SetPosition(glm::vec3(7.0f, 0.0f, -20.0f));
+	tanks[0].Body.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
+	tanks[0].Head.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
+	tanks[1].Body.SetPosition(glm::vec3(-12.0f, 0.0f, 20.0f));
+	tanks[1].Head.SetPosition(glm::vec3(-12.0f, 0.0f, 20.0f));
+	tanks[2].Body.SetPosition(glm::vec3(-25.0f, 0.0f, 20.0f));
+	tanks[2].Head.SetPosition(glm::vec3(-25.0f, 0.0f, 20.0f));
+	tanks[3].Body.SetPosition(glm::vec3(14.0f, 0.0f, 27.0f));
+	tanks[3].Head.SetPosition(glm::vec3(14.0f, 0.0f, 27.0f));
+	tanks[4].Body.SetPosition(glm::vec3(0.0f, 0.0f, -20.0f));
+	tanks[4].Head.SetPosition(glm::vec3(0.0f, 0.0f, -20.0f));
 
-	tanks[5].Body.SetPosition(glm::vec3(-18.0f, 0.0f, -25.0f));
-	tanks[5].Head.SetPosition(glm::vec3(-18.0f, 0.0f, -25.0f));
-	tanks[6].Body.SetPosition(glm::vec3(-35.0f, 0.0f, -29.0f));
-	tanks[6].Head.SetPosition(glm::vec3(-35.0f, 0.0f, -29.0f));
-	tanks[7].Body.SetPosition(glm::vec3(24.0f, 0.0f, -30.0f));
-	tanks[7].Head.SetPosition(glm::vec3(24.0f, 0.0f, -30.0f));
+	tanks[5].Body.SetPosition(glm::vec3(-12.0f, 0.0f, -25.0f));
+	tanks[5].Head.SetPosition(glm::vec3(-12.0f, 0.0f, -25.0f));
+	tanks[6].Body.SetPosition(glm::vec3(-25.0f, 0.0f, -29.0f));
+	tanks[6].Head.SetPosition(glm::vec3(-25.0f, 0.0f, -29.0f));
+	tanks[7].Body.SetPosition(glm::vec3(14.0f, 0.0f, -30.0f));
+	tanks[7].Head.SetPosition(glm::vec3(14.0f, 0.0f, -30.0f));
 
 	for (int i = 0; i < tanks.size(); i++)
 	{
@@ -1248,7 +1248,7 @@ bool HelicopterFrontCollision(Helicopter& selectedHelicopter, std::vector<Tank>&
 		if (&selectedHelicopter != &helicopters[i]) {
 			// Avoid checking collision with itself
 			float distance = glm::distance(selectedHelicopter.Body.GetPosition(), helicopters[i].Body.GetPosition());
-			float collisionThreshold = 10.0f;
+			float collisionThreshold = 6.7f;
 			if (distance < collisionThreshold) {
 				// Collision detected
 				return true;
@@ -1260,10 +1260,8 @@ bool HelicopterFrontCollision(Helicopter& selectedHelicopter, std::vector<Tank>&
 	// Assuming helicopters and selectedHelicopter exist, you can check collision with tanks
 	for (int i = 0; i < tanks.size(); i++) {
 		float distance = glm::distance(selectedHelicopter.Body.GetPosition(), tanks[i].Body.GetPosition());
-		float collisionThreshold = 6.5f;
+		float collisionThreshold = 3.7f;
 		if (distance < collisionThreshold) {
-			if (selectedHelicopter.Body.GetPosition().y > 2.3f)
-				return false;
 			// Collision detected
 			return true;
 		}
@@ -1637,12 +1635,8 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				//coborare elicopter (tasta Q)
 				if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 				{
-					if (helicopters[i].Body.GetPosition().y > -0.5f && HelicopterFrontCollision(helicopters[i], tanks, helicopters, mountains) == false)
+					if (helicopters[i].Body.GetPosition().y > -0.5f)
 					{
-						helicopterPreviousPositionBody = helicopters[i].Body.GetPosition();
-						helicopterPreviousPositionElice = helicopters[i].ProppelerUp.GetPosition();
-						helicopterPreviousPositionEliceSpate = helicopters[i].ProppelerBack.GetPosition();
-
 						float movementSpeed = 2.5f; // Ajustează după necesități
 						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
 						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + glm::vec3(0.0f, -movementSpeed * static_cast<float>(deltaTime), 0.0f);
@@ -1659,10 +1653,6 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				{
 					if (helicopters[i].Body.GetPosition().y < 100.0f)
 					{
-						helicopterPreviousPositionBody = helicopters[i].Body.GetPosition();
-						helicopterPreviousPositionElice = helicopters[i].ProppelerUp.GetPosition();
-						helicopterPreviousPositionEliceSpate = helicopters[i].ProppelerBack.GetPosition();
-
 						float movementSpeed = 2.5f; // Ajustează după necesități
 						glm::vec3 newPositionBody = helicopters[i].Body.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
 						glm::vec3 newPositionProppelerUp = helicopters[i].ProppelerUp.GetPosition() + glm::vec3(0.0f, movementSpeed * static_cast<float>(deltaTime), 0.0f);
