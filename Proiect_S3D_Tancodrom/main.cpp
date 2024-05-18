@@ -142,7 +142,7 @@ float calculateTimeOfDay(glm::vec3 lightPos) {
 }
 
 // settings
-const unsigned int SCR_WIDTH = 1000;
+const unsigned int SCR_WIDTH = 1020;
 const unsigned int SCR_HEIGHT = 800;
 
 GLuint ProjMatrixLocation, ViewMatrixLocation, WorldMatrixLocation;
@@ -986,6 +986,7 @@ int main()
 	engine2->play2D("media/WarMusic.ogg", true);
 	explosionSound->setSoundVolume(0.7f);
 	engine->setSoundVolume(1.0f);
+	engine2->setSoundVolume(0.0f);
 	helicopterSound->play2D("media/HelicopterSound.ogg", true);
 
 
@@ -1066,7 +1067,7 @@ int main()
 		float lightX = radius * cos(speed * time);
 		float lightZ = radius * sin(speed * time);
 		lightPos.x = lightX;
-		lightPos.y = fabs(lightZ) + 50;
+		lightPos.y = fabs(lightZ);
 
 
 
@@ -1644,6 +1645,12 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					helicopters[i].ProppelerBack.SetRotationAngle(rotationAngleProppelerBack);
 					helicopters[i].ProppelerUp.SetRotationAngle(rotationAngleProppelerUp);
 
+					glm::vec3 newPos = helicopters[i].ProppelerBack.GetPosition();
+					
+					if(i==1)
+						helicopters[i].ProppelerBack.SetPosition(glm::vec3(newPos.x + 0.04f, newPos.y, newPos.z - 0.01f));
+					else
+						helicopters[i].ProppelerBack.SetPosition(glm::vec3(newPos.x - 0.04f, newPos.y, newPos.z + 0.01f));
 				}
 
 				// Rotație la dreapta (tasta D) - mai trebuie vazut cum se roteste elicea + la elicea de sus exista o mica deviatie
@@ -1658,6 +1665,11 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					helicopters[i].ProppelerBack.SetRotationAngle(rotationAngleProppelerBack);
 					helicopters[i].ProppelerUp.SetRotationAngle(rotationAngleProppelerUp);
 
+					glm::vec3 newPos = helicopters[i].ProppelerBack.GetPosition();
+					if(i==1)
+						helicopters[i].ProppelerBack.SetPosition(glm::vec3(newPos.x - 0.04f, newPos.y, newPos.z + 0.01f));
+					else
+						helicopters[i].ProppelerBack.SetPosition(glm::vec3(newPos.x + 0.04f, newPos.y, newPos.z - 0.01f));
 				}
 
 				//coborare elicopter (tasta Q)
