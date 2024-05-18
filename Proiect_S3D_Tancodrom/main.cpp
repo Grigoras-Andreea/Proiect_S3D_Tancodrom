@@ -863,7 +863,7 @@ int main()
 	pCamera = new Camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(0.0, 2.0, 3.0));
 
 	glm::vec3 lightPos(0.0f, 2.0f, 1.0f);
-	
+
 	wchar_t buffer[MAX_PATH];
 	GetCurrentDirectoryW(MAX_PATH, buffer);
 
@@ -883,17 +883,12 @@ int main()
 	//Shader lightingShader((currentPathChr + std::string("\\Shaders\\PhongLight.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\PhongLight.fs")).c_str()));
 	Shader lampShader((currentPathChr + std::string("\\Shaders\\Lamp.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\Lamp.fs")).c_str()));
 	Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
-	
-	//Shader blendingShader((currentPath + "\\Shaders\\Blending.vs").c_str(), (currentPath + "\\Shaders\\Blending.fs").c_str());
-	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
+	Shader depthShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
+
 	Shader modelShader((currentPath + "\\Shaders\\modelVS.glsl").c_str(), (currentPath + "\\Shaders\\modelFS.glsl").c_str());
-	
-	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
-	//std::string piratObjFileName = (currentPath + "\\Models\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
-	//std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
-	std:: string treeObjFileName = (std::string(currentPathChr) + "\\Models\\Tree\\Tree.obj");
-	
-	//std::string grassObjFileName = (std::string(currentPathChr) + "\\Models\\grass_model\\grass_model.obj");
+
+	std::string treeObjFileName = (std::string(currentPathChr) + "\\Models\\Tree\\Tree.obj");
+
 	std::string grassObjFileName = (std::string(currentPathChr) + "\\Models\\grass2\\High\\High Grass.obj");
 
 	destroyedTankObjFileName = (std::string(currentPathChr) + "\\Models\\DestroyedTank\\obj.obj");
@@ -902,11 +897,8 @@ int main()
 	TankShellObjFilename = (std::string(currentPathChr) + "\\Models\\Tank_Shell\\Tank Shell2.obj");
 
 	std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mountain\\mount.blend1.obj");
-	//std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mount.blend1.obj");
-	//std::string piratObjFileName = (currentPath + "\\Models\\Human\\human.obj");
 	std::string piratObjFileName = (currentPath + "\\Models\\WWII_Tank_Germany_Panzer_III_v1_L2.123c56cb92d1-9485-44e9-a197-a7bddb48c29f\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	tank = Model(piratObjFileName, false);
-	//std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_bell_nou.obj");
 	std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_Bell\\Heli_bell_nou.obj");
 	std::string heli_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_body2.obj");
 	std::string heli_eliceObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_elice2.obj");
@@ -922,12 +914,12 @@ int main()
 	std::string sunObjFileName = (std::string(currentPathChr) + "\\Models\\Sun\\sol.obj");
 
 
-	
+
 	//---- Creare Modele
 	std::vector<Tank> tanks;
 	tanks.insert(tanks.end(), 8, Tank(Model(tank_bodyObjFileName, false), Model(tank_turretObjFileName, false)));
 
-	Helicopter helicopter1(Model(heli_bodyObjFileName, false), Model(heli_eliceObjFileName, false) , Model(heli_elice_spateObjFileName, false));
+	Helicopter helicopter1(Model(heli_bodyObjFileName, false), Model(heli_eliceObjFileName, false), Model(heli_elice_spateObjFileName, false));
 	Helicopter helicopter2(Model(heli_bodyObjFileName, false), Model(heli_eliceObjFileName, false), Model(heli_elice_spateObjFileName, false));
 
 	std::vector<Helicopter> helicopters;
@@ -940,22 +932,19 @@ int main()
 	clouds.insert(clouds.end(), 8, Model(cloud3ObjFileName, false));
 	clouds.insert(clouds.end(), 1, Model(cloud4ObjFileName, false));
 	clouds.insert(clouds.end(), 5, Model(cloud5ObjFileName, false));
-	
+
 	std::vector<Model> mountains(4, Model(mountainObjFileName, false));
-	std:: vector<Model> trees(100, Model(treeObjFileName, false));
+	std::vector<Model> trees(100, Model(treeObjFileName, false));
 	trees.insert(trees.end(), 100, Model(treeObjFileName, false));
-	std::vector<Model>grass (100, Model(grassObjFileName, false));
+	std::vector<Model>grass(100, Model(grassObjFileName, false));
 	grass.insert(grass.end(), 100, Model(grassObjFileName, false));
 	treeTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Tree\\Render.jpeg");
-	grassTexture= CreateTexture(std::string(currentPathChr) + "\\Models\\grass2\\Tex\\Grass.png");
+	grassTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass2\\Tex\\Grass.png");
 	tankTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	floorTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass_floor2.png");
-	//unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
 	cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\blue2.jpg");
 	tankTexture2 = CreateTexture(std::string(currentPathChr) + "\\Models\\cabina.jpg");
-	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
 	helicopterTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Heli_Bell\\HH65C.jpg");
-	//explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\explosion.png");
 	explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\explosionTexture2.jpg");
 	watchTowerTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\watchTower\\textures\\watchTower.jpg");
 	unsigned int sunTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Sun\\2k_sun.jpg");
@@ -964,7 +953,7 @@ int main()
 	float radius = 354.0f; // Raza cercului pe care se va rota lumina
 	float speed = 0.065f;
 
-	PozitionateModels(tanks, mountains, helicopters, clouds,trees,grass);
+	PozitionateModels(tanks, mountains, helicopters, clouds, trees, grass);
 
 	watchTower = Model(watchTowerObjFileName, false);
 	watchTower.SetRotationAngle(0.0f);
@@ -997,10 +986,10 @@ int main()
 
 
 	// ------  INCERCARE SHADOWMAPPING ------------ 
-	/*unsigned int shadowMapFBO;
+	unsigned int shadowMapFBO;
 	glGenFramebuffers(1, &shadowMapFBO);
 
-	unsigned int shadowMapWidth = 2048, shadowMapHeight = 2048;
+	unsigned int shadowMapWidth = 8048, shadowMapHeight = 8048;
 	unsigned int shadowMap;
 	glGenTextures(1, &shadowMap);
 	glBindTexture(GL_TEXTURE_2D, shadowMap);
@@ -1018,19 +1007,12 @@ int main()
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	glm::mat4 orthogonalProjection = glm::ortho(-35.0f, 35.0f, -35.0f, 35.0f, 0.1f, 75.0f);
+	glm::mat4 orthogonalProjection = glm::ortho(-135.0f, 135.0f, -35.0f, 35.0f, 0.1f, 750.0f);
 	glm::mat4 lightView = glm::lookAt(20.0f * lightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 lightProjection = orthogonalProjection * lightView;
+	glm::mat4 lightProjection = orthogonalProjection * lightView ;
 
 
-	Shader shadowMapShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
 
-	
-	*/
-	
-	
-	
-	
 	while (!glfwWindowShouldClose(window)) {
 		// Per-frame time logic
 		double currentFrame = glfwGetTime();
@@ -1069,32 +1051,36 @@ int main()
 		lightPos.y = fabs(lightZ) + 50;
 
 
-
-		//-------------------------------------------------------------
-
-		/*glEnable(GL_DEPTH_TEST);
-		glBindFramebuffer(GL_FRAMEBUFFER, shadowMapHeight);
+		// Generate Shadow Map
+		glEnable(GL_DEPTH_TEST);
+		glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+		glViewport(0, 0, shadowMapWidth, shadowMapHeight);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
+		depthShader.Use();
+		depthShader.SetMat4("lightSpaceMatrix", lightProjection * lightView);
 
-		shadowMapShader.Use();
-		glUniformMatrix4fv(glGetUniformLocation(shadowMapShader.ID, "lightProjection"), 1, GL_FALSE, glm::value_ptr(lightProjection));
+		RenderModels(depthShader, modelShader, tanks, mountains, helicopters, clouds, grass, trees);
 
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
-		glActiveTexture(GL_TEXTURE0 + 2);
+		// Render Scene with Shadows
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		lightingShader.Use();
+		lightingShader.SetVec3("lightPos", lightPos);
+		lightingShader.SetVec3("viewPos", pCamera->GetPosition());
+		lightingShader.SetMat4("lightSpaceMatrix", lightProjection * lightView);
+		lightingShader.SetFloat("farPlane", 75.0f); // Adjust based on your far plane value
+
+		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, shadowMap);
-		glUniform1i(glGetUniformLocation(shadowMapShader.ID, "shadowMap"), 2);
+		lightingShader.SetInt("shadowMap", 2);
 
 		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds, grass, trees);
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);*/
-
-
-		//---------------------------------------------
-		
 		// Use lighting shader
-		lightingShader.Use();
 		if (lightZ < 0) {
 			lightPos.x = -lightPos.x;
 		}
@@ -1123,46 +1109,34 @@ int main()
 		lightingShader.SetMat4("view", pCamera->GetViewMatrix());
 
 
-		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds,grass,trees);
+		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds, grass, trees);
 
-		if(!isNight)
-			glBindTexture(GL_TEXTURE_2D, sunTexture);
-		else
-			glBindTexture(GL_TEXTURE_2D, moonTexture);
-		soare.SetPosition(lightPos);
-		lightingShader.SetMat4("model", soare.GetModelMatrix());
-		soare.Draw(lightingShader);
-		processInput(window, tanks, helicopters, mountains,trees);
+		processInput(window, tanks, helicopters, mountains, trees);
 
 		// Use lamp shader
 		lampShader.Use();
 		lampShader.SetMat4("projection", pCamera->GetProjectionMatrix());
 		lampShader.SetMat4("view", pCamera->GetViewMatrix());
-		
+
 		//Set light model matrix and draw the lamp object
 		glm::mat4 lightModel = glm::translate(glm::mat4(1.0), lightPos);
 		if (isNight)
-		{
 			lightModel = glm::scale(lightModel, glm::vec3(6.0f)); // a smaller cube
-			glBindTexture(GL_TEXTURE_2D, moonTexture);
-		}
 		else
-		{
 			lightModel = glm::scale(lightModel, glm::vec3(10.0f)); // a smaller cube
-			glBindTexture(GL_TEXTURE_2D, sunTexture);
-		}
 		//lightModel = glm::scale(lightModel, glm::vec3(0.5f)); // a smaller cube
 		lampShader.SetMat4("model", lightModel);
+
 
 		glActiveTexture(GL_TEXTURE1);
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		
-		//soare.Draw(lampShader);
-		
 
-		
+		//soare.Draw(lampShader);
+
+
+
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
