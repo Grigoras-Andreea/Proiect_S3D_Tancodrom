@@ -672,19 +672,60 @@ void PozitionateModels(std::vector<Tank>& tanks,
 	}
 
 	/*------Copaci------*/
-	trees[0].SetPosition(glm::vec3(10.0f, 0.0f, 70.0f));
-	trees[0].SetScale(glm::vec3(100.0f));
-	trees[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	trees[1].SetPosition(glm::vec3(0.0f, 0.0f, 11.0f));
-	trees[1].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	trees[2].SetPosition(glm::vec3(0.0f, 0.0f, 12.0f));
-	trees[2].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	trees[3].SetPosition(glm::vec3(0.0f, 0.0f, 13.0f));
-	trees[3].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	trees[4].SetPosition(glm::vec3(0.0f, 0.0f, 14.0f));
-	trees[4].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	trees[5].SetPosition(glm::vec3(0.0f, 0.0f, 15.0f));
-	trees[5].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//trees[0].SetPosition(glm::vec3(10.0f, 0.0f, 70.0f));
+	//trees[0].SetScale(glm::vec3(100.0f));
+	//trees[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//trees[1].SetPosition(glm::vec3(0.0f, 0.0f, 11.0f));
+	//trees[1].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//trees[2].SetPosition(glm::vec3(0.0f, 0.0f, 12.0f));
+	//trees[2].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//trees[3].SetPosition(glm::vec3(0.0f, 0.0f, 13.0f));
+	//trees[3].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//trees[4].SetPosition(glm::vec3(0.0f, 0.0f, 14.0f));
+	//trees[4].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	//trees[5].SetPosition(glm::vec3(0.0f, 0.0f, 15.0f));
+	//trees[5].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	auto generateRandom = [](float min, float max) {
+		return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+		};
+	// Define the positions of the tanks
+	std::vector<glm::vec3> tankPositions = {
+		glm::vec3(7.0f, 0.0f, 30.0f),
+		glm::vec3(-18.0f, 0.0f, 20.0f),
+		glm::vec3(-35.0f, 0.0f, 20.0f),
+		glm::vec3(24.0f, 0.0f, 27.0f),
+		glm::vec3(7.0f, 0.0f, -20.0f),
+		glm::vec3(-18.0f, 0.0f, -25.0f),
+		glm::vec3(-35.0f, 0.0f, -29.0f),
+		glm::vec3(24.0f, 0.0f, -30.0f)
+	};
+	//float minX = -150.0f + 25.0f;
+	//float maxX = 150.0f - 25.0f;
+	//float minZ = -150.0f + 25.0f;
+	//float maxZ = 150.0f - 25.0f;
+
+	for (int i = 0; i < 300; ++i) {
+		float randomPosX, randomPosZ;
+		bool positionAccepted = false;
+		do {
+			randomPosX = generateRandom(-90.0f, 90.0f);
+			randomPosZ = generateRandom(-90.0f, 90.0f);
+			positionAccepted = true;
+
+			for (const auto& pos : tankPositions) {
+				if (glm::distance(glm::vec3(randomPosX, 0.0f, randomPosZ), pos) < 5.0f) {
+					positionAccepted = false;
+					break;
+				}
+			}
+		} while (!positionAccepted);
+
+		trees[i].SetPosition(glm::vec3(randomPosX, 0.0f, randomPosZ));
+		trees[i].SetScale(glm::vec3(generateRandom(3.0f, 6.5f)));
+		trees[i].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+		trees[i].SetRotationAngle(generateRandom(0.0f, 360.0f));
+	}
+
 
 
 	
@@ -942,10 +983,10 @@ int main()
 	clouds.insert(clouds.end(), 5, Model(cloud5ObjFileName, false));
 	
 	std::vector<Model> mountains(4, Model(mountainObjFileName, false));
-	std:: vector<Model> trees(100, Model(treeObjFileName, false));
-	trees.insert(trees.end(), 100, Model(treeObjFileName, false));
-	std::vector<Model>grass (100, Model(grassObjFileName, false));
-	grass.insert(grass.end(), 100, Model(grassObjFileName, false));
+	std:: vector<Model> trees(200, Model(treeObjFileName, false));
+	trees.insert(trees.end(), 200, Model(treeObjFileName, false));
+	std::vector<Model>grass (200, Model(grassObjFileName, false));
+	grass.insert(grass.end(), 200, Model(grassObjFileName, false));
 	treeTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Tree\\Render.jpeg");
 	grassTexture= CreateTexture(std::string(currentPathChr) + "\\Models\\grass2\\Tex\\Grass.png");
 	tankTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
