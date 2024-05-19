@@ -1138,14 +1138,14 @@ int main()
 		{
 			lightingShader.SetVec3("lightColor", 0.7f, 0.7f, 1.0f);
 
-			lightingShader.SetFloat("Ka", 0.2);
-			lightingShader.SetFloat("Kd", 0.4);
-			lightingShader.SetFloat("Ks", 0.3);
+			lightingShader.SetFloat("Ka", 0.3);
+			lightingShader.SetFloat("Kd", 0.6);
+			lightingShader.SetFloat("Ks", 0.4);
 		}
 		else
 		{
 			lightingShader.SetVec3("lightColor", 1.0f, 1.0f, 0.9f);
-			lightingShader.SetFloat("Ka", 0.3f);
+			lightingShader.SetFloat("Ka", 0.4f);
 			lightingShader.SetFloat("Kd", 0.7f);
 			lightingShader.SetFloat("Ks", 0.5f);
 		}
