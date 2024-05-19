@@ -142,8 +142,8 @@ float calculateTimeOfDay(glm::vec3 lightPos) {
 }
 
 // settings
-const unsigned int SCR_WIDTH = 1020;
-const unsigned int SCR_HEIGHT = 800;
+const unsigned int SCR_WIDTH = 1800;
+const unsigned int SCR_HEIGHT = 1080;
 
 GLuint ProjMatrixLocation, ViewMatrixLocation, WorldMatrixLocation;
 Camera* pCamera = nullptr;
@@ -762,8 +762,8 @@ void PozitionateModels(std::vector<Tank>& tanks,
 	grass[4].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	grass[4].SetScale(glm::vec3(3.0f));
 	grass[5].SetPosition(glm::vec3(0.0f, 0.0f, 20.0f));
-grass[5].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-grass[5].SetScale(glm::vec3(3.0f));
+	grass[5].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
+	grass[5].SetScale(glm::vec3(3.0f));
 	
 
 
@@ -901,7 +901,7 @@ int main()
 	glEnableVertexAttribArray(0);
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // cursor haz
 	// Create camera
-	pCamera = new Camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(0.0, 2.0, 3.0));
+	pCamera = new Camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(47.5, 11.5, 1.0));
 
 	glm::vec3 lightPos(0.0f, 2.0f, 1.0f);
 	
@@ -1024,19 +1024,11 @@ int main()
 	soare.SetPosition(glm::vec3(0.0f, 20.0f, 0.0f));
 	soare.SetScale(glm::vec3(5.0f));
 
-	engine2->play2D("media/WarMusic.ogg", true);
+	engine->play2D("media/WarMusic.ogg", true);
 	explosionSound->setSoundVolume(0.7f);
 	engine->setSoundVolume(1.0f);
-	engine2->setSoundVolume(0.0f);
+	//engine2->setSoundVolume(0.0f);
 	helicopterSound->play2D("media/HelicopterSound.ogg", true);
-
-
-
-
-
-
-
-
 
 	// ------  INCERCARE SHADOWMAPPING ------------ 
 	/*unsigned int shadowMapFBO;
