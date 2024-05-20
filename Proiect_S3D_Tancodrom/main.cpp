@@ -38,10 +38,6 @@ using namespace irrklang;
 #pragma comment (lib, "assimp-vc143-mt.lib")
 
 
-
-//
-//bool tankIsSelected = false;
-//bool helicopterIsSelected = false;
 bool isNight = false, tankIsSelected = false, helicopterIsSelected = false;
 unsigned int floorTexture, cloudTexture, tankTexture, tankTexture2, helicopterTexture, explosionTexture, grassTexture, treeTexture, watchTowerTexture;
 std::string cloudObjFileName, destroyedTankObjFileName;
@@ -276,13 +272,6 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 		for (auto& shell : shells) {
 			// Verifică coliziunea între shell și tanc
 			if (glm::distance(shell.Shell.GetPosition(), tank.Body.GetPosition()) < collisionThreshold ) {
-				/*TankShell newExplosion = TankShell(Model(cloudObjFileName, true), deltaTime, glm::vec3(0.0f, 0.2f, 0.0f));
-				newExplosion.Shell.SetRotationAngle(180.0f);
-				newExplosion.Shell.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-				newExplosion.Shell.SetScale(glm::vec3(0.1f));
-				newExplosion.Shell.SetPosition(tank.Body.GetPosition());
-				*/
-				//explosions.push_back(newExplosion);
 				// Dacă există coliziune, șterge shell-ul și tancul lovit
 				
 				Model destroyedTank = Model(destroyedTankObjFileName, false);
@@ -311,7 +300,6 @@ void CheckShellCollision(std::vector<Tank>& tanks, std::vector<TankShell>& shell
 			}
 		}
 	}
-
 }
 
 void CheckShellCollisionForMountain(std::vector<Model>& mountains, std::vector<TankShell>& shells)
@@ -330,7 +318,6 @@ void CheckShellCollisionForMountain(std::vector<Model>& mountains, std::vector<T
 			}
 		}
 	}
-
 }
 
 void CheckShellCollisionForHelicopter(std::vector<Helicopter>& helicopters, std::vector<TankShell>& shells)
@@ -350,7 +337,6 @@ void CheckShellCollisionForHelicopter(std::vector<Helicopter>& helicopters, std:
 			}
 		}
 	}
-
 }
 void CheckCollisionForTree(std::vector<Model>& trees, std::vector<TankShell>& shells)
 {
@@ -368,7 +354,6 @@ void CheckCollisionForTree(std::vector<Model>& trees, std::vector<TankShell>& sh
 			}
 		}
 	}
-
 }
 
 void checkShellsLifetime(std::vector<Tank>& tanks)
@@ -399,8 +384,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 std::string ConvertWStringToString(const std::wstring& wstr) {
 	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
 	if (bufferSize == 0) {
-		// Tratează eroarea de conversie
-		// Poți arunca o excepție, returna un șir de caractere gol sau trata eroarea în alt mod
 		return "";
 	}
 
@@ -460,38 +443,6 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		explosions[i].Shell.Draw(lightingShader);
 	}
 
-	//tank.SetPosition(glm::vec3(0.0f, 0.0f, 30.0f));
-	//tank.SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//tank.SetRotationAngle(180.0f);
-	//lightingShader.SetMat4("model", tank.GetModelMatrix());
-	//tank.Draw(lightingShader);
-	
-	//glBindVertexArray(4);
-	//float grassVertices[] = {
-	//	// positions            // texture Coords 
-	//	5.0f, -0.5f,  0.0f,  1.0f, 0.0f,
-	//	-5.0f, -0.5f,  0.0f,  0.0f, 0.0f,
-	//	-5.0f, -0.5f, 0.0f,  0.0f, 1.0f,
-
-	//	5.0f, -0.5f,  0.0f,  1.0f, 0.0f,
-	//	-5.0f, -0.5f, 0.0f,  0.0f, 1.0f,
-	//	5.0f, -0.5f, 0.0f,  1.0f, 1.0f
-	//};
-	/*renderExplosion();
-	glBindTexture(GL_TEXTURE_2D, explosionTexture);
-	glm::mat4 model2 = glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	model2 = glm::scale(model2, glm::vec3(0.02f, 0.02f, 0.02f));
-	model2 = glm::translate(model2, glm::vec3(0.0f, -0.2f, 0.0f));
-	lightingShader.SetMat4("model", model2);
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	model2 = glm::rotate(model2, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	lightingShader.SetMat4("model", model2);
-	glDrawArrays(GL_TRIANGLES, 0, 6);*/
-
-
-
-	
 	glBindTexture(GL_TEXTURE_2D, helicopterTexture);
 	if (helicopters[0].isDestroyed == false)
 	{
@@ -519,13 +470,7 @@ void RenderModels(Shader& lightingShader, Shader& modelShader,
 		lightingShader.SetMat4("model", clouds[i].GetModelMatrix());
 		clouds[i].Draw(lightingShader);
 	}
-	//glBindTexture(GL_TEXTURE_2D, treeTexture);
-	//// Adăugarea copacilor
-	//for (int i = 0; i < trees.size(); i++) {
-	//	lightingShader.SetMat4("model", trees[i].GetModelMatrix());
-	//	trees[i].Draw(lightingShader);
-	//}
-	
+
 	glBindTexture(GL_TEXTURE_2D, grassTexture);
 	// Adăugarea ierbii
 	for (int i = 0; i < grass.size(); i++) {
@@ -671,20 +616,6 @@ void PozitionateModels(std::vector<Tank>& tanks,
 		clouds[i].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
-	/*------Copaci------*/
-	//trees[0].SetPosition(glm::vec3(10.0f, 0.0f, 70.0f));
-	//trees[0].SetScale(glm::vec3(100.0f));
-	//trees[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//trees[1].SetPosition(glm::vec3(0.0f, 0.0f, 11.0f));
-	//trees[1].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//trees[2].SetPosition(glm::vec3(0.0f, 0.0f, 12.0f));
-	//trees[2].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//trees[3].SetPosition(glm::vec3(0.0f, 0.0f, 13.0f));
-	//trees[3].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//trees[4].SetPosition(glm::vec3(0.0f, 0.0f, 14.0f));
-	//trees[4].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-	//trees[5].SetPosition(glm::vec3(0.0f, 0.0f, 15.0f));
-	//trees[5].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	auto generateRandom = [](float min, float max) {
 		return min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
 		};
@@ -699,11 +630,7 @@ void PozitionateModels(std::vector<Tank>& tanks,
 		glm::vec3(-35.0f, 0.0f, -29.0f),
 		glm::vec3(24.0f, 0.0f, -30.0f)
 	};
-	//float minX = -150.0f + 25.0f;
-	//float maxX = 150.0f - 25.0f;
-	//float minZ = -150.0f + 25.0f;
-	//float maxZ = 150.0f - 25.0f;
-
+	
 	for (int i = 0; i < 300; ++i) {
 		float randomPosX, randomPosZ;
 		bool positionAccepted = false;
@@ -726,25 +653,6 @@ void PozitionateModels(std::vector<Tank>& tanks,
 		trees[i].SetRotationAngle(generateRandom(0.0f, 360.0f));
 	}
 
-
-
-	
-
-	// Generarea și plasarea aleatoare a arborilor
-	//for (int i = 0; i <70; ++i) {
-	//	
-	//	// Generare aleatorie a poziției și scalei
-	//	float randomPosX = generateRandom(-150.0f, 150.0f); // Modifică limitele în funcție de dimensiunile scenei
-	//	float randomPosZ = generateRandom(-150.0f, 150.0f); // Modifică limitele în funcție de dimensiunile scenei
-	//	float randomScale = generateRandom(0.5f, 1.5f); // Modifică limitele în funcție de scala dorită a arborilor
-
-	//	trees[i].SetPosition(glm::vec3(randomPosX, 0.0f, randomPosZ)); // Modifică limitele în funcție de dimensiunile scenei]
-	//	trees[i].SetScale(glm::vec3(10.0f));
-	//	trees[i].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
-
-	//	
-	//}
-
 	//------iarba------
 	grass[0].SetPosition(glm::vec3(-10.0f, 0.0f, 50.0f));
 	grass[0].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -764,9 +672,6 @@ void PozitionateModels(std::vector<Tank>& tanks,
 	grass[5].SetPosition(glm::vec3(0.0f, 0.0f, 20.0f));
 	grass[5].SetRotationAxis(glm::vec3(0.0f, 1.0f, 0.0f));
 	grass[5].SetScale(glm::vec3(3.0f));
-	
-
-
 }
 
 
@@ -775,7 +680,6 @@ void moveClouds(std::vector<Model>& clouds)
 	if (clouds[14].GetPosition().x > -400.0f && clouds[16].GetPosition().x > -400.0f)
 		for (int i = 0; i < 25; i++)
 			clouds[i].SetPosition(clouds[i].GetPosition() + glm::vec3(-0.002f, 0.0f, -0.002f));
-	
 }
 
 void rotate_elice(Model& helicpter3_elice, double deltaTime)
@@ -899,7 +803,7 @@ int main()
 	// note that we update the lamp's position attribute's stride to reflect the updated buffer data
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // cursor haz
+	
 	// Create camera
 	pCamera = new Camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(47.5, 11.5, 1.0));
 
@@ -911,9 +815,6 @@ int main()
 	std::wstring executablePath(buffer);
 	std::wstring wscurrentPath = executablePath.substr(0, executablePath.find_last_of(L"\\/"));
 
-	/*std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	std::string currentPath = converter.to_bytes(wscurrentPath);*/
-	//std::wstring wscurrentPath; // Asume că aceasta este inițializată cu calea dorită
 	std::string currentPath = ConvertWStringToString(wscurrentPath).c_str();			// de tinut minte asta
 
 	const char* currentPathChr = currentPath.c_str();
@@ -921,17 +822,11 @@ int main()
 	std::string path = (std::string(currentPathChr) + "\\Shaders\\PhongLight.vs").c_str();
 	std::string path2 = (std::string(currentPathChr) + "\\Shaders\\PhongLight.vs").c_str();
 
-	//Shader lightingShader((currentPathChr + std::string("\\Shaders\\PhongLight.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\PhongLight.fs")).c_str()));
 	Shader lampShader((currentPathChr + std::string("\\Shaders\\Lamp.vs")).c_str(), ((currentPathChr + std::string("\\Shaders\\Lamp.fs")).c_str()));
 	Shader lightingShader((currentPath + "\\Shaders\\ShadowMapping.vs").c_str(), (currentPath + "\\Shaders\\ShadowMapping.fs").c_str());
 	
-	//Shader blendingShader((currentPath + "\\Shaders\\Blending.vs").c_str(), (currentPath + "\\Shaders\\Blending.fs").c_str());
-	//Shader lampShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
 	Shader modelShader((currentPath + "\\Shaders\\modelVS.glsl").c_str(), (currentPath + "\\Shaders\\modelFS.glsl").c_str());
 	
-	//std::string piratObjFileName = (currentPath + "\\Models\\maimuta.obj");
-	//std::string piratObjFileName = (currentPath + "\\Models\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
-	//std::string piratObjFileName = (std::string(currentPathChr) + "\\Models\\Tiger.obj");
 	std:: string treeObjFileName = (std::string(currentPathChr) + "\\Models\\Tree\\Tree.obj");
 	
 	//std::string grassObjFileName = (std::string(currentPathChr) + "\\Models\\grass_model\\grass_model.obj");
@@ -943,11 +838,8 @@ int main()
 	TankShellObjFilename = (std::string(currentPathChr) + "\\Models\\Tank_Shell\\Tank Shell2.obj");
 
 	std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mountain\\mount.blend1.obj");
-	//std::string mountainObjFileName = (std::string(currentPathChr) + "\\Models\\mount.blend1.obj");
-	//std::string piratObjFileName = (currentPath + "\\Models\\Human\\human.obj");
 	std::string piratObjFileName = (currentPath + "\\Models\\WWII_Tank_Germany_Panzer_III_v1_L2.123c56cb92d1-9485-44e9-a197-a7bddb48c29f\\14077_WWII_Tank_Germany_Panzer_III_v1_L2.obj");
 	tank = Model(piratObjFileName, false);
-	//std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_bell_nou.obj");
 	std::string helicopterObjFileName = (std::string(currentPathChr) + "\\Models\\Heli_Bell\\Heli_bell_nou.obj");
 	std::string heli_bodyObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_body2.obj");
 	std::string heli_eliceObjFileName = (std::string(currentPathChr) + "\\Models\\Helicopter_elice2.obj");
@@ -961,7 +853,6 @@ int main()
 	std::string cloud5ObjFileName = (std::string(currentPathChr) + "\\Models\\altostratus01.obj");
 
 	std::string sunObjFileName = (std::string(currentPathChr) + "\\Models\\Sun\\sol.obj");
-
 
 	
 	//---- Creare Modele
@@ -991,12 +882,9 @@ int main()
 	grassTexture= CreateTexture(std::string(currentPathChr) + "\\Models\\grass2\\Tex\\Grass.png");
 	tankTexture = CreateTexture(std::string(currentPathChr) + "\\ColoredFloor.png");
 	floorTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\grass_floor2.png");
-	//unsigned int mountainTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\mountain\\ground_grass_3264_4062_Small.jpg");
 	cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\clouds\\blue2.jpg");
 	tankTexture2 = CreateTexture(std::string(currentPathChr) + "\\Models\\cabina.jpg");
-	//unsigned int cloudTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\white.jpg");
 	helicopterTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Heli_Bell\\HH65C.jpg");
-	//explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\explosion.png");
 	explosionTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\explosionTexture2.jpg");
 	watchTowerTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\watchTower\\textures\\watchTower.jpg");
 	unsigned int sunTexture = CreateTexture(std::string(currentPathChr) + "\\Models\\Sun\\2k_sun.jpg");
@@ -1027,43 +915,7 @@ int main()
 	engine->play2D("media/WarMusic.ogg", true);
 	explosionSound->setSoundVolume(0.7f);
 	engine->setSoundVolume(1.0f);
-	//engine2->setSoundVolume(0.0f);
 	helicopterSound->play2D("media/HelicopterSound.ogg", true);
-
-	// ------  INCERCARE SHADOWMAPPING ------------ 
-	/*unsigned int shadowMapFBO;
-	glGenFramebuffers(1, &shadowMapFBO);
-
-	unsigned int shadowMapWidth = 2048, shadowMapHeight = 2048;
-	unsigned int shadowMap;
-	glGenTextures(1, &shadowMap);
-	glBindTexture(GL_TEXTURE_2D, shadowMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapWidth, shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	float clampColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, clampColor);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowMap, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glm::mat4 orthogonalProjection = glm::ortho(-35.0f, 35.0f, -35.0f, 35.0f, 0.1f, 75.0f);
-	glm::mat4 lightView = glm::lookAt(20.0f * lightPos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 lightProjection = orthogonalProjection * lightView;
-
-
-	Shader shadowMapShader((currentPath + "\\Shaders\\ShadowMappingDepth.vs").c_str(), (currentPath + "\\Shaders\\ShadowMappingDepth.fs").c_str());
-
-	
-	*/
-	
-	
-	
 	
 	while (!glfwWindowShouldClose(window)) {
 		// Per-frame time logic
@@ -1075,18 +927,13 @@ int main()
 		CheckShellCollision(tanks, shells);
 		CheckShellCollisionForHelicopter(helicopters, shells);
 		CheckShellCollisionForMountain(mountains, shells);
-		//CheckCollisionForTree(trees, shells);
 		moveClouds(clouds);
 		rotateElice(helicopters);
 
-		if (helicopterIsSelected) {
-			//engine2->setSoundVolume(1.0f);
+		if (helicopterIsSelected) 
 			helicopterSound->setSoundVolume(1.0f);
-		}
-		else {
-			//engine2->setSoundVolume(0.0f);
+		else 
 			helicopterSound->setSoundVolume(0.0f);
-		}
 
 		// Clear buffers
 		float timeOfDay = glfwGetTime(); // Adjust this based on your time scale
@@ -1102,31 +949,6 @@ int main()
 		lightPos.x = lightX;
 		lightPos.y = fabs(lightZ);
 
-
-
-		//-------------------------------------------------------------
-
-		/*glEnable(GL_DEPTH_TEST);
-		glBindFramebuffer(GL_FRAMEBUFFER, shadowMapHeight);
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-
-		shadowMapShader.Use();
-		glUniformMatrix4fv(glGetUniformLocation(shadowMapShader.ID, "lightProjection"), 1, GL_FALSE, glm::value_ptr(lightProjection));
-
-
-		glActiveTexture(GL_TEXTURE0 + 2);
-		glBindTexture(GL_TEXTURE_2D, shadowMap);
-		glUniform1i(glGetUniformLocation(shadowMapShader.ID, "shadowMap"), 2);
-
-		RenderModels(lightingShader, modelShader, tanks, mountains, helicopters, clouds, grass, trees);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);*/
-
-
-		//---------------------------------------------
-		
 		// Use lighting shader
 		lightingShader.Use();
 		if (lightZ < 0) {
@@ -1185,18 +1007,12 @@ int main()
 			lightModel = glm::scale(lightModel, glm::vec3(10.0f)); // a smaller cube
 			glBindTexture(GL_TEXTURE_2D, sunTexture);
 		}
-		//lightModel = glm::scale(lightModel, glm::vec3(0.5f)); // a smaller cube
 		lampShader.SetMat4("model", lightModel);
 
 		glActiveTexture(GL_TEXTURE1);
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
-		
-		//soare.Draw(lampShader);
-		
-
-		
 		// Swap buffers and poll IO events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -1275,16 +1091,6 @@ bool TankFrontCollision(Tank& selectedTank, std::vector<Tank>& tanks, std::vecto
 			return true;
 		}
 	}
-	//Assuming selectedTank and tree exist, you can check collision with trees
-	//for (int i = 0; i < trees.size(); i++) {
-	//	float distance = glm::distance(selectedTank.Body.GetPosition(), trees[i].GetPosition());
-	//	float collisionThreshold = 1.0f;
-	//	if (distance < collisionThreshold) {
-	//		// Collision detected
-	//		return true;
-	//	}
-	//}
-
 
 	float distance = glm::distance(selectedTank.Body.GetPosition(), watchTower.GetPosition());
 	float collisionThreshold = 7.0f;
@@ -1313,7 +1119,6 @@ bool HelicopterFrontCollision(Helicopter& selectedHelicopter, std::vector<Tank>&
 				// Collision detected
 				return true;
 			}
-		
 		}
 	}
 
@@ -1338,8 +1143,6 @@ bool HelicopterFrontCollision(Helicopter& selectedHelicopter, std::vector<Tank>&
 			return true;
 		}
 	}
-
-	// No collision detected
 	return false;
 }
 
@@ -1416,19 +1219,15 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 				forwardDirection.x * sinAngleHead - forwardDirection.z * cosAngleHead
 			);
 
-
 			if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && fireCooldown + 1 < lastFrame)
 			{
 				engine->play2D("media/TankFireSound.ogg", false);
 				fireCooldown = lastFrame;
 
 				TankShell newShell = TankShell(Model(TankShellObjFilename, true), deltaTime, -rotatedForwardDirectionHead);
-				//newShell.Shell.SetScale(glm::vec3(0.05f));
 				newShell.Shell.SetScale(glm::vec3(0.1f));
 				newShell.Shell.SetPosition(glm::vec3(tanks[i].Head.GetPosition().x, tanks[i].Head.GetPosition().y + 2.27f, tanks[i].Head.GetPosition().z) + newShell.moveDir * static_cast <float>(8));
 
-				//it->Shell.SetPosition(it->Shell.GetPosition() + (it->moveDir * movementSpeed * static_cast<float>(deltaTime)));
-				
 				newShell.Shell.SetRotationAxis(tanks[i].Head.GetRotationAxis());
 				newShell.Shell.SetRotationAngle(tanks[i].Head.GetRotationAngle() + 180);
 				
@@ -1453,7 +1252,6 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 					glm::vec3 newPositionHead = tanks[i].Head.GetPosition() + (movementDirectionBody * movementSpeedForward * static_cast<float>(deltaTime));
 					tanks[i].Body.SetPosition(newPositionBody);
 					tanks[i].Head.SetPosition(newPositionHead);
-
 
 					// Rotație la stânga (tasta A)
 					if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -1538,9 +1336,7 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 						float rotationSpeed = 20.0f; // Ajustează după necesități
 						glm::vec3 rotationAxis(0.0f, 1.0f, 0.0f);
 						rotationAngleBody -= rotationSpeed * static_cast<float>(deltaTime); // Adaugă unghiul de rotație
-						//rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f); // Setează axa de rotație la axa Y
 						tanks[i].Body.SetRotationAngle(rotationAngleBody);
-						//tank.Body.SetRotationAxis(rotationAxis);
 					}
 				}
 				else
@@ -1764,56 +1560,25 @@ void processInput(GLFWwindow* window, std::vector<Tank>& tanks, std::vector<Heli
 	if (!tankIsSelected && !helicopterIsSelected)
 	{
 		if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS && tanks[0].isDamaged == false)
-		{
 			tanks[0].SetIsSelected(true);
-
-		}
 		if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS && tanks[1].isDamaged == false)
-		{
-			
 			tanks[1].SetIsSelected(true);
-			
-		}
 		if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS && tanks[2].isDamaged == false)
-		{
 			tanks[2].SetIsSelected(true);
-			
-		}
 		if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS && tanks[3].isDamaged == false)
-		{
 			tanks[3].SetIsSelected(true);
-			
-		}
 		if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS && tanks[4].isDamaged == false)
-		{
 			tanks[4].SetIsSelected(true);
-			
-		}
 		if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS && tanks[5].isDamaged == false)
-		{
 			tanks[5].SetIsSelected(true);
-			
-		}
 		if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS && tanks[6].isDamaged == false)
-		{
 			tanks[6].SetIsSelected(true);
-			
-		}
 		if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS && tanks[7].isDamaged == false)
-		{
 			tanks[7].SetIsSelected(true);
-			
-		}
 		if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS && helicopters[0].isDestroyed == false)
-		{
 			helicopters[0].SetIsSelected(true);
-			
-		}
 		if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS && helicopters[1].isDestroyed == false)
-		{
 			helicopters[1].SetIsSelected(true);
-			
-		}
 
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			pCamera->ProcessKeyboard(Camera::FORWARD, (float)deltaTime * 5);
